@@ -10,19 +10,22 @@ export default function Home() {
         <div>
             <h1 className="page-title">Home Page</h1>
             <table>
-                <tr>
-                    <td>
-                        <GreenTextButton text="Buy products from customer"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <OrangeTextButton text="Sell products to customer"/>  
-                    </td>
-                    <td>
-                        <BlueTextButton text="See all inventory"/>
-                    </td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td>
+                            <GreenTextButton text="Buy products from customer"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <OrangeTextButton text="Sell products to customer"/>  
+                        </td>
+                        <td>
+                            <BlueTextButton text="See all inventory"/>
+                        </td>
+                    </tr>
+                </tbody>
+
             </table>
             
            
