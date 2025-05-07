@@ -15,6 +15,10 @@ a {
     text-decoration: none;
 }
 
+.result-table {
+    text-align: center;
+}
+
 .left-align {
     float: left;
 
@@ -139,4 +143,8 @@ a {
 
 .error-text {
     color: red;
+}
+
+.big-input {
+    font-size: x-large;
 }
