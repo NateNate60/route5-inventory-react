@@ -1,8 +1,6 @@
 "use client"
 import React from "react";
 
-import constants from "./constants.json"
-
 export default function TokenSetter () {
     /*
     Component which sets the value of a login token

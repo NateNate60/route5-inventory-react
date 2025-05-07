@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import constants from "./constants.json"
+import constants from "@/app/constants.json"
 import {Product} from "../types/Product"
 
 interface ProductDisplayerProps {
@@ -9,7 +9,7 @@ interface ProductDisplayerProps {
 }
 
 export default function ProductDisplayer ({products}: ProductDisplayerProps) {
-    let resultRows = products.map( (product) => <tr>
+    let resultRows = products.map( (product) => <tr key={product['id']}>
         <td width={"15%"} className="result-table">
             {product['id']}
         </td>

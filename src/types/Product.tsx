@@ -11,3 +11,8 @@ export type Product = {
     sale_price_date: string,
     sale_date: string
 }
+
+export type ProductQuantity = {
+    product: Product,
+    quantity: number
+}
