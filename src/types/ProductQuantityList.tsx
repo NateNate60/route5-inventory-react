@@ -1,29 +1,33 @@
-import { ProductQuantity } from "./Product"
+import { Product } from "./Product"
 
 export class ProductQuantityList {
-    products: Array<ProductQuantity>
-
-    constructor(products: Array<ProductQuantity> = []) {
-        this.products = products
+    products: {
+        [id: string]: {
+            product: Product,
+            inCart: number
+        }
     }
 
-    changeProductQuantity (productID: string, quantity: number) {
+    constructor() {
+        this.products = {}
+    }
+
+    changeProductQuantity (productID: string, inCart: number) {
         /*
-        Change the quantity of a product.
+        Change the quantity of a product, if it exists.
         */
-        this.products.forEach( (item: ProductQuantity) => {
-            if (item.product.id === productID) {
-                item.quantity = quantity
-            }
-        })
+        if (productID in this.products) {
+            this.products[productID].inCart = inCart
+        }
     }
 
     deleteProduct (productID: string) {
         /*
         Remove the product with the given ID from the list
         */
-        let newArray = this.products.filter( (item: ProductQuantity) => item.product.id !== productID)
-        this.products = newArray
+        if (productID in this.products) {
+            delete this.products[productID]
+        }
     }
 
     priceTotal (): number {
@@ -31,9 +35,28 @@ export class ProductQuantityList {
         Return the total sale price of all items in the list
         */
         let price: number = 0
-        for (let item of this.products) {
-            price += item.product.sale_price * item.quantity
+        for (let item in this.products) {
+            price += this.products[item].product.sale_price * this.products[item].inCart
         }
         return price
+    }
+
+    addProduct (product: Product): boolean {
+        /*
+        Add a product to the list
+        */
+        if (product.id in this.products) {
+            if (this.products[product.id].inCart >= this.products[product.id].product.quantity) {
+                // The product is out of stock
+                return false
+            }
+            this.products[product.id].inCart++
+        } else {
+            this.products[product.id] = {
+                product: product,
+                inCart: 1
+            }
+        }
+        return true
     }
 }
