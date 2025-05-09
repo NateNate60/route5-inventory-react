@@ -23,7 +23,7 @@ export default function Home() {
                             <GreenTextButton text="Buy products from customer"/>
                         </td>
                         <td>
-                            <OrangeTextButton text="Sell products to customer"/>  
+                            <OrangeTextButton text="Sell products to customer" href="/sell"/>  
                         </td>
                     </tr>
                     <tr>
