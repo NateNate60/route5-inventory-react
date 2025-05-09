@@ -30,13 +30,17 @@ export class ProductQuantityList {
         }
     }
 
-    priceTotal (): number {
+    priceTotal (useAcquirePrice: boolean = false): number {
         /*
         Return the total sale price of all items in the list
         */
         let price: number = 0
         for (let item in this.products) {
-            price += this.products[item].product.sale_price * this.products[item].inCart
+            if (useAcquirePrice) {
+                price += this.products[item].product.acquired_price * this.products[item].inCart
+            } else {
+                price += this.products[item].product.sale_price * this.products[item].inCart
+            }
         }
         return price
     }

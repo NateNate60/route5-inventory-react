@@ -2,7 +2,7 @@ export type Product = {
     id: string,
     type: "card" | "slab" | "sealed",
     description: string,
-    condition: "d" | "hp" | "mp" | "lp" | "nm" | "sealed",
+    condition: string,
     acquired_price: number,
     sale_price: number,
     quantity: number,
