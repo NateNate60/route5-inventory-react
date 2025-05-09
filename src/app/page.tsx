@@ -10,9 +10,10 @@ import "./style.css"
 import TokenSetter from "../components/TokenSetter";
 import ProductDisplayer from "../components/ProductDisplayer";
 import {Product} from "../types/Product"
+import { ProductQuantityList } from "@/types/ProductQuantityList";
 
 export default function Home() {
-    const [items, setItems] = useState<Array<Product>>([])
+    const [items, setItems] = useState<ProductQuantityList>(new ProductQuantityList())
     return (
         <div>
             <h1 className="page-title">Home Page</h1>
@@ -20,7 +21,7 @@ export default function Home() {
                 <tbody>
                     <tr>
                         <td>
-                            <GreenTextButton text="Buy products from customer"/>
+                            <GreenTextButton text="Buy products from customer" href="/buy"/>
                         </td>
                         <td>
                             <OrangeTextButton text="Sell products to customer" href="/sell"/>  
@@ -36,7 +37,11 @@ export default function Home() {
                     </tr>
                     <tr>
                         <td>
-                            <InventorySearcher onSubmit={(e: Product) => {setItems([e])}}/>
+                            <InventorySearcher onSubmit={(e: Product) => {
+                                let product = new ProductQuantityList()
+                                product.addProduct(e)
+                                setItems(product)
+                            }}/>
                         </td>
                     </tr>
                 </tbody>

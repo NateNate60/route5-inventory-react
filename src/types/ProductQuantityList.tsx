@@ -41,17 +41,21 @@ export class ProductQuantityList {
         return price
     }
 
-    addProduct (product: Product): boolean {
+    addProduct (product: Product, enforceQuantityConstraint: boolean = true): boolean {
         /*
         Add a product to the list
         */
         if (product.id in this.products) {
-            if (this.products[product.id].inCart >= this.products[product.id].product.quantity) {
+            if (enforceQuantityConstraint && this.products[product.id].inCart >= this.products[product.id].product.quantity) {
                 // The product is out of stock
                 return false
             }
             this.products[product.id].inCart++
         } else {
+            if (enforceQuantityConstraint && product.quantity === 0) {
+                // There is no stock of the product
+                return false
+            }
             this.products[product.id] = {
                 product: product,
                 inCart: 1
