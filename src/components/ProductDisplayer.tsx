@@ -16,7 +16,7 @@ export default function ProductDisplayer ({products}: ProductDisplayerProps) {
                 <td width={"10%"} className="result-table">
                     {product['id']}
                 </td>
-                <td width={"30%"} className="result-table">
+                <td width={"25%"} className="result-table">
                     {product['description']}
                 </td>
                 <td width={"10%"} className="result-table">
@@ -25,16 +25,19 @@ export default function ProductDisplayer ({products}: ProductDisplayerProps) {
                 <td width={"7%"} className="result-table">
                     {product['quantity']}
                 </td>
-                <td width={"7%"} className="result-table">
+                <td width={"6%"} className="result-table">
                     {products.products[productID].inCart}
                 </td>
-                <td width={"6%"} className="result-table">
+                <td width={'7%'} className="result-table">
+                    $ {product['acquired_price'] / 100}
+                </td>
+                <td width={"5%"} className="result-table">
                     $ {product['sale_price'] / 100}
                 </td>
                 <td width={"15%"} className="result-table">
                     {product['consignor_name']}
                 </td>
-                <td width={"20%"} className="result-table">
+                <td width={"15%"} className="result-table">
                     {product['consignor_contact']}
                 </td>
             </tr>
@@ -61,6 +64,9 @@ export default function ProductDisplayer ({products}: ProductDisplayerProps) {
                     </th>
                     <th>
                         In cart
+                    </th>
+                    <th>
+                        Bought for
                     </th>
                     <th>
                         Price ea.
