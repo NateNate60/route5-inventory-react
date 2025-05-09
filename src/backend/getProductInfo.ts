@@ -1,5 +1,5 @@
 import { Product } from "@/types/Product"
-import constants from "@/app/constants.json"
+import constants from "@/constants.json"
 import getCookieValue from "./getCookie"
 
 export default async function getProductInfo (productID: string): Promise<Product> {
