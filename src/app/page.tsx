@@ -14,6 +14,7 @@ import { ProductQuantityList } from "@/types/ProductQuantityList";
 
 export default function Home() {
     const [items, setItems] = useState<ProductQuantityList>(new ProductQuantityList())
+    const [errorText, setErrorText] = useState<string>('')
     return (
         <div>
             <h1 className="page-title">Home Page</h1>
@@ -37,11 +38,19 @@ export default function Home() {
                     </tr>
                     <tr>
                         <td>
-                            <InventorySearcher onSubmit={(e: Product) => {
+                            <InventorySearcher onSubmit={(e) => {
                                 let product = new ProductQuantityList()
-                                product.addProduct(e)
-                                setItems(product)
+                                if ("error" in e) {
+                                    setErrorText(e["error"])
+                                } else {
+                                    product.addProduct(e)
+                                    setErrorText("")
+                                    setItems(product)
+                                }
                             }}/>
+                        </td>
+                        <td className="error-text">
+
                         </td>
                     </tr>
                 </tbody>

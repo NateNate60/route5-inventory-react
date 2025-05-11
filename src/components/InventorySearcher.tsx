@@ -3,9 +3,10 @@ import React from "react"
 import {Product} from "../types/Product"
 import SearchBar from "./SearchBar"
 import getProductInfo from "@/backend/getProductInfo"
+import { BackendAPIError } from "@/types/BackendAPIError"
 
 interface InventorySearcherProps {
-    onSubmit: (e: Product) => any
+    onSubmit: (e: Product | BackendAPIError) => any
 }
 
 export default function InventorySearcher ({onSubmit}: InventorySearcherProps): React.JSX.Element {
@@ -16,7 +17,7 @@ export default function InventorySearcher ({onSubmit}: InventorySearcherProps): 
         <div>
             <SearchBar big={true} onSubmit={(s: string) => {
                 getProductInfo(s
-                ).then( (item: Product) => {onSubmit(item)})
+                ).then( (item) => {onSubmit(item)})
             }}/>
         </div>
     )
