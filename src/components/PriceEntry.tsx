@@ -11,7 +11,7 @@ export default function PriceEntry ({onSubmit}: PriceEntryProps) {
         <div>
             <form onSubmit={ () => {onSubmit(pricePaid)}}>
                 <label>Input total price paid: $</label>
-                <input type="text" id="pricePaid" onChange={(e) => {
+                <input type="number" step={0.01} value={pricePaid} id="pricePaid" onChange={(e) => {
                     setPricePaid(Number(e.target.value))
                 }}/>
                 <GreenTextButton text="Submit" onClick={ () => {

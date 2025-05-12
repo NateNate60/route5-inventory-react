@@ -1,16 +1,19 @@
 "use client"
-import React from "react";
+import React, { useState } from "react";
+import WhiteTextButton from "./buttons/whitebutton";
 
 export default function TokenSetter () {
     /*
     Component which sets the value of a login token
     */
 
+    const [value, setValue] = useState<string>("")
     return (
         <form>
             <label>Paste token:</label>
-            <input type="password" onChange={ (e: React.ChangeEvent<HTMLInputElement>) => {
-                document.cookie = `token=Bearer ${e.target.value}`
+            <input type="password"  name="cookie-input" onChange={ (e) => setValue(e.target.value)} value={value}/>
+            <WhiteTextButton text="Set" onClick={() => {
+                document.cookie = `token=Bearer ${value}`
             }}/>
         </form>
         

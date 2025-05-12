@@ -27,7 +27,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             <label>Product bar code/serial number/asset tag</label>
                         </td>
                         <td>
-                            <input type="text" id="barcode" name="barcode" onChange={(e) => setBarcode(e.target.value)}/>
+                            <input type="text" id="barcode" name="barcode" onChange={(e) => setBarcode(e.target.value)} value={barcode}/>
                         </td>
                     </tr>
                     <tr>
@@ -43,7 +43,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                                 } else if (e.target.value === "card"){
                                     setType("card")
                                 }
-                            }}>
+                            }} value={type}>
                                 <option value="sealed">Sealed</option>
                                 <option value="slab">Slab</option>
                                 <option value="card">Raw card</option>
@@ -55,7 +55,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             <label>Card name or product description</label>
                         </td>
                         <td>
-                            <input type="text" id="description" name="description" onChange={(e) => setDescription(e.target.value)}/>
+                            <input type="text" id="description" name="description" onChange={(e) => setDescription(e.target.value)} value={description}/>
                         </td>
                         <td>
                             language + card name + card number + attributes
@@ -66,7 +66,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Condition
                         </td>
                         <td>
-                            <input type="text" id="condition" name="condition" onChange={(e) => setCondition(e.target.value)}/>
+                            <input type="text" id="condition" name="condition" onChange={(e) => setCondition(e.target.value)} value={condition}/>
                         </td>
                         <td>
                             e.g. "PSA 9", "CGC PRISTINE", "BGS BLACK LABEL", "nm", "d", "sealed"
@@ -77,7 +77,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             <label>Quantity bought</label>
                         </td>
                         <td>
-                            <input type="number" id="description" name="description" onChange={(e) => setQuantity(parseInt(e.target.value))}/>
+                            <input type="number" id="description" name="description" onChange={(e) => setQuantity(parseInt(e.target.value))} value={description}/>
                         </td>
                         <td className="error-text">
                             Enter for sealed product only. For slabs and raw cards, enter 1
@@ -88,7 +88,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Price we paid per unit (in dollars)
                         </td>
                         <td>
-                            <input type="number" id="acquired_price" name="acquired_price" step="0.01" onChange={(e) => setAcquiredPrice(Math.round(Number(e.target.value) * 100))}/>
+                            <input type="number" id="acquired_price" name="acquired_price" step="0.01" onChange={(e) => setAcquiredPrice(Math.round(Number(e.target.value) * 100))} value={acquiredPrice}/>
                         </td>
                     </tr>
                     <tr>
@@ -96,7 +96,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Price we want to sell it for per unit
                         </td>
                         <td>
-                            <input type="number" id="sale_price" name="sale_price" step="0.01" onChange={(e) => setSalePrice(Math.round(Number(e.target.value) * 100))}/>
+                            <input type="number" id="sale_price" name="sale_price" step="0.01" onChange={(e) => setSalePrice(Math.round(Number(e.target.value) * 100))} value={salePrice}/>
                         </td>
                     </tr>
                     <tr>
@@ -104,7 +104,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Consignor name (optional)
                         </td>
                         <td>
-                            <input type="text" id="consignor_name" name="consignor_name" onChange={(e) => setConsignorName(e.target.value)}/>
+                            <input type="text" id="consignor_name" name="consignor_name" onChange={(e) => setConsignorName(e.target.value)} value={consignorName}/>
                         </td>
                     </tr>
                     <tr>
@@ -112,14 +112,14 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Consignor contact info (optional)
                         </td>
                         <td>
-                            <input type="text" id="consignor_contact" name="consignor_contact" onChange={(e) => setConsignorContact(e.target.value)}/>
+                            <input type="text" id="consignor_contact" name="consignor_contact" onChange={(e) => setConsignorContact(e.target.value)} value={consignorContact}/>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <WhiteTextButton text="Add" onClick={() => {
                                 let today = new Date()
-                                onSubmit({
+                                let info: Product = {
                                     id: barcode,
                                     type: type,
                                     description: description,
@@ -131,7 +131,17 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                                     consignor_contact: consignorContact,
                                     sale_price_date: today.toString(),
                                     sale_date: ""
-                                })
+                                }
+                                setBarcode("")
+                                setType("card")
+                                setDescription("")
+                                setCondition("")
+                                setAcquiredPrice(0)
+                                setSalePrice(0)
+                                setQuantity(1)
+                                setConsignorContact("")
+                                setConsignorName("")
+                                onSubmit(info)
                             }}/>
                         </td>
                     </tr>

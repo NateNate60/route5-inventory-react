@@ -10,10 +10,12 @@ export default function SearchBar ({onSubmit, big}: SearchBarProps) {
     return (
         <form onSubmit={(e: FormEvent<HTMLFormElement>) => {
             e.preventDefault()
-            onSubmit(value)
+            let content = value
+            setValue("")
+            onSubmit(content)
         }}>
             <label>Scan or input bar code:</label>
-            <input type="text" id="entry" className={big ? "big-input" : ""} onChange={(e) => setValue(e.target.value)}/>
+            <input type="text" id="entry" className={big ? "big-input" : ""} onChange={(e) => setValue(e.target.value)} value={value}/>
         </form>
     )
 }

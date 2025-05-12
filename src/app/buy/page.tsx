@@ -126,7 +126,7 @@ function SealedProductInput ({setProduct}: SealedProductInputProps) {
                             <input type="number" id="sealedPriceInput" step={0.01} onChange={ (e) => {
                                 setPrice(Number(e.target.value))
                                 setError("")
-                            }}/>
+                            }} value={sealedPrice}/>
                         </td>
                     </tr>
                     <tr>
@@ -137,7 +137,7 @@ function SealedProductInput ({setProduct}: SealedProductInputProps) {
                             <input type="number" id="sealedQuantityInput" onChange={ (e) => {
                                 setQuantity(Number(e.target.value))
                                 setError("")
-                            }}/>
+                            }} value={sealedQuantity}/>
                         </td>
                     </tr>
                     <tr>
