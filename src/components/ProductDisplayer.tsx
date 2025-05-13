@@ -2,6 +2,8 @@
 
 import React from "react"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
+import DeleteButton from "./buttons/DeleteButton"
+import WhiteTextButton from "./buttons/whitebutton"
 
 interface ProductDisplayerProps {
     products: ProductQuantityList
@@ -16,29 +18,34 @@ export default function ProductDisplayer ({products}: ProductDisplayerProps) {
                 <td width={"10%"} className="result-table">
                     {product['id']}
                 </td>
-                <td width={"25%"} className="result-table">
+                <td width={"20%"} className="result-table">
                     {product['description']}
                 </td>
                 <td width={"10%"} className="result-table">
                     {product['condition']}
                 </td>
-                <td width={"7%"} className="result-table">
-                    {product['quantity']}
-                </td>
                 <td width={"6%"} className="result-table">
-                    {products.products[productID].inCart}
+                    {product['quantity']}
                 </td>
                 <td width={'7%'} className="result-table">
                     $ {product['acquired_price'] / 100}
                 </td>
-                <td width={"5%"} className="result-table">
+                <td width={"7%"} className="result-table">
                     $ {product['sale_price'] / 100}
                 </td>
-                <td width={"15%"} className="result-table">
+                <td width={"10%"} className="result-table">
+                    {product["sale_price_date"].slice(0, 10)}
+                </td>
+                <td width={"10%"} className="result-table">
                     {product['consignor_name']}
                 </td>
-                <td width={"15%"} className="result-table">
+                <td width={"10%"} className="result-table">
                     {product['consignor_contact']}
+                </td>
+                
+                <td width={"10%"} className="result-table">
+                    <DeleteButton />
+                    <WhiteTextButton text="Edit" href={`/inventory/edit?id=${product['id']}`}/>
                 </td>
             </tr>
         )
@@ -63,19 +70,21 @@ export default function ProductDisplayer ({products}: ProductDisplayerProps) {
                         In inventory
                     </th>
                     <th>
-                        In cart
-                    </th>
-                    <th>
                         Bought for
                     </th>
                     <th>
-                        Price ea.
+                        Price
+                    </th>
+                    <th>
+                        Price date
                     </th>
                     <th>
                         Consignor name
                     </th>
                     <th>
                         Consignor contact
+                    </th>
+                    <th>
                     </th>
                 </tr>
             </thead>

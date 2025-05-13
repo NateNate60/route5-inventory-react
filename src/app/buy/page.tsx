@@ -5,7 +5,7 @@ import getProductInfo from "@/backend/getProductInfo";
 import BackButton from "@/components/buttons/backbutton";
 import GreenTextButton from "@/components/buttons/greenbutton";
 import WhiteTextButton from "@/components/buttons/whitebutton";
-import ProductDisplayer from "@/components/ProductDisplayer";
+import ProductCart from "@/components/ProductCart";
 import ProductInfoForm from "@/components/ProductInfoForm";
 import SearchBar from "@/components/SearchBar";
 import { Product } from "@/types/Product";
@@ -48,7 +48,11 @@ export default function BuyPage () {
                     setPriceTotal(products.priceTotal(true))
                 }}/>
             </div>
-            <ProductDisplayer products={products}/>
+            <ProductCart products={products} onDelete={(productID: string) => {
+                            products.deleteProduct(productID)
+                            setErrorText("")
+                            setPriceTotal(products.priceTotal())
+            }}/>
             <div>
                 <br/>
                 <p>

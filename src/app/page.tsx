@@ -30,7 +30,7 @@ export default function Home() {
                     </tr>
                     <tr>
                         <td>
-                            <BlueTextButton text="Manage inventory"/>
+                            <BlueTextButton text="Manage inventory" href="/inventory"/>
                         </td>
                         <td>
                             <TokenSetter />
