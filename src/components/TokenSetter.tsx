@@ -10,10 +10,11 @@ export default function TokenSetter () {
     const [value, setValue] = useState<string>("")
     return (
         <form>
-            <label>Paste token:</label>
+            <label>Paste access token:</label>
             <input type="password"  name="cookie-input" onChange={ (e) => setValue(e.target.value)} value={value}/>
             <WhiteTextButton text="Set" onClick={() => {
-                document.cookie = `token=Bearer ${value}`
+                // Cookie expires in 30 days
+                document.cookie = `token=Bearer ${value}; max-age=2592000`
             }}/>
         </form>
         
