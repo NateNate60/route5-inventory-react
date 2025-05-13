@@ -2,6 +2,7 @@
 
 import "@/app/style.css"
 import getInventory from "@/backend/getInventory"
+import BackButton from "@/components/buttons/backbutton"
 import ProductDisplayer from "@/components/ProductDisplayer"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
 import { useState } from "react"
@@ -26,6 +27,7 @@ export default function InventoryManagement () {
     return (
         <div>
             <h1>Manage Inventory</h1>
+            <BackButton/>
             <p className="error-text">
                 {errorText}
             </p>
