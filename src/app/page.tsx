@@ -43,14 +43,14 @@ export default function Home() {
                                 if ("error" in e) {
                                     setErrorText(e["error"])
                                 } else {
-                                    product.addProduct(e)
                                     setErrorText("")
+                                    product.addProduct(e, false)
                                     setItems(product)
                                 }
                             }}/>
                         </td>
                         <td className="error-text">
-
+                            {errorText}
                         </td>
                     </tr>
                 </tbody>
