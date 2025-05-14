@@ -194,7 +194,7 @@ function SealedProductInput ({setProduct}: SealedProductInputProps) {
                 This is for SEALED product or PSA slabs only. If a PSA cert number is inputted, it will be looked up on the PSA database.
                 <br />
                 <span className="error-text">
-                    Do not spam the PSA cert lookup. We are limited to 100 seaches a day.
+                    Do not spam the PSA cert lookup. We are limited to 100 searches a day.
                 </span>
                 <br />
                 Sealed product has to be already in the database. If the item ID is not found or it's a raw card/non-PSA slab, enter the product info manually below.
