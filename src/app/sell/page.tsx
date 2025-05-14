@@ -26,6 +26,10 @@ export default function SellPage () {
             <div>
                 <SearchBar big={true} onSubmit={(entry: string) => {
                     getProductInfo(entry).then( (product) => {
+                        if ("cert" in product) {
+                            setErrorText(`${product["name"]} is not in inventory`)
+                            return
+                        }
                         if ("error" in product) {
                             let err = product["error"]
                             setErrorText(err)
