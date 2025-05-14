@@ -12,6 +12,13 @@ export type Product = {
     sale_date: string
 }
 
+export type SlabCert = {
+    cert: string,
+    name: string,
+    grade: string,
+    grader: string
+}
+
 export type ProductQuantity = {
     product: Product,
     quantity: number

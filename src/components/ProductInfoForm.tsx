@@ -72,7 +72,6 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             <ConditionPicker type={type} onChange={ (condition) => {setCondition(condition)} }/>
                         </td>
                         <td>
-                            {condition}
                         </td>
                     </tr>
                     <tr>

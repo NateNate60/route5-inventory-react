@@ -42,6 +42,8 @@ export default function Home() {
                                 let product = new ProductQuantityList()
                                 if ("error" in e) {
                                     setErrorText(e["error"])
+                                } else if ("cert" in e) {
+                                    setErrorText("Slabs are not currently supported here")
                                 } else {
                                     setErrorText("")
                                     product.addProduct(e, false)

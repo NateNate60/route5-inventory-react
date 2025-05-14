@@ -1,12 +1,12 @@
 "use client"
 import React from "react"
-import {Product} from "../types/Product"
+import {Product, SlabCert} from "../types/Product"
 import SearchBar from "./SearchBar"
 import getProductInfo from "@/backend/getProductInfo"
 import { BackendAPIError } from "@/types/BackendAPIError"
 
 interface InventorySearcherProps {
-    onSubmit: (e: Product | BackendAPIError) => any
+    onSubmit: (e: Product | BackendAPIError | SlabCert) => any
 }
 
 export default function InventorySearcher ({onSubmit}: InventorySearcherProps): React.JSX.Element {
