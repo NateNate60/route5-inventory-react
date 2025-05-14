@@ -10,7 +10,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
     const [barcode, setBarcode] = useState<string>("")
     const [type, setType] = useState<"card" | "slab" | "sealed">("sealed")
     const [description, setDescription] = useState<string>("")
-    const [condition, setCondition] = useState<string>("")
+    const [condition, setCondition] = useState<string>("sealed")
     const [quantity, setQuantity] = useState<number>(1)
     const [acquiredPrice, setAcquiredPrice] = useState<number>(0)
     const [salePrice, setSalePrice] = useState<number>(0)
@@ -38,10 +38,13 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             <select name="type" id="type" onChange={(e) => {
                                 if (e.target.value === "sealed") {
                                     setType("sealed")
+                                    setCondition("sealed")
                                 } else if (e.target.value === "slab") {
                                     setType("slab")
+                                    setCondition("PSA 10")
                                 } else if (e.target.value === "card"){
                                     setType("card")
+                                    setCondition("NM")
                                 }
                             }} value={type}>
                                 <option value="sealed">Sealed</option>
@@ -66,10 +69,10 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Condition
                         </td>
                         <td>
-                            <input type="text" id="condition" name="condition" onChange={(e) => setCondition(e.target.value)} value={condition}/>
+                            <ConditionPicker type={type} onChange={ (condition) => {setCondition(condition)} }/>
                         </td>
                         <td>
-                            e.g. "PSA 9", "CGC PRISTINE", "BGS BLACK LABEL", "nm", "d", "sealed"
+                            {condition}
                         </td>
                     </tr>
                     <tr>
@@ -77,10 +80,12 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             <label>Quantity bought</label>
                         </td>
                         <td>
-                            <input type="number" id="description" name="description" onChange={(e) => setQuantity(parseInt(e.target.value))} value={description}/>
+                            {type === "sealed" ?
+                                <input type="number" id="description" name="description" onChange={(e) => setQuantity(parseInt(e.target.value))} value={description}/>
+                            : 1}
                         </td>
                         <td className="error-text">
-                            Enter for sealed product only. For slabs and raw cards, enter 1
+                            
                         </td>
                     </tr>
                     <tr>
@@ -148,5 +153,89 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                 </tbody>
             </table>
         </form>
+    )
+}
+
+interface ConditionPickerInterface {
+    type: "sealed" | "slab" | "card",
+    onChange: (value: string) => any
+}
+
+function ConditionPicker ({type, onChange}: ConditionPickerInterface) {
+    const [value, setValue] = useState<string>("")
+
+    if (type === "sealed") {
+        return (
+            <select disabled>
+                <option value="sealed">Sealed</option>
+            </select>
+        )
+    } else if (type === "slab") {
+        return (
+            <GradeSelection onChange={ (grade) => onChange(grade) }/>
+        )
+    } else if (type === "card") {
+        return (
+            <select onChange={ (e) => {
+                setValue(e.target.value)
+                onChange(e.target.value)}
+            } value={value}>
+                <option value="NM">Near Mint</option>
+                <option value="LP">Lightly Played</option>
+                <option value="MP">Moderately Played</option>
+                <option value="HP">Heavily Played</option>
+                <option value="D">Damaged</option>
+            </select>
+        )
+    }
+}
+
+interface GradeSelectionProps {
+    onChange: (grade: string) => any
+}
+
+function GradeSelection ({onChange}: GradeSelectionProps) {
+    const [grader, setGrader] = useState<string>("PSA")
+    const [grade, setGrade] = useState<string>("10")
+
+    return (
+        <span>
+            <select onChange={ (e) => {
+                setGrader(e.target.value)
+                setGrade("10")
+                onChange(`${e.target.value} 10`)}
+            } value={grader}>
+                <option value="PSA">PSA</option>
+                <option value="CGC">CGC</option>
+                <option value="BGS">BGS</option>
+            </select>
+            <select onChange={ (e) => {
+                setGrade(e.target.value)
+                onChange(`${grader} ${e.target.value}`)}
+            } value={grade}>
+                {grader === "BGS" ? <option value="BLACK LABEL">Black Label 10</option> : undefined}
+                {grader === "CGC" ? <option value="PRISTINE">Pristine 10</option> : undefined}
+                {grader === "BGS" ? <option value="10">Pristine 10</option> : undefined}
+                {grader === "PSA" || grader === "CGC" ? <option value="10">Gem Mint 10</option> : undefined}
+                {grader === "BGS" ? <option value="9.5">Gem Mint 9.5</option> : undefined}
+                {grader === "CGC" ? <option value="9.5">Mint+ 9.5</option> : undefined}
+                <option value="9">9</option>
+                <option value="8.5">8.5</option>
+                <option value="7.5">7.5</option>
+                <option value="7">7</option>
+                <option value="6.5">6.5</option>
+                <option value="6">6</option>
+                <option value="5.5">5.5</option>
+                <option value="5">5</option>
+                <option value="4.5">4.5</option>
+                <option value="4">4</option>
+                <option value="3.5">3.5</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+                <option value="AA">Authentic</option>
+            </select>
+        </span>
+
     )
 }
