@@ -80,7 +80,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                         </td>
                         <td>
                             {type === "sealed" ?
-                                <input type="number" id="description" name="description" onChange={(e) => setQuantity(parseInt(e.target.value))} value={description}/>
+                                <input type="number" id="description" name="description" onChange={(e) => setQuantity(parseInt(e.target.value))} value={quantity}/>
                             : 1}
                         </td>
                         <td className="error-text">
@@ -92,7 +92,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Price we paid per unit (in dollars)
                         </td>
                         <td>
-                            <input type="number" id="acquired_price" name="acquired_price" step="0.01" onChange={(e) => setAcquiredPrice(Math.round(Number(e.target.value) * 100))} value={acquiredPrice}/>
+                            <input type="number" id="acquired_price" name="acquired_price" step="0.01" onChange={(e) => setAcquiredPrice(Math.round(Number(e.target.value) * 100))} value={acquiredPrice / 100}/>
                         </td>
                     </tr>
                     <tr>
@@ -100,7 +100,7 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                             Price we want to sell it for per unit
                         </td>
                         <td>
-                            <input type="number" id="sale_price" name="sale_price" step="0.01" onChange={(e) => setSalePrice(Math.round(Number(e.target.value) * 100))} value={salePrice}/>
+                            <input type="number" id="sale_price" name="sale_price" step="0.01" onChange={(e) => setSalePrice(Math.round(Number(e.target.value) * 100))} value={salePrice / 100}/>
                         </td>
                     </tr>
                     <tr>
