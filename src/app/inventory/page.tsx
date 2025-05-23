@@ -20,7 +20,7 @@ export default function InventoryManagement () {
         }
         for (let item of value) {
             inventory.addProduct(item)
-            runningValue += item.sale_price
+            runningValue += item.sale_price * item.quantity
         }
         setTotalValue(runningValue)
     })
@@ -30,6 +30,11 @@ export default function InventoryManagement () {
             <BackButton/>
             <p className="error-text">
                 {errorText}
+                <br/>
+            </p>
+            <p>
+                <br/>
+                Total value of inventory if everything is sold at asking: ${totalValue / 100}
             </p>
             <ProductDisplayer products={inventory}/>
         </div>
