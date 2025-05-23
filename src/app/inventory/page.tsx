@@ -36,7 +36,7 @@ export default function InventoryManagement () {
                 <br/>
                 Total value of inventory if everything is sold at asking: ${totalValue / 100}
             </p>
-            <ProductDisplayer products={inventory}/>
+            <ProductDisplayer products={inventory} editable={true}/>
         </div>
     )
 }
