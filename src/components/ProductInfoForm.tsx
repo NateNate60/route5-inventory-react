@@ -139,7 +139,6 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                                 setBarcode("")
                                 setType("card")
                                 setDescription("")
-                                setCondition("")
                                 setAcquiredPrice(0)
                                 setSalePrice(0)
                                 setQuantity(1)
