@@ -58,7 +58,7 @@ export default function Home() {
                 </tbody>
             </table>
             <br />
-            <ProductDisplayer products={items}/>
+            <ProductDisplayer products={items} editable={false}/>
            
         </div>
     );
