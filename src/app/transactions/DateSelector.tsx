@@ -1,15 +1,59 @@
 "use client"
 
+import WhiteTextButton from "@/components/buttons/whitebutton"
 import { useState } from "react"
 
 interface DateSelectorProps {
-    onBeginChange: (begin: Date) => any,
-    onEndChange: (end: Date) => any,
-    begin: Date,
+    onChange: (start: Date, end: Date) => any
+    start: Date,
     end: Date
 }
 
-export default function DateSelector ({onBeginChange, onEndChange, begin, end}: DateSelectorProps) {
+export default function DateSelector ({onChange, start, end}: DateSelectorProps) {
+    const [startDate, setStartDate] = useState<string>(start.toISOString().slice(0, 10))
+    const [endDate, setEndDate] = useState<string>(end.toISOString().slice(0, 10))
+    const [changed, setChanged] = useState<boolean>(false)
+
+    let maybeApplyButton
+    if (changed) {
+        maybeApplyButton = <WhiteTextButton text="Apply" onClick={() => {
+            let s = new Date(startDate)
+            let e = new Date(endDate)
+            s.setTime(s.getTime() + s.getTimezoneOffset() * 60 * 1000)
+            e.setTime(e.getTime() + e.getTimezoneOffset() * 60 * 1000)
+            setChanged(false)
+            onChange(s, e)
+        }}/>
+    }
+
+    let maybeSortOptions
+    if (!changed) {
+        maybeSortOptions = <span>
+            <WhiteTextButton text="Show this month" onClick={ () => {
+                let today = new Date()
+                let s = new Date(today.getFullYear(), today.getMonth(), 1);
+                s.setTime(s.getTime() + s.getTimezoneOffset() * 60 * 1000)
+                let e = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                e.setTime(e.getTime() + e.getTimezoneOffset() * 60 * 1000)
+
+                setStartDate(s.toISOString().slice(0, 10))
+                setEndDate(e.toISOString().slice(0, 10))
+                onChange(s, e)
+            }}/>
+            <WhiteTextButton text="Show last month" onClick={ () => {
+                let today = new Date()
+                let s = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                s.setTime(s.getTime() + s.getTimezoneOffset() * 60 * 1000)
+                let e = new Date(today.getFullYear(), today.getMonth(), 0);
+                e.setTime(e.getTime() + e.getTimezoneOffset() * 60 * 1000)
+
+                setStartDate(s.toISOString().slice(0, 10))
+                setEndDate(e.toISOString().slice(0, 10))
+                onChange(s, e)
+            }}/>
+        </span>
+    }
+
     return (
         <div>
             <table className="date-selector">
@@ -26,18 +70,22 @@ export default function DateSelector ({onBeginChange, onEndChange, begin, end}: 
                 <tbody>
                     <tr>
                         <td>
-                            <input type="date" className="date-input" value={begin.toISOString().slice(0, 10)} onChange={ (e) => {
-                                let d = new Date(e.target.value)
-                                d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000)
-                                onBeginChange(d)
+                            <input type="date" className="date-input" value={startDate} onChange={ (e) => {
+                                setStartDate(e.target.value)
+                                setChanged(true)
                             }}/>
                         </td>
                         <td>
-                            <input type="date" className="date-input" value={end.toISOString().slice(0, 10)} onChange={ (e) => {
-                                let d = new Date(e.target.value)
-                                d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000)
-                                onEndChange(d)
+                            <input type="date" className="date-input" value={endDate} onChange={ (e) => {
+                                setEndDate(e.target.value)
+                                setChanged(true)
                             }}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2} className="date-selector-apply">
+                            {maybeApplyButton}
+                            {maybeSortOptions}
                         </td>
                     </tr>
                 </tbody>
