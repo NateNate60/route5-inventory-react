@@ -12,6 +12,7 @@ import TokenSetter from "../components/TokenSetter";
 import ProductDisplayer from "../components/ProductDisplayer";
 import {Product} from "../types/Product"
 import { ProductQuantityList } from "@/types/ProductQuantityList";
+import WhiteTextButton from "@/components/buttons/whitebutton";
 
 export default function Home() {
     const [items, setItems] = useState<ProductQuantityList>(new ProductQuantityList())
@@ -21,6 +22,11 @@ export default function Home() {
             <h1 className="page-title">Home Page</h1>
             <table>
                 <tbody>
+                    <tr>
+                        <td colSpan={2}>
+                            <TokenSetter />
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <GreenTextButton text="Buy products from customer" href="/buy"/>
@@ -34,7 +40,7 @@ export default function Home() {
                             <BlueTextButton text="Manage inventory" href="/inventory"/>
                         </td>
                         <td>
-                            <TokenSetter />
+                            <WhiteTextButton text="View transactions" href="/transactions"/>
                         </td>
                     </tr>
                     <tr>
