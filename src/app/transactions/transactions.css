@@ -31,6 +31,10 @@
     border-radius: 10px;
 }
 
+.date-selector-apply {
+    text-align: center;
+}
+
 .date-input {
     display: block;
     margin: 0 auto;
