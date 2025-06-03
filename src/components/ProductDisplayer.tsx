@@ -2,27 +2,59 @@
 
 import React, { useState } from "react"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
-import DeleteButton from "./buttons/DeleteButton"
 import WhiteTextButton from "./buttons/whitebutton"
 import { Product } from "@/types/Product"
 import updatePrice from "@/backend/updatePrice"
+import ProductPriceField from "./ProductPriceField"
 
 interface ProductDisplayerProps {
     products: ProductQuantityList,
-    editable: boolean
+    editable: boolean,
+    sort?: string,
+    filter?: string
 }
 
-export default function ProductDisplayer ({products, editable = false}: ProductDisplayerProps) {
-    let resultRows: Array<React.JSX.Element> = []
+export default function ProductDisplayer ({products, editable, sort, filter}: ProductDisplayerProps) {
+    if (filter === "") {
+        filter = undefined
+    }
+
+    let productList = Array<Product>()
     for (let productID in products.products) {
-        let product = products.products[productID].product
-        resultRows.push( 
-            <ProductListing product={product} editable={editable} key={productID}/>
-        )
-        
+        if (products.products[productID].product.type === filter ||
+            filter === undefined) {
+            productList.push(products.products[productID].product)
+        }
+            
     }
     
-    
+    switch (sort) {
+        case "abc":
+            productList.sort((a, b) => a.description.localeCompare(b.description))
+            break
+        case "price-highest":
+            productList.sort((a, b) => b.sale_price - a.sale_price)
+            break
+        case "date-newest":
+            productList.sort((a, b) => b.acquired_date.localeCompare(a.acquired_date))
+            break
+        case "date-oldest":
+            productList.sort((a, b) => a.acquired_date.localeCompare(b.acquired_date))
+            break
+        case "quantity-most":
+            productList.sort((a, b) => b.quantity - a.quantity)
+            break
+        default:
+    }
+
+    let resultRows: Array<React.JSX.Element> = []
+    for (let product of productList) {
+        resultRows.push( 
+            <ProductListing product={product} editable={editable} key={product.id}/>
+        )
+    }
+            
+
     return (
         <table width={"100%"}>
             <thead>
@@ -49,10 +81,10 @@ export default function ProductDisplayer ({products, editable = false}: ProductD
                         Price date
                     </th>
                     <th>
-                        Consignor name
+                        Consignor
                     </th>
                     <th>
-                        Consignor contact
+                        Acquired Date
                     </th>
                     <th>
                     </th>
@@ -98,9 +130,11 @@ function ProductListing ({product, editable}: ProductListingProps) {
             </td>
             <td width={"10%"} className="result-table">
                 {product['consignor_name']}
+                <br/>
+                {product['consignor_contact']}
             </td>
             <td width={"10%"} className="result-table">
-                {product['consignor_contact']}
+                {product['acquired_date'].slice(0, 10)}
             </td>
             
             <td width={"10%"} className="result-table">
@@ -111,26 +145,6 @@ function ProductListing ({product, editable}: ProductListingProps) {
             </td>
         </tr>
     )
-}
-
-interface ProductPriceFieldProps {
-    price: number,
-    editable: boolean,
-    onChange: (price: number) => any
-}
-
-function ProductPriceField ({price, editable, onChange}: ProductPriceFieldProps) {
-    if (editable) {
-        return (
-            <input type="number" step={0.01} defaultValue={price / 100} onChange={(e) => onChange(Number(e.target.value) * 100)}/>
-        )
-    } else {
-        return (
-            <span>
-                ${price / 100}
-            </span>
-        )
-    }
 }
 
 interface ProductPriceDateProps {

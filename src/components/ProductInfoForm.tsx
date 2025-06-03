@@ -3,19 +3,33 @@ import WhiteTextButton from "./buttons/whitebutton";
 import { useState } from "react";
 
 interface ProductInforFormProps {
+    barcode: string,
     onSubmit: (product: Product) => any
 }
 
-export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
-    const [barcode, setBarcode] = useState<string>("")
-    const [type, setType] = useState<"card" | "slab" | "sealed">("sealed")
+export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormProps) {
     const [description, setDescription] = useState<string>("")
-    const [condition, setCondition] = useState<string>("sealed")
+    const [condition, setCondition] = useState<string>("")
     const [quantity, setQuantity] = useState<number>(1)
-    const [acquiredPrice, setAcquiredPrice] = useState<number>(0)
-    const [salePrice, setSalePrice] = useState<number>(0)
     const [consignorName, setConsignorName] = useState<string>("")
     const [consignorContact, setConsignorContact] = useState<string>("")
+
+    let type: "slab" | "sealed" | "card"
+    if (barcode.length === 12) {
+        // UPC
+        type = "sealed"
+        if (condition == "") {
+            setCondition("sealed")
+        }
+    } else if (barcode.length === 5) {
+        // Asset tag
+        type = "card"
+        if (condition == "card") {
+            setCondition("NM")
+        }
+    } else {
+        type = "slab"
+    }
     return (
         <form id="productInfoForm">
             <table width={"80%"}>
@@ -24,44 +38,10 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                 <tbody>
                     <tr>
                         <td>
-                            <label>Product bar code/serial number/asset tag</label>
-                        </td>
-                        <td>
-                            <input type="text" id="barcode" name="barcode" onChange={(e) => setBarcode(e.target.value)} value={barcode}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Type</label>
-                        </td>
-                        <td>
-                            <select name="type" id="type" onChange={(e) => {
-                                if (e.target.value === "sealed") {
-                                    setType("sealed")
-                                    setCondition("sealed")
-                                } else if (e.target.value === "slab") {
-                                    setType("slab")
-                                    setCondition("PSA 10")
-                                } else if (e.target.value === "card"){
-                                    setType("card")
-                                    setCondition("NM")
-                                }
-                            }} value={type}>
-                                <option value="sealed">Sealed</option>
-                                <option value="slab">Slab</option>
-                                <option value="card">Raw card</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
                             <label>Card name or product description</label>
                         </td>
                         <td>
                             <input type="text" id="description" name="description" onChange={(e) => setDescription(e.target.value)} value={description}/>
-                        </td>
-                        <td>
-                            language + card name + card number + attributes
                         </td>
                     </tr>
                     <tr>
@@ -70,37 +50,6 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                         </td>
                         <td>
                             <ConditionPicker type={type} onChange={ (condition) => {setCondition(condition)} }/>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Quantity bought</label>
-                        </td>
-                        <td>
-                            {type === "sealed" ?
-                                <input type="number" id="description" name="description" onChange={(e) => setQuantity(parseInt(e.target.value))} value={quantity}/>
-                            : 1}
-                        </td>
-                        <td className="error-text">
-                            
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Price we paid per unit (in dollars)
-                        </td>
-                        <td>
-                            <input type="number" id="acquired_price" name="acquired_price" step="0.01" onChange={(e) => setAcquiredPrice(Math.round(Number(e.target.value) * 100))} value={acquiredPrice / 100}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Price we want to sell it for per unit
-                        </td>
-                        <td>
-                            <input type="number" id="sale_price" name="sale_price" step="0.01" onChange={(e) => setSalePrice(Math.round(Number(e.target.value) * 100))} value={salePrice / 100}/>
                         </td>
                     </tr>
                     <tr>
@@ -128,19 +77,27 @@ export default function ProductInfoForm ({onSubmit}: ProductInforFormProps) {
                                     type: type,
                                     description: description,
                                     condition: condition,
-                                    acquired_price: acquiredPrice,
-                                    sale_price: salePrice,
+                                    acquired_price: 1,
+                                    acquired_date: today.toString(),
+                                    sale_price: 1,
                                     quantity: quantity,
                                     consignor_name: consignorName,
                                     consignor_contact: consignorContact,
                                     sale_price_date: today.toString(),
                                     sale_date: ""
                                 }
-                                setBarcode("")
-                                setType("card")
+
+                                if (info.condition === "") {
+                                    // Don't know why this happens but set it to default values if it does
+                                    if (info.type === "card") {
+                                        info.condition = "NM"
+                                    } else if (info.type === "sealed") {
+                                        info.condition = "sealed"
+                                    } else if (info.type === "slab") {
+                                        info.condition = "PSA 10"
+                                    }
+                                }
                                 setDescription("")
-                                setAcquiredPrice(0)
-                                setSalePrice(0)
                                 setQuantity(1)
                                 setConsignorContact("")
                                 setConsignorName("")

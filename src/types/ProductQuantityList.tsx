@@ -1,23 +1,20 @@
-import { Product } from "./Product"
+import { Product, ProductQuantity } from "./Product"
 
 export class ProductQuantityList {
     products: {
-        [id: string]: {
-            product: Product,
-            inCart: number
-        }
+        [id: string]: ProductQuantity
     }
 
     constructor() {
         this.products = {}
     }
 
-    changeProductQuantity (productID: string, inCart: number) {
+    changeProductQuantity (productID: string, quantity: number) {
         /*
         Change the quantity of a product, if it exists.
         */
         if (productID in this.products) {
-            this.products[productID].inCart = inCart
+            this.products[productID].quantity = quantity
         }
     }
 
@@ -37,9 +34,9 @@ export class ProductQuantityList {
         let price: number = 0
         for (let item in this.products) {
             if (useAcquirePrice) {
-                price += this.products[item].product.acquired_price * this.products[item].inCart
+                price += this.products[item].product.acquired_price * this.products[item].quantity
             } else {
-                price += this.products[item].product.sale_price * this.products[item].inCart
+                price += this.products[item].product.sale_price * this.products[item].quantity
             }
         }
         return price
@@ -50,11 +47,11 @@ export class ProductQuantityList {
         Add a product to the list
         */
         if (product.id in this.products) {
-            if (enforceQuantityConstraint && this.products[product.id].inCart >= this.products[product.id].product.quantity) {
+            if (enforceQuantityConstraint && this.products[product.id].quantity >= this.products[product.id].product.quantity) {
                 // The product is out of stock
                 return false
             }
-            this.products[product.id].inCart++
+            this.products[product.id].quantity++
         } else {
             if (enforceQuantityConstraint && product.quantity === 0) {
                 // There is no stock of the product
@@ -62,7 +59,7 @@ export class ProductQuantityList {
             }
             this.products[product.id] = {
                 product: product,
-                inCart: 1
+                quantity: 1
             }
         }
         return true

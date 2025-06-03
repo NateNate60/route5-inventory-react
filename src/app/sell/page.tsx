@@ -2,16 +2,15 @@
 
 import React, {useState} from "react"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
-import { Product } from "@/types/Product"
 import SearchBar from "@/components/SearchBar"
 import getProductInfo from "@/backend/getProductInfo"
 import ProductCart from "@/components/ProductCart"
 
 import "@/app/style.css"
+import "@/app/buttons.css"
 import BackButton from "@/components/buttons/backbutton"
 import PriceEntry from "@/components/PriceEntry"
 import sellItems from "@/backend/sellItems"
-import { BackendAPIError } from "@/types/BackendAPIError"
 
 
 export default function SellPage () {
@@ -56,11 +55,13 @@ export default function SellPage () {
                 Price total: ${priceTotal / 100}
             </p>
             <br/>
-            <PriceEntry onSubmit={(price: number) => {
+            <PriceEntry onSubmit={(price: number, creditApplied: number, paymentMethod: string) => {
                 if (Number.isNaN(price)) {
                     setErrorText("Please enter a decimal number.")
+                } else if (products.priceTotal() === 0) {
+                    setErrorText("There is nothing in the cart.")
                 } else {
-                    sellItems(products, price * 100, (txid) =>
+                    sellItems(products, price * 100, creditApplied * 100, paymentMethod, (txid) =>
                     {
                         setErrorText(`Transaction succeeded with transaction ID ${txid}`)
                         setPriceTotal(0)

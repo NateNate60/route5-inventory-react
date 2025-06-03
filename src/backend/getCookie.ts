@@ -1,3 +1,5 @@
+"use client"
+
 export default function getCookieValue (name: string): string {
     /*
     A function that gives a cookie with a given name

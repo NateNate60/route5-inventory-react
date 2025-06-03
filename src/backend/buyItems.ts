@@ -4,14 +4,18 @@ import CONSTANTS from "@/constants.json"
 import { Product } from "@/types/Product";
 
 export default async function buyItems (products: ProductQuantityList,
-                                        sellerName: string,
-                                        sellerContact: string): Promise<any> {
+                                        pricePaid: number,
+                                        sellerName: string = "",
+                                        sellerContact: string = ""): Promise<any> {
     let cookie = getCookieValue("token")
     let items: Array<Product> = []
+    let percentage = pricePaid / products.priceTotal()
 
     for (let itemID in products.products) {
-        products.products[itemID].product.quantity = products.products[itemID].inCart
-        items.push(products.products[itemID].product)
+        products.products[itemID].product.quantity = products.products[itemID].quantity
+        let target = products.products[itemID].product
+        target.acquired_price = target.sale_price * percentage
+        items.push(target)
     }
 
 

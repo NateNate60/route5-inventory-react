@@ -6,7 +6,7 @@ import getProductInfo from "@/backend/getProductInfo"
 import { BackendAPIError } from "@/types/BackendAPIError"
 
 interface InventorySearcherProps {
-    onSubmit: (e: Product | BackendAPIError | SlabCert) => any
+    onSubmit: (e: Product | BackendAPIError | SlabCert, barcode: string) => any
 }
 
 export default function InventorySearcher ({onSubmit}: InventorySearcherProps): React.JSX.Element {
@@ -17,7 +17,7 @@ export default function InventorySearcher ({onSubmit}: InventorySearcherProps): 
         <div>
             <SearchBar big={true} onSubmit={(s: string) => {
                 getProductInfo(s
-                ).then( (item) => {onSubmit(item)})
+                ).then( (item) => {onSubmit(item, s)})
             }}/>
         </div>
     )

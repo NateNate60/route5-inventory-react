@@ -1,0 +1,27 @@
+body, .button {
+    font-family: "Century Gothic", Futura, sans-serif;
+    font-size: medium;
+    margin: 20px;
+}
+
+input[type="submit"], button {
+    font-family:  "Century Gothic", Futura, sans-serif;
+    font-size: medium;
+}
+
+input, select {
+    font-family:  "Century Gothic", Futura, sans-serif;
+    font-size: medium;
+}
+
+th, td {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+th {
+    font-family:"Century Gothic", Futura, sans-serif;
+    font-weight: bold;
+    font-size: medium;
+    text-align: center;
+}

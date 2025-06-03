@@ -7,6 +7,7 @@ import BlueTextButton from "../components/buttons/bluebuttton"
 import OrangeTextButton from "../components/buttons/orangebutton"
 import InventorySearcher from "../components/InventorySearcher";
 import "./style.css"
+import "./buttons.css"
 import TokenSetter from "../components/TokenSetter";
 import ProductDisplayer from "../components/ProductDisplayer";
 import {Product} from "../types/Product"

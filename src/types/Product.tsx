@@ -4,6 +4,7 @@ export type Product = {
     description: string,
     condition: string,
     acquired_price: number,
+    acquired_date: string,
     sale_price: number,
     quantity: number,
     consignor_name: string,

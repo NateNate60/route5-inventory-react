@@ -1,0 +1,74 @@
+.left-side {
+    width: 45%;
+    margin-left: 4%;
+    margin-right: 1%;
+    padding: 1%;
+    background-color: rgb(220, 255, 220);
+    float: inline-start;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.right-side {
+    width: 45%;
+    margin-right: 4%;
+    margin-left: 1%;
+    padding: 1%;
+    background-color: rgb(255, 211, 154);
+    float: inline-end;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.date-selector {
+    width: 50%;
+    border: 1px solid black;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    background-color: rgb(255, 255, 197);
+    border-radius: 10px;
+}
+
+.date-input {
+    display: block;
+    margin: 0 auto;
+    font-size: x-large;
+}
+
+.transaction-table {
+    width: 100%;
+}
+
+.small {
+    font-size: small;
+}
+
+.unbold {
+    font-weight: normal;
+}
+
+td {
+    padding-top: 1%;
+}
+
+.buy-details {
+    background-color: rgb(233, 250, 233);
+}
+
+.sell-details {
+    background-color: rgb(255, 227, 190);
+}
+
+.details-table {
+    width: 100%;
+}
+
+.details-table-cell {
+    padding-right: 5px
+}
+
+.monetary {
+    text-align: center;
+}
