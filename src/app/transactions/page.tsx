@@ -18,7 +18,10 @@ export default function TransactionsPage () {
         <div>
             <BackButton />
             <h1>View Transaction Records</h1>
-            <DateSelector begin={startDate} onBeginChange={ (start) => setStartDate(start) } end={endDate} onEndChange={ (end) => setEndDate(end)}/>
+            <DateSelector start={startDate} end={endDate} onChange={ (begin, end) => {
+                setStartDate(begin)
+                setEndDate(end)
+            }}/>
             <BuyTransactonsTable startDate={startDate} endDate={endDate}/>
             <SellTransactonsTable startDate={startDate} endDate={endDate}/>
         </div>
