@@ -28,6 +28,7 @@ export default function SealedProductInput ({setProduct}: SealedProductInputProp
                     description: product["name"],
                     condition: `${product["grader"]} ${product["grade"]}`,
                     acquired_price: 0,
+                    acquired_date: "",
                     sale_price: 0,
                     sale_price_date: "",
                     sale_date: "",
