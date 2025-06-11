@@ -39,3 +39,22 @@ a {
 .big-input {
     font-size: x-large;
 }
+
+.editable {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px dashed;
+}
+
+.numeric-input {
+    width: 5em
+}
+
+.single-product-displayer {
+    padding: 5px;
+}
+
+table.single-product-displayer {
+    width: 50%;
+}
