@@ -11,6 +11,8 @@ import { useState } from "react"
 
 import constants from "@/constants.json"
 import { FILTERS, SORTS } from "@/types/Sort"
+import OrangeTextButton from "@/components/buttons/orangebutton"
+import BlueTextButton from "@/components/buttons/bluebuttton"
 
 export default function InventoryManagement () {
     const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())
@@ -35,7 +37,8 @@ export default function InventoryManagement () {
     return (
         <div>
             <h1>Manage Inventory</h1>
-            <BackButton/>
+            <OrangeTextButton text="Record New Transaction" href="/unifiedbuysell"/>
+            <BlueTextButton text="View Transaction History" href="/transactions"/>
             <p className="error-text">
                 {errorText}
                 <br/>
