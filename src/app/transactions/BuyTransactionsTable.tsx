@@ -146,7 +146,7 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                                 Store Credit Given
                             </th>
                             <th className="small unbold">
-                                ${tx.credit_given}
+                                ${Math.round(tx.credit_given) / 100}
                             </th>
                         </tr>
                         <tr>
