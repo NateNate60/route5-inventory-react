@@ -1,0 +1,32 @@
+p {
+    margin-bottom: 5px;
+}
+
+#navigation {
+    margin-left: 30%;
+    margin-right: 30%;
+    width: 40%;
+    padding: 1%;
+    margin-bottom: 1%;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#summary {
+    margin-left: 30%;
+    margin-right: 30%;
+    padding: 1%;
+    margin-bottom: 1%;
+    background-color: rgb(255, 255, 197);
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+#product-displayer {
+    margin-left: 2%;
+    margin-right: 2%;
+    background-color: rgb(202, 236, 249);
+    border: 1px solid black;
+    border-radius: 10px;
+}
