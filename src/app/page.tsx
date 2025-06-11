@@ -1,72 +1,70 @@
 "use client"
 
-import React, { useState } from "react";
+import "@/app/small.css"
+import "@/app/buttons.css"
+import getInventory from "@/backend/getInventory"
+import BackButton from "@/components/buttons/backbutton"
+import DropdownMenu from "@/components/DropdownMenu"
+import ProductDisplayer from "@/app/ProductDisplayer"
+import { ProductQuantityList } from "@/types/ProductQuantityList"
+import { useState } from "react"
 
-import GreenTextButton from "../components/buttons/greenbutton"
-import BlueTextButton from "../components/buttons/bluebuttton"
-import OrangeTextButton from "../components/buttons/orangebutton"
-import InventorySearcher from "../components/InventorySearcher";
-import "./style.css"
-import "./buttons.css"
-import TokenSetter from "../components/TokenSetter";
-import ProductDisplayer from "../components/ProductDisplayer";
-import {Product} from "../types/Product"
-import { ProductQuantityList } from "@/types/ProductQuantityList";
-import WhiteTextButton from "@/components/buttons/whitebutton";
+import constants from "@/constants.json"
+import { FILTERS, SORTS } from "@/types/Sort"
+import OrangeTextButton from "@/components/buttons/orangebutton"
+import BlueTextButton from "@/components/buttons/bluebuttton"
 
-export default function Home() {
-    const [items, setItems] = useState<ProductQuantityList>(new ProductQuantityList())
-    const [errorText, setErrorText] = useState<string>('')
+export default function InventoryManagement () {
+    const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())
+    const [errorText, setErrorText] = useState<string>("")
+    const [totalValue, setTotalValue] = useState<number>(0)
+    const [sort, setSort] = useState<string>("abc")
+    const [filter, setFilter] = useState<string>("")
+
+    getInventory(
+    ).then( (value) => {
+        let runningValue = 0
+        if ("error" in value) {
+            setErrorText(value["error"])
+            return
+        }
+        for (let item of value) {
+            inventory.addProduct(item)
+            runningValue += item.sale_price * item.quantity
+        }
+        setTotalValue(runningValue)
+    })
     return (
         <div>
-            <h1 className="page-title">Home Page</h1>
-            <table>
+            <h1>Manage Inventory</h1>
+            <table id="navigation">
                 <tbody>
                     <tr>
-                        <td colSpan={2}>
-                            <TokenSetter />
-                        </td>
-                    </tr>
-                    <tr>
                         <td>
-                            <GreenTextButton text="Buy products from customer" href="/buy"/>
+                            <OrangeTextButton text="Record New Transaction" href="/unifiedbuysell"/>
                         </td>
                         <td>
-                            <OrangeTextButton text="Sell products to customer" href="/sell"/>  
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <BlueTextButton text="Manage inventory" href="/inventory"/>
-                        </td>
-                        <td>
-                            <WhiteTextButton text="View transactions" href="/transactions"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <InventorySearcher onSubmit={(e) => {
-                                let product = new ProductQuantityList()
-                                if ("error" in e) {
-                                    setErrorText(e["error"])
-                                } else if ("cert" in e) {
-                                    setErrorText("Slabs are not currently supported here")
-                                } else {
-                                    setErrorText("")
-                                    product.addProduct(e, false)
-                                    setItems(product)
-                                }
-                            }}/>
-                        </td>
-                        <td className="error-text">
-                            {errorText}
+                            <BlueTextButton text="View Transaction History" href="/transactions"/>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <br />
-            <ProductDisplayer products={items} editable={false}/>
-           
+            <p className="error-text">
+                {errorText}
+                <br/>
+            </p>
+            <div id="summary">
+                <p>
+                    Total value of inventory if everything is sold at asking: ${totalValue / 100}
+                </p>
+                <p>
+                    Sort by: <DropdownMenu options={SORTS} selected={sort} onClick={(s) => setSort(s)} />
+                </p>
+                <p>
+                    Filter by: <DropdownMenu options={FILTERS} selected={filter} onClick={(f) => setFilter(f)} />
+                </p>
+            </div>
+            <ProductDisplayer products={inventory} editable={true} filter={filter} sort={sort}/>
         </div>
-    );
+    )
 }

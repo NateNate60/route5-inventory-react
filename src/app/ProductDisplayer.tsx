@@ -2,10 +2,11 @@
 
 import React, { useState } from "react"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
-import WhiteTextButton from "./buttons/whitebutton"
+import WhiteTextButton from "../components/buttons/whitebutton"
 import { Product } from "@/types/Product"
 import updatePrice from "@/backend/updatePrice"
-import ProductPriceField from "./ProductPriceField"
+import ProductPriceField from "../components/ProductPriceField"
+import "./inventory.css"
 
 interface ProductDisplayerProps {
     products: ProductQuantityList,
@@ -56,7 +57,7 @@ export default function ProductDisplayer ({products, editable, sort, filter}: Pr
             
 
     return (
-        <table width={"100%"}>
+        <table id="product-displayer">
             <thead>
                 <tr>
                     <th>
@@ -120,7 +121,7 @@ function ProductListing ({product, editable}: ProductListingProps) {
                 {product['quantity']}
             </td>
             <td width={'7%'} className="result-table">
-                $ {product['acquired_price'] / 100}
+                $ {Math.round(product['acquired_price']) / 100}
             </td>
             <td width={"7%"} className="result-table">
                 <ProductPriceField price={price} editable={editable} onChange={(newPrice) => {setPrice(newPrice)}}/>
