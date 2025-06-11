@@ -5,6 +5,8 @@ import { Product } from "@/types/Product";
 
 export default async function buyItems (products: ProductQuantityList,
                                         pricePaid: number,
+                                        creditGiven: number,
+                                        paymentMethod: string,
                                         sellerName: string = "",
                                         sellerContact: string = ""): Promise<any> {
     let cookie = getCookieValue("token")
@@ -27,6 +29,8 @@ export default async function buyItems (products: ProductQuantityList,
         },
         body: JSON.stringify({
             items: items,
+            credit_given: creditGiven,
+            payment_method: paymentMethod,
             acquired_from_name: sellerName,
             acquired_from_contact: sellerContact
         })
