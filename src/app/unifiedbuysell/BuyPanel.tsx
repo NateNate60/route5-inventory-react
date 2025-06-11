@@ -1,0 +1,134 @@
+"use client"
+
+import { ProductQuantity } from "@/types/Product"
+import { ProductQuantityList } from "@/types/ProductQuantityList"
+import { JSX, useState } from "react"
+import CashEntry, { PaymentMethodEntry } from "./CashEntry"
+import InventorySearcher from "@/components/InventorySearcher"
+import NumericEntryField from "@/components/NumericEntryField"
+import DeleteButton from "@/components/buttons/DeleteButton"
+
+interface BuyPanelProps {
+    cart: ProductQuantityList,
+    onChange: (item: string, attribute: "price" | "quantity", value: number) => any,
+    onDelete: (item: string) => any,
+    setCashPaid: (amount: number) => any,
+    setCreditPaid: (amount: number) => any,
+    setPaymentMethod: (paymentMethod: string) => any
+}
+
+export default function BuyPanel ({cart, onChange, onDelete, setCashPaid, setCreditPaid, setPaymentMethod}: BuyPanelProps) {
+
+    let buyTableEntries: Array<JSX.Element> = []
+    for (let thing in cart.products) [
+        buyTableEntries.push(<BuyPanelEntry product={cart.products[thing]} key={cart.products[thing].product.id}
+                              onDelete={(id) => onDelete(id)}
+                              onPriceChange={(price) => onChange(thing, "price", price)}
+                              onQuantityChange={(quantity) => onChange(thing, "quantity", quantity)}/>)
+    ]
+
+    return (
+        <div className="buy-panel">
+            <table className="buy-panel-table fullwidth">
+                <thead>
+                    <tr>
+                        <td colSpan={6} className="table-title">
+                            We receive from customer
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Bar code
+                        </th>
+                        <th>
+                            Item
+                        </th>
+                        <th>
+                            Market Price
+                        </th>
+                        <th>
+                            Qty
+                        </th>
+                        <th>
+                            Price Total
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {buyTableEntries}
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={5}>
+                            <hr/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            Total Products
+                        </td>
+                        <td>
+                            ${Math.round(cart.priceTotal()) / 100}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            Store Credit
+                        </td>
+                        <td colSpan={2}>
+                            <CashEntry onChange={setCreditPaid}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            Money
+                        </td>
+                        <td colSpan={2}>
+                            <CashEntry onChange={setCashPaid}/>
+                        </td>
+                        <td>
+                            <PaymentMethodEntry onChange={setPaymentMethod}/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+interface BuyPanelEntryProps {
+    product: ProductQuantity,
+    onPriceChange: (price: number) => any,
+    onQuantityChange: (qty: number) => any,
+    onDelete: (id: string) => any
+}
+
+function BuyPanelEntry ({product, onPriceChange, onQuantityChange, onDelete}: BuyPanelEntryProps) {
+    return (
+        <tr>
+            <td>
+                {product.product.id}
+            </td>
+            <td>
+                {product.product.description} {product.product.condition}
+            </td>
+            <td>
+                $<NumericEntryField step={0.01} value={product.product.sale_price / 100} onChange={(e) => onPriceChange(e)} min={0}/>
+            </td>
+            <td>
+                <NumericEntryField step={1} value={product.quantity} onChange={(e) => onQuantityChange(e)} min={1}/>
+            </td>
+            <td>
+                ${Math.round(product.product.sale_price * product.quantity) / 100}
+            </td>
+            <td>
+                <DeleteButton onClick={() => {onDelete(product.product.id)}}/>
+            </td>
+        </tr>
+    )
+}
+

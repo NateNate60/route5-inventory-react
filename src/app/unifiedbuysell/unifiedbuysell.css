@@ -1,0 +1,94 @@
+.panels {
+    width: 100%;
+}
+
+.buy-panel {
+    width: 95%;
+    margin-left: 4%;
+    margin-right: 1%;
+    margin-bottom: 10px;
+    padding: 1%;
+    background-color: rgb(220, 255, 220);
+    float: left;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+#buy-side {
+    float: inline-start;
+    width: 50%;
+}
+
+#sell-side {
+    float: inline-end;
+    width: 50%;
+}
+
+.sell-panel {
+    width: 95%;
+    margin-right: 4%;
+    margin-left: 1%;
+    margin-bottom: 10px;
+    padding: 1%;
+    background-color: rgb(255, 211, 154);
+    float: right;
+    clear: right;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.table-title {
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
+.small {
+    font-size: small;
+}
+
+.unbold {
+    font-weight: normal;
+}
+
+td {
+    padding-top: 1%;
+}
+
+.monetary {
+    text-align: center;
+}
+
+#summary {
+    clear: both;
+    margin-top: 30px;
+    margin-left: 2%;
+    margin-right: 2%;
+    padding: 1%;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+#summary-value-received {
+    width: 40%;
+}
+
+#summary-percentage {
+    width: 20%
+}
+
+#summary-value-given {
+    width: 40%
+}
+
+#sell-error {
+    text-align: center;
+}
+
+#submit {
+    text-align: center;
+}
