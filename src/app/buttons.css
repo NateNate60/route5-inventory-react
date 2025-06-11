@@ -98,6 +98,8 @@
 }
 
 .back-button {
-    padding-left: 5%;
-    padding-right: 100%;
+    display: flex;
+    width: 100%;
+    clear: both;
+    margin-bottom: 1em;
 }
