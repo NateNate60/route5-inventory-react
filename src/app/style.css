@@ -22,7 +22,7 @@ a {
     text-decoration: none;
 }
 
-.page-title {
+#page-title {
     text-align: center;
     font-size: 250%;
 }

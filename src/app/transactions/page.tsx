@@ -1,5 +1,6 @@
 "use client"
 
+import "@/app/style.css"
 import "@/app/small.css"
 import "@/app/buttons.css"
 import "./transactions.css"
@@ -17,7 +18,7 @@ export default function TransactionsPage () {
     return (
         <div>
             <BackButton />
-            <h1>View Transaction Records</h1>
+            <h1 id="page-title">View Transaction Records</h1>
             <DateSelector start={startDate} end={endDate} onChange={ (begin, end) => {
                 setStartDate(begin)
                 setEndDate(end)

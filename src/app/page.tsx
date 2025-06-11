@@ -1,5 +1,6 @@
 "use client"
 
+import "@/app/style.css"
 import "@/app/small.css"
 import "@/app/buttons.css"
 import getInventory from "@/backend/getInventory"
@@ -36,7 +37,7 @@ export default function InventoryManagement () {
     })
     return (
         <div>
-            <h1>Manage Inventory</h1>
+            <h1 id="page-title">Manage Inventory</h1>
             <table id="navigation">
                 <tbody>
                     <tr>

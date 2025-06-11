@@ -37,7 +37,7 @@ export default function UnifiedBuySellPage () {
     return (
         <div>
             <BackButton/>
-            <h1 className="page-title">Record New Transaction</h1>
+            <h1 id="page-title">Record New Transaction</h1>
             <div id="panels">
                 <div id="buy-side">
                     <BuyPanel cart={buyCart} setCashPaid={setBuyCash} setCreditPaid={setBuyCredit} setPaymentMethod={setBuyPaymentMethod}
