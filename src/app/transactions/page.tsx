@@ -7,14 +7,22 @@ import "./transactions.css"
 import BuyTransactonsTable from "./BuyTransactionsTable"
 import SellTransactonsTable from "./SellTransactionsTable"
 import DateSelector from "./DateSelector"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import BackButton from "@/components/buttons/backbutton"
+import { refresh_token } from "@/backend/login"
 
 export default function TransactionsPage () {
-
     // These initialise to last/next midnight today
     const [startDate, setStartDate] = useState<Date>(() => {let d = new Date(); d.setHours(0,0,0,0); return d})
     const [endDate, setEndDate] = useState<Date>(() => {let d = new Date(); d.setHours(24,0,0,0); return d})
+
+    useEffect( () => {
+        refresh_token()
+        const interval = setInterval( () => {
+            refresh_token()
+        }, 60000)
+        return () => clearInterval(interval);
+    })
     return (
         <div>
             <BackButton />

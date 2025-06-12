@@ -8,12 +8,13 @@ import BackButton from "@/components/buttons/backbutton"
 import DropdownMenu from "@/components/DropdownMenu"
 import ProductDisplayer from "@/app/ProductDisplayer"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import constants from "@/constants.json"
 import { FILTERS, SORTS } from "@/types/Sort"
 import OrangeTextButton from "@/components/buttons/orangebutton"
 import BlueTextButton from "@/components/buttons/bluebuttton"
+import { refresh_token } from "@/backend/login"
 
 export default function InventoryManagement () {
     const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())
@@ -21,6 +22,14 @@ export default function InventoryManagement () {
     const [totalValue, setTotalValue] = useState<number>(0)
     const [sort, setSort] = useState<string>("abc")
     const [filter, setFilter] = useState<string>("")
+
+    useEffect( () => {
+        refresh_token()
+        const interval = setInterval( () => {
+            refresh_token()
+        }, 60000)
+        return () => clearInterval(interval);
+    })
 
     getInventory(
     ).then( (value) => {

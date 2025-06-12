@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import BuyPanel from "./BuyPanel"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
 import "./unifiedbuysell.css"
@@ -16,6 +16,7 @@ import buyItems from "@/backend/buyItems"
 import { Product } from "@/types/Product"
 import SingleProductDisplayer from "@/components/SingleProductDisplayer"
 import BackButton from "@/components/buttons/backbutton"
+import { refresh_token } from "@/backend/login"
 
 export default function UnifiedBuySellPage () {
     const [changeCounter, setChangeCounter] = useState<number>(0)
@@ -33,6 +34,14 @@ export default function UnifiedBuySellPage () {
     const [sellCredit, setSellCredit] = useState<number>(0)
     const [sellCash, setSellCash] = useState<number>(0)
     const [sellPaymentMethod, setSellPaymentMethod] = useState<string>("cash")
+
+    useEffect( () => {
+        refresh_token()
+        const interval = setInterval( () => {
+            refresh_token()
+        }, 60000)
+        return () => clearInterval(interval);
+    })
 
     return (
         <div>
