@@ -1,0 +1,18 @@
+#login-prompt {
+    margin-top: 10%;
+    margin-right: 40%;
+    margin-left: 40%;
+    padding: 1%;
+    width: 20%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+#login-button {
+    text-align: center;
+}
+
+.login-input {
+    display: block;
+    margin: 0 auto;
+}
