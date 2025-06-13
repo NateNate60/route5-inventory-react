@@ -1,4 +1,4 @@
-export interface TokenValidityRecord {
+export type TokenValidityRecord = {
     expiration: Date,
     username: string
 }
