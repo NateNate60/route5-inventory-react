@@ -21,6 +21,9 @@ export default function LoginPage () {
 
     return (
         <div>
+            <form onSubmit={() => {
+                                login(username, password, staySignedIn)
+                            }}>
             <table id="login-prompt">
                 <tbody>
                     <tr>
@@ -59,14 +62,16 @@ export default function LoginPage () {
                     </tr>
                     <tr>
                         <td id="login-button">
-                            <WhiteTextButton text="Log in" onClick={() => {
-                                login(username, password, staySignedIn)
+                            <WhiteTextButton text="Log in" onClick={async () => {
+                                await login(username, password, staySignedIn)
+                                window.location.href = "/"
                             }}/>
                         </td>
                         
                     </tr>
                 </tbody>
             </table>
+            </form>
         </div>
     )
 }
