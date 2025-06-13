@@ -1,13 +1,13 @@
 "use client"
 
-import "@/app/style.css"
-import "@/app/small.css"
-import "@/app/buttons.css"
+import "@/css/style.css"
+import "@/css/small.css"
+import "@/css/buttons.css"
 import getInventory from "@/backend/getInventory"
 import DropdownMenu from "@/components/DropdownMenu"
 import ProductDisplayer from "@/app/ProductDisplayer"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 
 import { FILTERS, SORTS } from "@/types/Sort"
 import OrangeTextButton from "@/components/buttons/orangebutton"
@@ -21,6 +21,8 @@ export default function InventoryManagement () {
     const [totalValue, setTotalValue] = useState<number>(0)
     const [sort, setSort] = useState<string>("abc")
     const [filter, setFilter] = useState<string>("")
+
+    const [loggedIn, setLoggedIn] = useState<boolean>(false)
 
     useEffect( () => {
         refreshToken()
@@ -44,11 +46,11 @@ export default function InventoryManagement () {
             }
             setTotalValue(runningValue)
         })
-    }, [])
+    }, [loggedIn])
 
     return (
         <div>
-            <LoginWidget/>
+            <LoginWidget onTokenFetch={() => setLoggedIn(true)}/>
             <h1 id="page-title">Manage Inventory</h1>
             <table id="navigation">
                 <tbody>

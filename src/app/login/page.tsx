@@ -1,6 +1,5 @@
 import WhiteTextButton from "@/components/buttons/whitebutton"
-import "@/app/style.css"
-import "@/app/buttons.css"
+import "@/css/style.css"
 import "./login.css"
 import { useEffect, useState } from "react"
 import { login, refreshToken } from "@/backend/login"

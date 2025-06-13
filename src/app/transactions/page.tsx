@@ -1,8 +1,7 @@
 "use client"
 
-import "@/app/style.css"
-import "@/app/small.css"
-import "@/app/buttons.css"
+import "@/css/style.css"
+import "@/css/small.css"
 import "./transactions.css"
 import BuyTransactonsTable from "./BuyTransactionsTable"
 import SellTransactonsTable from "./SellTransactionsTable"
