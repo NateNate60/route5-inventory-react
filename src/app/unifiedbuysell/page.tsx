@@ -40,7 +40,7 @@ export default function UnifiedBuySellPage () {
             refreshToken()
         }, 60000)
         return () => clearInterval(interval);
-    })
+    }, [])
 
     return (
         <div>

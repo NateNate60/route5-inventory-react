@@ -9,7 +9,6 @@ import DateSelector from "./DateSelector"
 import { useEffect, useState } from "react"
 import BackButton from "@/components/buttons/backbutton"
 import { refreshToken } from "@/backend/login"
-import LoginWidget from "@/components/LoginWidget"
 
 export default function TransactionsPage () {
     // These initialise to last/next midnight today
@@ -22,7 +21,7 @@ export default function TransactionsPage () {
             refreshToken()
         }, 60000)
         return () => clearInterval(interval);
-    })
+    }, [])
     return (
         <div>
             <BackButton />
