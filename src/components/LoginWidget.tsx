@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import WhiteTextButton from "./buttons/whitebutton";
-import { checkAccessValidity, refreshToken } from "@/backend/login";
+import { checkAccessValidity, logout, refreshToken } from "@/backend/login";
 
 interface LoginWidgetProps {
     onTokenFetch?: () => void
@@ -20,16 +20,18 @@ export default function LoginWidget ({onTokenFetch}: LoginWidgetProps) {
         )
     }, [])
 
-    let maybeLoginButton
+    let loginButton
     if (! username) {
-        maybeLoginButton = <WhiteTextButton text="Log in" href="/login"/>
+        loginButton = <WhiteTextButton text="Log in" href="/login"/>
+    } else {
+        loginButton = <WhiteTextButton text="Log out" onClick={logout}/>
     }
     return (
         <div id="login-widget">
             <p>
                 Welcome{username ? ", " + username : ". Please log in."}
             </p>
-            {maybeLoginButton}
+            {loginButton}
         </div>
     )
 }
