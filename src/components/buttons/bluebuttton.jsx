@@ -1,3 +1,5 @@
+import "@/css/buttons.css"
+
 export default function BlueTextButton (props) {
     return (
         <span style={{float: props.float}}>

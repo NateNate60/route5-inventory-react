@@ -1,3 +1,5 @@
+import "@/css/buttons.css"
+
 export default function GreenTextButton (props) {
     return (
         <span style={{display: "flex", alignItems: props.float, justifyContent: props.float}}>
