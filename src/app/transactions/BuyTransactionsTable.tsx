@@ -3,7 +3,7 @@
 import { getBuyTransactions } from "@/backend/getTransactions"
 import WhiteTextButton from "@/components/buttons/whitebutton"
 import { BuyTransaction } from "@/types/Transaction"
-import { JSX, useState } from "react"
+import { JSX, useEffect, useState } from "react"
 
 interface BuyTransactionsTableProps {
     startDate?: Date,
@@ -19,7 +19,7 @@ export default function BuyTransactonsTable ({startDate, endDate}: BuyTransactio
     const [currentStartDate, setCurrentStartDate] = useState<Date | undefined>(startDate)
     const [currentEndDate, setCurrentEndDate] = useState<Date | undefined>(endDate)
 
-    if (transactions === undefined || startDate !== currentStartDate || endDate !== currentEndDate) {
+    useEffect( () => {
         setCurrentStartDate(startDate)
         setCurrentEndDate(endDate)
         getBuyTransactions(startDate, endDate)
@@ -36,7 +36,8 @@ export default function BuyTransactonsTable ({startDate, endDate}: BuyTransactio
             setCreditOut(totalCreditOut)
         })
         setTransactions([ <tr key="loading"><td colSpan={4}>Loading...</td></tr>])
-    }
+
+    }, [startDate, endDate])
 
     return (
         <div className="left-side">
