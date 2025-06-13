@@ -5,8 +5,8 @@ import { ProductQuantityList } from "@/types/ProductQuantityList"
 import WhiteTextButton from "../components/buttons/whitebutton"
 import { Product } from "@/types/Product"
 import updatePrice from "@/backend/updatePrice"
-import ProductPriceField from "../components/ProductPriceField"
 import "./inventory.css"
+import NumericEntryField from "@/components/NumericEntryField"
 
 interface ProductDisplayerProps {
     products: ProductQuantityList,
@@ -124,7 +124,7 @@ function ProductListing ({product, editable}: ProductListingProps) {
                 $ {Math.round(product['acquired_price']) / 100}
             </td>
             <td width={"7%"} className="result-table">
-                <ProductPriceField price={price} editable={editable} onChange={(newPrice) => {setPrice(newPrice)}}/>
+                <NumericEntryField step={0.01} value={Math.round(price) / 100} onChange={(newPrice) => {setPrice(newPrice * 100)}}/>
             </td>
             <td width={"10%"} className="result-table">
                 <ProductPriceDate dateString={priceDate} />
