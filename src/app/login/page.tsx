@@ -1,11 +1,9 @@
-"use client"
-
 import WhiteTextButton from "@/components/buttons/whitebutton"
 import "@/app/style.css"
 import "@/app/buttons.css"
 import "./login.css"
 import { useEffect, useState } from "react"
-import { login, refresh_token } from "@/backend/login"
+import { login, refreshToken } from "@/backend/login"
 
 export default function LoginPage () {
     const [username, setUsername] = useState<string>("")
@@ -13,9 +11,9 @@ export default function LoginPage () {
     const [staySignedIn, setStaySignedIn] = useState<boolean>(false)
 
     useEffect( () => {
-        refresh_token()
+        refreshToken()
         const interval = setInterval( () => {
-            refresh_token()
+            refreshToken()
         }, 60000)
         return () => clearInterval(interval);
     })
