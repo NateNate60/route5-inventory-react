@@ -11,14 +11,6 @@ export default function LoginPage () {
     const [password, setPassword] = useState<string>("")
     const [staySignedIn, setStaySignedIn] = useState<boolean>(false)
 
-    useEffect( () => {
-        refreshToken()
-        const interval = setInterval( () => {
-            refreshToken()
-        }, 60000)
-        return () => clearInterval(interval);
-    })
-
     return (
         <div>
             <form onSubmit={() => {
