@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 interface DropdownMenuProps {
     // An array of possible options
     options: {[key: string]: string}

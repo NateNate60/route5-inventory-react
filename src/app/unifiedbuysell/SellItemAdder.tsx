@@ -1,3 +1,5 @@
+"use client"
+
 import InventorySearcher from "@/components/InventorySearcher"
 import { Product } from "@/types/Product"
 import { useState } from "react"

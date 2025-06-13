@@ -1,4 +1,6 @@
-import { FormEvent, useState } from "react"
+"use client"
+
+import { useState } from "react"
 import GreenTextButton from "./buttons/greenbutton"
 
 interface PriceEntryProps {

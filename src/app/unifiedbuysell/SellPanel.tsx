@@ -1,3 +1,5 @@
+"use client"
+
 import { ProductQuantityList } from "@/types/ProductQuantityList"
 import { JSX, useState } from "react"
 import CashEntry, { PaymentMethodEntry } from "./CashEntry"

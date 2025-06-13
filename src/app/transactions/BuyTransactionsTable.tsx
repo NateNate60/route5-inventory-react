@@ -1,3 +1,5 @@
+"use client"
+
 import { getBuyTransactions } from "@/backend/getTransactions"
 import WhiteTextButton from "@/components/buttons/whitebutton"
 import { BuyTransaction } from "@/types/Transaction"

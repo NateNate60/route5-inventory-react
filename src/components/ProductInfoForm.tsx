@@ -1,3 +1,5 @@
+"use client"
+
 import { Product } from "@/types/Product";
 import WhiteTextButton from "./buttons/whitebutton";
 import { useState } from "react";

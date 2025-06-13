@@ -1,3 +1,5 @@
+"use client"
+
 import getProductInfo from "@/backend/getProductInfo"
 import { Product } from "@/types/Product"
 import { useState } from "react"

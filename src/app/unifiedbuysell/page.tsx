@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import BuyPanel from "./BuyPanel"
 import { ProductQuantityList } from "@/types/ProductQuantityList"

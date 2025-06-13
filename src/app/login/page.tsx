@@ -1,3 +1,5 @@
+"use client"
+
 import WhiteTextButton from "@/components/buttons/whitebutton"
 import "@/css/style.css"
 import "./login.css"

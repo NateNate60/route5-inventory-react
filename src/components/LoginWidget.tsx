@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import WhiteTextButton from "./buttons/whitebutton";
 import { checkAccessValidity, refreshToken } from "@/backend/login";

@@ -1,3 +1,5 @@
+"use client"
+
 import { ProductQuantityList } from "@/types/ProductQuantityList";
 import DeleteButton from "./buttons/DeleteButton"
 import React, { useState } from "react";
