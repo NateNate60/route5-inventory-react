@@ -21,30 +21,31 @@ export function login (username: string, password: string, staySignedIn: boolean
     })
 }
 
-export function refreshToken () {
+export async function refreshToken () {
     let token = getCookieValue("refresh_token")
     if (!token) {
         // Logged out, no refresh token!
         return
     }
-    fetch(`${constants["BACKEND_URL"]}/v1/login/tokens/access`, {
-        headers: {
-            "Authorization": token
-        }
-    }).then( (response) => response.json()
-    ).then( (json) => document.cookie = `token=Bearer ${json["access_token"]}; Max-Age=${10 * 60}; path=/`)
-}
-
-export async function checkAccessValidity (): Promise<TokenValidityRecord> {
-    let token = getCookieValue("token")
-    let record = await fetch(`${constants["BACKEND_URL"]}/v1/login/tokens/access/validity`, {
+    let json = await fetch(`${constants["BACKEND_URL"]}/v1/login/tokens/access`, {
         headers: {
             "Authorization": token
         }
     }).then( (response) => response.json()
     )
+    document.cookie = `token=Bearer ${json["access_token"]}; Max-Age=${10 * 60}; path=/`
+}
+
+export async function checkAccessValidity (): Promise<TokenValidityRecord> {
+    await refreshToken()
+    let token = getCookieValue("token")
+    let response = await fetch(`${constants.BACKEND_URL}/v1/login/tokens/access/validity`, {
+        headers: {
+            "Authorization": token
+        }
+    }).then( (response) => response.json())
     return {
-        "expiration": record["expiration"],
-        "username": record["username"]
+        expiration: response["expiration"],
+        username: response["username"]
     }
 }
