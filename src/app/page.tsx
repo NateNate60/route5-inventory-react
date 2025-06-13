@@ -4,17 +4,16 @@ import "@/app/style.css"
 import "@/app/small.css"
 import "@/app/buttons.css"
 import getInventory from "@/backend/getInventory"
-import BackButton from "@/components/buttons/backbutton"
 import DropdownMenu from "@/components/DropdownMenu"
 import ProductDisplayer from "@/app/ProductDisplayer"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
 import { useEffect, useState } from "react"
 
-import constants from "@/constants.json"
 import { FILTERS, SORTS } from "@/types/Sort"
 import OrangeTextButton from "@/components/buttons/orangebutton"
 import BlueTextButton from "@/components/buttons/bluebuttton"
-import { refresh_token } from "@/backend/login"
+import { refreshToken } from "@/backend/login"
+import LoginWidget from "@/components/LoginWidget"
 
 export default function InventoryManagement () {
     const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())
@@ -24,28 +23,32 @@ export default function InventoryManagement () {
     const [filter, setFilter] = useState<string>("")
 
     useEffect( () => {
-        refresh_token()
+        refreshToken()
         const interval = setInterval( () => {
-            refresh_token()
+            refreshToken()
         }, 60000)
         return () => clearInterval(interval);
-    })
+    }, [])
 
-    getInventory(
-    ).then( (value) => {
-        let runningValue = 0
-        if ("error" in value) {
-            setErrorText(value["error"])
-            return
-        }
-        for (let item of value) {
-            inventory.addProduct(item)
-            runningValue += item.sale_price * item.quantity
-        }
-        setTotalValue(runningValue)
-    })
+    useEffect( () => {
+        getInventory(
+        ).then( (value) => {
+            let runningValue = 0
+            if ("error" in value) {
+                setErrorText(value["error"])
+                return
+            }
+            for (let item of value) {
+                inventory.addProduct(item)
+                runningValue += item.sale_price * item.quantity
+            }
+            setTotalValue(runningValue)
+        })
+    }, [])
+
     return (
         <div>
+            <LoginWidget/>
             <h1 id="page-title">Manage Inventory</h1>
             <table id="navigation">
                 <tbody>
