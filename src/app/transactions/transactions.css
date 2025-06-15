@@ -76,3 +76,17 @@ td {
 .monetary {
     text-align: center;
 }
+
+@media (prefers-color-scheme: dark) {
+    #date-selector {
+        background-color: rgb(121, 113, 0);
+    }
+
+    #left-side {
+        background-color: rgb(0, 66, 0);
+    }
+
+    #right-side {
+        background-color: rgb(148, 71, 0);
+    }
+}
