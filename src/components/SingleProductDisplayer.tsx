@@ -64,7 +64,7 @@ export default function SingleProductDisplayer ({product, editable}: SingleProdu
                         Sale Date
                     </th>
                     <td className="single-product-displayer">
-                        {new Date(new Date(product.sale_date).getTime() + offset * 60 * 1000).toISOString().slice(0, 10)}
+                        {product.sale_date === "" ? "" : new Date(new Date(product.sale_date).getTime() + offset * 60 * 1000).toISOString().slice(0, 10)}
                     </td>
                 </tr>
                 <tr>
