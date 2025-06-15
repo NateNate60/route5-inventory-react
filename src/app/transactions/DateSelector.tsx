@@ -56,7 +56,7 @@ export default function DateSelector ({onChange, start, end}: DateSelectorProps)
 
     return (
         <div>
-            <table className="date-selector">
+            <table id="date-selector">
                 <thead>
                     <tr>
                         <th>

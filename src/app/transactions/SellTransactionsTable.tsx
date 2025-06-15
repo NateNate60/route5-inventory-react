@@ -38,7 +38,7 @@ export default function SellTransactonsTable ({startDate, endDate}: SellTransact
     }, [startDate, endDate])
 
     return (
-        <div className="right-side">
+        <div id="right-side">
             <table className="transaction-table">
                 <thead>
                     <tr>

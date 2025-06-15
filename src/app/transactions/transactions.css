@@ -1,4 +1,4 @@
-.left-side {
+#left-side {
     width: 45%;
     margin-left: 4%;
     margin-right: 1%;
@@ -9,7 +9,7 @@
     border-radius: 10px;
 }
 
-.right-side {
+#right-side {
     width: 45%;
     margin-right: 4%;
     margin-left: 1%;
@@ -20,7 +20,7 @@
     border-radius: 10px;
 }
 
-.date-selector {
+#date-selector {
     width: 50%;
     border: 1px solid black;
     margin-left: 25%;

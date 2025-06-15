@@ -40,7 +40,7 @@ export default function BuyTransactonsTable ({startDate, endDate}: BuyTransactio
     }, [startDate, endDate])
 
     return (
-        <div className="left-side">
+        <div id="left-side">
             <table className="transaction-table">
                 <thead>
                     <tr>
