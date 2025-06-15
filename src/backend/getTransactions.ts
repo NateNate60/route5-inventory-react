@@ -15,6 +15,9 @@ export async function getBuyTransactions (startDate?: Date, endDate?: Date): Pro
     return response.json().then(
         async (json) => {
             let r: Array<BuyTransaction> = []
+            if ("error" in json) {
+                return r
+            }
             for (let tx of json) {
                 let transaction: BuyTransaction = {
                     txid: tx["txid"],
@@ -54,6 +57,9 @@ export async function getSellTransactions (startDate?: Date, endDate?: Date): Pr
     return response.json().then(
         async (json) => {
             let r: Array<SaleTransaction> = []
+            if ("error" in json) {
+                return r
+            }
             for (let tx of json) {
                 let transaction: SaleTransaction = {
                     txid: tx["txid"],
