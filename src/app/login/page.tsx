@@ -7,15 +7,23 @@ import { useEffect, useState } from "react"
 import { login, refreshToken } from "@/backend/login"
 
 export default function LoginPage () {
-    const [username, setUsername] = useState<string>("")
-    const [password, setPassword] = useState<string>("")
     const [staySignedIn, setStaySignedIn] = useState<boolean>(false)
+    const [errorText, setErrorText] = useState<string>("")
 
     return (
         <div>
-            <form onSubmit={() => {
-                                login(username, password, staySignedIn)
-                            }}>
+            <form onSubmit={async (event) => {
+                event.preventDefault()
+                let formData = new FormData(event.currentTarget)
+                let success = await login(formData.get("username")?.toString() ?? "",
+                    formData.get("password")?.toString() ?? "",
+                    staySignedIn)
+                if (!success) {
+                    setErrorText("Invalid username or password")
+                } else {
+                    window.location.href = "/"
+                }
+            }}>
             <table id="login-prompt">
                 <tbody>
                     <tr>
@@ -26,7 +34,7 @@ export default function LoginPage () {
                     <tr>
                         <td>
                             <input type="text" name="username" className="login-input" 
-                                value={username} onChange={(e) => setUsername(e.target.value)}
+                                onChange={() => setErrorText("")}
                             />
                         </td>
                     </tr>
@@ -39,7 +47,7 @@ export default function LoginPage () {
                     <tr>
                         <td>
                             <input type="password" name="password" className="login-input"
-                                 value={password} onChange={(e) => setPassword(e.target.value)}
+                                onChange={() => setErrorText("")}
                             />
                         </td>
                     </tr>
@@ -50,14 +58,11 @@ export default function LoginPage () {
                         </td>
                     </tr>
                     <tr>
-                        <td><br/></td>
+                        <td className="error-text">{errorText}<br/></td>
                     </tr>
                     <tr>
                         <td id="login-button">
-                            <WhiteTextButton text="Log in" onClick={async () => {
-                                await login(username, password, staySignedIn)
-                                window.location.href = "/"
-                            }}/>
+                            <WhiteTextButton text="Log in" submit={true}/>
                         </td>
                         
                     </tr>

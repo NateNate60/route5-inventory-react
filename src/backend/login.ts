@@ -16,8 +16,12 @@ export function login (username: string, password: string, staySignedIn: boolean
     }).then(
         (response) => response.json()
     ).then( (json) => {
+        if ("error" in json) {
+            return false
+        }
         document.cookie = `token=Bearer ${json["access_token"]}; Max-Age=${10 * 60}; path=/`
         document.cookie = `refresh_token=Bearer ${json["refresh_token"]}; Max-Age=${staySignedIn ? 30 * 24 * 60 * 60 : 24 * 60 * 60}; path=/`
+        return true
     })
 }
 
