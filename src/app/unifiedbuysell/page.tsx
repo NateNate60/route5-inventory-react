@@ -16,9 +16,12 @@ import { Product } from "@/types/Product"
 import SingleProductDisplayer from "@/components/SingleProductDisplayer"
 import BackButton from "@/components/buttons/backbutton"
 import { refreshToken } from "@/backend/login"
+import ModeSelector from "./ModeSelector"
 
 export default function UnifiedBuySellPage () {
     const [changeCounter, setChangeCounter] = useState<number>(0)
+
+    const [mode, setMode] = useState<"buy" | "sell" | "trade">("sell")
 
     const [buyCart, setBuyCart] = useState<ProductQuantityList>(new ProductQuantityList())
     const [buyCards, setBuyCards] = useState<number>(0)
@@ -42,51 +45,93 @@ export default function UnifiedBuySellPage () {
         return () => clearInterval(interval);
     }, [])
 
+    function clearAll () {
+        setBuyCart(new ProductQuantityList())
+        setBuyCards(0)
+        setBuyCash(0)
+        setBuyCredit(0)
+        setBuyPaymentMethod("cash")
+
+        setSellCart(new ProductQuantityList())
+        setSellCards(0)
+        setSellCash(0)
+        setSellCredit(0)
+        setSellPaymentMethod("cash")
+    }
+
+    let maybeBuySide, maybeSellSide
+    if (mode === "buy" || mode === "trade") {
+        maybeBuySide = <div id={mode === "trade" ? "buy-side" : undefined}>
+                <BuyPanel cart={buyCart} 
+                    cashPaid={mode === "buy" ? sellCash : buyCash}
+                    setCashPaid={mode === "buy" ? setSellCash : setBuyCash} 
+                    creditPaid={mode === "buy" ? sellCredit : buyCredit}
+                    setCreditPaid={mode === "buy" ? setSellCredit : setBuyCredit}
+                    setPaymentMethod={mode === "buy" ? setSellPaymentMethod : setBuyPaymentMethod}
+                    onChange={ (item, attribute, value) => {
+                        if (attribute === "quantity") {
+                            buyCart.changeProductQuantity(item, value)
+                        } else {
+                            buyCart.products[item].product.sale_price = Math.round(value * 100)
+                        }
+                        setChangeCounter(changeCounter + 1)
+                        setBuyCards(buyCart.priceTotal())
+                }} onDelete={(id) => {
+                    buyCart.deleteProduct(id)
+                    setBuyCards(buyCart.priceTotal())
+                    setChangeCounter(changeCounter + 1)
+                }}/>
+                <BuyItemAdder onSubmit={(product) => {
+                    buyCart.addProduct(product, false)
+                    setLastScan(product)
+                    setBuyCards(buyCart.priceTotal())
+                    setChangeCounter(changeCounter + 1)
+                }}/>
+            </div>
+    }
+    if (mode === "sell" || mode === "trade") {
+        maybeSellSide = <div id={mode === "trade" ? "sell-side" : undefined}>
+            <SellPanel cart={sellCart} 
+                cashPaid={mode === "sell" ? buyCash: sellCash}
+                setCashPaid={mode === "sell" ? setBuyCash : setSellCash} 
+                creditPaid={mode === "sell" ? buyCredit: sellCredit}
+                setCreditPaid={mode === "sell" ? setBuyCredit : setSellCredit}
+                setPaymentMethod={mode === "sell" ? setBuyPaymentMethod : setSellPaymentMethod}
+                onChange={ (item, quantity) => {
+                    sellCart.products[item].quantity = quantity
+                    setSellCards(sellCart.priceTotal())
+                    setChangeCounter(changeCounter + 1)
+            }} onDelete={ (id) => {
+                sellCart.deleteProduct(id)
+                setSellCards(sellCart.priceTotal())
+                setChangeCounter(changeCounter + 1)
+            }}/>
+            <SellItemAdder onSubmit={ (product) => {
+                sellCart.addProduct(product)
+                setLastScan(product)
+                setSellCards(sellCart.priceTotal())
+                setChangeCounter(changeCounter + 1)
+            }}/>
+        </div>
+    }
+
     return (
         <div>
             <BackButton/>
             <h1 id="page-title">Record New Transaction</h1>
+            <ModeSelector onClickBuy={() => {
+                    setMode("buy")
+                    clearAll()
+                }} onClickSell={() => {
+                    setMode("sell")
+                    clearAll()
+                }} onClickTrade={() => {
+                    setMode("trade")
+                    clearAll()
+                }}/>
             <div id="panels">
-                <div id="buy-side">
-                    <BuyPanel cart={buyCart} setCashPaid={setBuyCash} setCreditPaid={setBuyCredit} setPaymentMethod={setBuyPaymentMethod}
-                        onChange={ (item, attribute, value) => {
-                            if (attribute === "quantity") {
-                                buyCart.changeProductQuantity(item, value)
-                            } else {
-                                buyCart.products[item].product.sale_price = Math.round(value * 100)
-                            }
-                            setChangeCounter(changeCounter + 1)
-                            setBuyCards(buyCart.priceTotal())
-                    }} onDelete={(id) => {
-                        buyCart.deleteProduct(id)
-                        setBuyCards(buyCart.priceTotal())
-                        setChangeCounter(changeCounter + 1)
-                    }}/>
-                    <BuyItemAdder onSubmit={(product) => {
-                        buyCart.addProduct(product, false)
-                        setLastScan(product)
-                        setBuyCards(buyCart.priceTotal())
-                        setChangeCounter(changeCounter + 1)
-                    }}/>
-                </div>
-                <div id="sell-side">
-                    <SellPanel cart={sellCart} setCashPaid={setSellCash} setCreditPaid={setSellCredit} setPaymentMethod={setSellPaymentMethod}
-                        onChange={ (item, quantity) => {
-                            sellCart.products[item].quantity = quantity
-                            setSellCards(sellCart.priceTotal())
-                            setChangeCounter(changeCounter + 1)
-                    }} onDelete={ (id) => {
-                        sellCart.deleteProduct(id)
-                        setSellCards(sellCart.priceTotal())
-                        setChangeCounter(changeCounter + 1)
-                    }}/>
-                    <SellItemAdder onSubmit={ (product) => {
-                        sellCart.addProduct(product)
-                        setLastScan(product)
-                        setSellCards(sellCart.priceTotal())
-                        setChangeCounter(changeCounter + 1)
-                    }}/>
-                </div>
+                {maybeBuySide}
+                {maybeSellSide}
             </div>
             <div id="summary">
                 <h3>Last Scanned Item</h3>
@@ -104,17 +149,7 @@ export default function UnifiedBuySellPage () {
                             sellItems(sellCart, buyCards + buyCash + buyCredit, buyCredit, buyPaymentMethod)
                         }
 
-                        setBuyCart(new ProductQuantityList())
-                        setBuyCards(0)
-                        setBuyCash(0)
-                        setBuyCredit(0)
-                        setBuyPaymentMethod("cash")
-
-                        setSellCart(new ProductQuantityList())
-                        setSellCards(0)
-                        setSellCash(0)
-                        setSellCredit(0)
-                        setSellPaymentMethod("cash")
+                        clearAll()
                     }}/>
                 </div>
                 

@@ -2,7 +2,7 @@
 
 import { ProductQuantityList } from "@/types/ProductQuantityList"
 import { JSX, useState } from "react"
-import CashEntry, { PaymentMethodEntry } from "./CashEntry"
+import { PaymentMethodEntry } from "./PaymentMethodEntry"
 import { ProductQuantity } from "@/types/Product"
 import NumericEntryField from "@/components/NumericEntryField"
 import DeleteButton from "@/components/buttons/DeleteButton"
@@ -11,12 +11,14 @@ interface SellPanelProps {
     cart: ProductQuantityList,
     onChange: (item: string, value: number) => any,
     onDelete: (item: string) => any,
+    cashPaid: number,
     setCashPaid: (amount: number) => any,
+    creditPaid: number,
     setCreditPaid: (amount: number) => any,
     setPaymentMethod: (paymentMethod: string) => any
 }
 
-export default function SellPanel ({cart, onChange, onDelete, setCashPaid, setCreditPaid, setPaymentMethod}: SellPanelProps) {
+export default function SellPanel ({cart, onChange, onDelete, cashPaid, setCashPaid, creditPaid, setCreditPaid, setPaymentMethod}: SellPanelProps) {
     const [error, setError] = useState<string>("")
     let sellTableEntries: Array<JSX.Element> = []
     for (let thing in cart.products) [
@@ -88,7 +90,7 @@ export default function SellPanel ({cart, onChange, onDelete, setCashPaid, setCr
                             Store Credit
                         </td>
                         <td colSpan={2}>
-                            <CashEntry onChange={setCreditPaid}/>
+                            $<NumericEntryField step={0.01} value={creditPaid / 100} onChange={(value) => setCreditPaid(value * 100)} min={0}/>
                         </td>
                     </tr>
                     <tr>
@@ -96,7 +98,7 @@ export default function SellPanel ({cart, onChange, onDelete, setCashPaid, setCr
                             Money
                         </td>
                         <td colSpan={2}>
-                            <CashEntry onChange={setCashPaid}/>
+                            $<NumericEntryField step={0.01} value={cashPaid / 100} onChange={(value) => setCashPaid(value * 100)} min={0}/>
                         </td>
                         <td>
                             <PaymentMethodEntry onChange={setPaymentMethod}/>

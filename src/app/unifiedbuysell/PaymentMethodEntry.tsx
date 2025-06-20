@@ -2,30 +2,6 @@
 
 import { useState } from "react"
 
-interface CashEntryProps {
-    onChange: (amount: number) => any
-}
-
-export default function CashEntry ({onChange}: CashEntryProps) {
-    const [amount, setAmount] = useState<number|undefined>(0)
-
-    return (
-        <>
-            $<input className="numeric-input" type="number" step={0.01} value={(amount ?? 0) / 100} min={0} onFocus={(event) => event.target.select()}
-              onChange={(e) => {
-                if (e.target.value === "") {
-                    setAmount(0)
-                    onChange(0)
-                } else {
-                    setAmount(Math.round(parseFloat(e.target.value) * 100))
-                    onChange(Math.round(parseFloat(e.target.value) * 100))
-                }
-                
-            }}/>
-        </>      
-    )
-}
-
 interface PaymentMethodEntryProps {
     onChange: (method: string) => any
 }

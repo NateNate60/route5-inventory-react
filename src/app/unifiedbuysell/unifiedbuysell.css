@@ -3,9 +3,9 @@
 }
 
 .buy-panel {
-    width: 95%;
-    margin-left: 4%;
-    margin-right: 1%;
+    width: 96%;
+    margin-right: 2%;
+    margin-left: 2%;
     margin-bottom: 10px;
     padding: 1%;
     background-color: rgb(220, 255, 220);
@@ -25,9 +25,9 @@
 }
 
 .sell-panel {
-    width: 95%;
-    margin-right: 4%;
-    margin-left: 1%;
+    width: 96%;
+    margin-right: 2%;
+    margin-left: 2%;
     margin-bottom: 10px;
     padding: 1%;
     background-color: rgb(255, 211, 154);
@@ -93,6 +93,19 @@ td {
     text-align: center;
 }
 
+#mode-selector {
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-right: 43%;
+    margin-left: 43%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
 @media (prefers-color-scheme: dark) {
     #summary {
         background-color: rgb(121, 113, 0);
@@ -104,5 +117,9 @@ td {
 
     .sell-panel {
         background-color: rgb(148, 71, 0);
+    }
+    
+    #mode-selector {
+        border: 1px solid white
     }
 }
