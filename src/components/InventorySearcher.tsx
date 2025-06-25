@@ -17,7 +17,9 @@ export default function InventorySearcher ({onSubmit}: InventorySearcherProps): 
         <div>
             <SearchBar big={true} onSubmit={(s: string) => {
                 getProductInfo(s
-                ).then( (item) => {onSubmit(item, s)})
+                ).then( (item) => {
+                    onSubmit(item, s)
+                })
             }}/>
         </div>
     )

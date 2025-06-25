@@ -7,6 +7,7 @@ import { PaymentMethodEntry } from "./PaymentMethodEntry"
 import InventorySearcher from "@/components/InventorySearcher"
 import NumericEntryField from "@/components/NumericEntryField"
 import DeleteButton from "@/components/buttons/DeleteButton"
+import { getMarketPrice } from "@/backend/searchProducts"
 
 interface BuyPanelProps {
     cart: ProductQuantityList,
@@ -47,6 +48,9 @@ export default function BuyPanel ({cart, onChange, onDelete, cashPaid, setCashPa
                         </th>
                         <th>
                             Market Price
+                        </th>
+                        <th>
+                            Price Ea.
                         </th>
                         <th>
                             Qty
@@ -110,6 +114,7 @@ interface BuyPanelEntryProps {
 }
 
 function BuyPanelEntry ({product, onPriceChange, onQuantityChange, onDelete}: BuyPanelEntryProps) {
+    let marketPrice = getMarketPrice(product.product)
     return (
         <tr>
             <td>
@@ -117,6 +122,9 @@ function BuyPanelEntry ({product, onPriceChange, onQuantityChange, onDelete}: Bu
             </td>
             <td>
                 {product.product.description} {product.product.condition}
+            </td>
+            <td>
+                ${marketPrice === undefined ? " unknown" : Math.round(marketPrice) / 100}
             </td>
             <td>
                 $<NumericEntryField step={0.01} value={product.product.sale_price / 100} onChange={(e) => onPriceChange(e)} min={0}/>

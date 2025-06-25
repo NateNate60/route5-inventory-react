@@ -1,5 +1,6 @@
 "use client"
 
+import searchProducts, { getMarketPrice } from "@/backend/searchProducts"
 import InventorySearcher from "@/components/InventorySearcher"
 import ProductInfoForm from "@/components/ProductInfoForm"
 import { Product } from "@/types/Product"
@@ -28,6 +29,34 @@ export default function BuyItemAdder ({onSubmit}: BuyItemAdderProps) {
             <InventorySearcher onSubmit={(result, barcode) => {
                 if ("error" in result) {
                     // Not found in inventory
+
+                    if (barcode.length === 12) {
+                        // This is a UPC. Try looking up in product database
+                        searchProducts(barcode, "sealed"
+                        ).then( (data) => {
+                            if (data.length === 0 ) {
+                                return
+                            }
+                            let result = data[0]
+                            let today = new Date()
+                            let product: Product = {
+                                id: barcode,
+                                type: "sealed",
+                                description: result.canonicalName,
+                                condition: "sealed",
+                                acquired_price: "sealedMarketPrice" in result.priceData ? result.priceData.sealedMarketPrice : 1,
+                                acquired_date: today.toString(),
+                                sale_price: 1,
+                                quantity: 1,
+                                consignor_name: "",
+                                consignor_contact: "",
+                                sale_price_date: today.toString(),
+                                sale_date: "",
+                                tcg_price_data: result
+                            }
+                            onSubmit(product)
+                        })
+                    }
                     setShowForm(true)
                     setBarcode(barcode)
                 } else if ("id" in result) {

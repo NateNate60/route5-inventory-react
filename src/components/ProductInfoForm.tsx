@@ -1,8 +1,9 @@
 "use client"
 
-import { Product } from "@/types/Product";
+import { Product, TCGProductData } from "@/types/Product";
 import WhiteTextButton from "./buttons/whitebutton";
 import { useState } from "react";
+import searchProducts from "@/backend/searchProducts";
 
 interface ProductInforFormProps {
     barcode: string,
@@ -15,6 +16,32 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
     const [quantity, setQuantity] = useState<number>(1)
     const [consignorName, setConsignorName] = useState<string>("")
     const [consignorContact, setConsignorContact] = useState<string>("")
+    const [tcgData, setTCGData] = useState<TCGProductData>()
+    const [disableNameInput, setDisableNameInput] = useState<boolean>(false)
+
+    const [suggestions, setSuggestions] = useState<Array<TCGProductData>>([])
+
+    let maybeSuggestions = suggestions.map( (suggestion) => 
+        <tr key={suggestion.tcgID}>
+            <td>
+                {suggestion.setName}
+            </td>
+            <td>
+                {suggestion.canonicalName} {suggestion.attribute}
+            </td>
+            <td>
+                {suggestion.number}
+            </td>
+            <td>
+                <WhiteTextButton text="Select" onClick={ () => {
+                    setDescription(suggestion.canonicalName)
+                    setSuggestions([])
+                    setDisableNameInput(true)
+                    setTCGData(suggestion)
+                }}/>
+            </td>
+        </tr>
+    )
 
     let type: "slab" | "sealed" | "card"
     if (barcode.length === 12) {
@@ -43,9 +70,21 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                             <label>Card name or product description</label>
                         </td>
                         <td>
-                            <input type="text" id="description" name="description" onChange={(e) => setDescription(e.target.value)} value={description}/>
+                            <input type="text" id="description" name="description" onChange={(e) => {
+                                let query = e.target.value
+                                if (query.length > 2){
+                                    setDescription(query)
+                                    searchProducts(query, type).then( (suggestions) => {
+                                        setSuggestions(suggestions)
+                                    })
+                                } else {
+                                    setSuggestions([])
+                                    setDescription(query)
+                                }
+                            }} value={description} disabled={disableNameInput}/>
                         </td>
                     </tr>
+                    {maybeSuggestions}
                     <tr>
                         <td>
                             Condition
@@ -86,7 +125,8 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                                     consignor_name: consignorName,
                                     consignor_contact: consignorContact,
                                     sale_price_date: today.toString(),
-                                    sale_date: ""
+                                    sale_date: "",
+                                    tcg_price_data: tcgData
                                 }
 
                                 if (info.condition === "") {
@@ -107,6 +147,11 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                             }}/>
                         </td>
                     </tr>
+                </tbody>
+            </table>
+            <table>
+                <tbody>
+
                 </tbody>
             </table>
         </form>
