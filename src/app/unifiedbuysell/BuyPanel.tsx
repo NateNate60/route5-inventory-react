@@ -124,16 +124,16 @@ function BuyPanelEntry ({product, onPriceChange, onQuantityChange, onDelete}: Bu
                 {product.product.description} {product.product.condition}
             </td>
             <td>
-                ${marketPrice === undefined ? " unknown" : Math.round(marketPrice) / 100}
+                $&#8288;{marketPrice === undefined ? " unknown" : Math.round(marketPrice) / 100}
             </td>
             <td>
-                $<NumericEntryField step={0.01} value={product.product.sale_price / 100} onChange={(e) => onPriceChange(e)} min={0}/>
+                $&#8288;<NumericEntryField step={0.01} value={product.product.sale_price / 100} onChange={(e) => onPriceChange(e)} min={0}/>
             </td>
             <td>
                 <NumericEntryField step={1} value={product.quantity} onChange={(e) => onQuantityChange(e)} min={1}/>
             </td>
             <td>
-                ${Math.round(product.product.sale_price * product.quantity) / 100}
+                $&#8288;{Math.round(product.product.sale_price * product.quantity) / 100}
             </td>
             <td>
                 <DeleteButton onClick={() => {onDelete(product.product.id)}}/>
