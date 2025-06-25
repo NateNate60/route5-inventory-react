@@ -7,6 +7,7 @@ import { Product } from "@/types/Product"
 import updatePrice from "@/backend/updatePrice"
 import "./inventory.css"
 import NumericEntryField from "@/components/NumericEntryField"
+import { getMarketPrice } from "@/backend/searchProducts"
 
 interface ProductDisplayerProps {
     products: ProductQuantityList,
@@ -76,16 +77,19 @@ export default function ProductDisplayer ({products, editable, sort, filter}: Pr
                         Bought for
                     </th>
                     <th>
-                        Price
+                        Acquired Date
+                    </th>
+                    <th>
+                        Market
+                    </th>
+                    <th>
+                        Our Sale Price
                     </th>
                     <th>
                         Price date
                     </th>
                     <th>
                         Consignor
-                    </th>
-                    <th>
-                        Acquired Date
                     </th>
                     <th>
                     </th>
@@ -106,6 +110,8 @@ interface ProductListingProps {
 function ProductListing ({product, editable}: ProductListingProps) {
     let [price, setPrice] = useState<number>(product["sale_price"])
     let [priceDate, setPriceDate] = useState<string>(product["sale_price_date"])
+
+    let marketPrice = Math.round(getMarketPrice(product) ?? 0) / 100
     return (
         <tr key={product['id']}>
             <td width={"10%"} className="result-table">
@@ -123,8 +129,14 @@ function ProductListing ({product, editable}: ProductListingProps) {
             <td width={'7%'} className="result-table">
                 $ {Math.round(product['acquired_price']) / 100}
             </td>
+            <td width={"10%"} className="result-table">
+                {product['acquired_date'].slice(0, 10)}
+            </td>
+            <td>
+                {marketPrice === 0 ? "" : "$" + marketPrice}
+            </td>
             <td width={"7%"} className="result-table">
-                <NumericEntryField step={0.01} value={Math.round(price) / 100} onChange={(newPrice) => {setPrice(newPrice * 100)}}/>
+                $<NumericEntryField step={0.01} value={Math.round(price) / 100} onChange={(newPrice) => {setPrice(newPrice * 100)}}/>
             </td>
             <td width={"10%"} className="result-table">
                 <ProductPriceDate dateString={priceDate} />
@@ -134,10 +146,6 @@ function ProductListing ({product, editable}: ProductListingProps) {
                 <br/>
                 {product['consignor_contact']}
             </td>
-            <td width={"10%"} className="result-table">
-                {product['acquired_date'].slice(0, 10)}
-            </td>
-            
             <td width={"10%"} className="result-table">
                 <WhiteTextButton text="Save" onClick={() => {
                     updatePrice(price, product["id"])
