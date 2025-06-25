@@ -6,6 +6,7 @@ import { PaymentMethodEntry } from "./PaymentMethodEntry"
 import { ProductQuantity } from "@/types/Product"
 import NumericEntryField from "@/components/NumericEntryField"
 import DeleteButton from "@/components/buttons/DeleteButton"
+import { getMarketPrice } from "@/backend/searchProducts"
 
 interface SellPanelProps {
     cart: ProductQuantityList,
@@ -54,7 +55,10 @@ export default function SellPanel ({cart, onChange, onDelete, cashPaid, setCashP
                             Item
                         </th>
                         <th>
-                            Market Price
+                            Market
+                        </th>
+                        <th>
+                            Price
                         </th>
                         <th>
                             Qty
@@ -117,6 +121,7 @@ interface SellPanelEntryProps {
 }
 
 function SellPanelEntry ({product, onChange, onDelete}: SellPanelEntryProps) {
+    let marketPrice = getMarketPrice(product.product)
     return (
         <tr>
             <td>
@@ -124,6 +129,9 @@ function SellPanelEntry ({product, onChange, onDelete}: SellPanelEntryProps) {
             </td>
             <td>
                 {product.product.description} {product.product.condition}
+            </td>
+            <td>
+                {marketPrice === undefined ? "" : "$ " + Math.round(marketPrice) / 100}
             </td>
             <td>
                 ${Math.round(product.product.sale_price) / 100}
