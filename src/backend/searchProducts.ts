@@ -54,30 +54,36 @@ export default async function searchProducts (productName: string, productType: 
 export function getMarketPrice (product: Product): number | undefined {
     /*
     Return the market price of a product for its appropriate condition
+
+    If the market price is higher than the other conditions, return the market price of
+    the higher conditions instead.
     */
-    let marketPrice = 0
+    let marketPrice = Infinity
     let priceData = product.tcg_price_data?.priceData
     if (priceData === undefined) {
         return undefined
     }
     if ("nmMarketPrice" in priceData) {
-
         switch (product.condition) {
-            case "NM":
-                marketPrice = priceData.nmMarketPrice
-                break
-            case "LP":
-                marketPrice = priceData.lpMarketPrice
-                break
-            case "MP":
-                marketPrice = priceData.mpMarketPrice
-                break
-            case "HP":
-                marketPrice = priceData.hpMarketPrice
-                break
             case "DM":
                 marketPrice = priceData.dmMarketPrice
-                break
+            case "HP":
+                if (priceData.hpMarketPrice < marketPrice) {
+                    marketPrice = priceData.hpMarketPrice
+                }
+            case "MP":
+                if (priceData.mpMarketPrice < marketPrice) {
+                    marketPrice = priceData.mpMarketPrice
+                }
+            case "LP":
+                if (priceData.lpMarketPrice < marketPrice) {
+                    marketPrice = priceData.lpMarketPrice
+                }
+            case "NM":
+                if (priceData.nmMarketPrice < marketPrice) {
+                    marketPrice = priceData.nmMarketPrice
+                }
+
         }
     } else if ("sealedMarketPrice" in priceData) {
         marketPrice = priceData.sealedLowPrice
