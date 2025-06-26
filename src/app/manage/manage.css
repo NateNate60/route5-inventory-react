@@ -31,7 +31,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    #user-management {
+    .management-section {
         border-color: white;
     }
 
