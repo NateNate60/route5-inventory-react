@@ -115,8 +115,8 @@ function UserTable ({users}: UserTableProps) {
         </td>
     </tr>)
 
-    return <table id="user-table">
-        <thead >
+    return <table id="user-table" className="fullwidth">
+        <thead>
             <tr>
                 <th>
                     Username
