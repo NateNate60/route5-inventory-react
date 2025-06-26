@@ -7,6 +7,7 @@ import UserManagement from "./UserManagement"
 import { useEffect } from "react"
 import { refreshToken } from "@/backend/login"
 import UPCManagement from "./UPCManagement"
+import PriceManagement from "./PriceManagement"
 
 export default function ManagePage () {
     useEffect( () => {
@@ -25,6 +26,7 @@ export default function ManagePage () {
                 <h1 id="page-title">Management</h1>
                 <UserManagement/>
                 <UPCManagement/>
+                <PriceManagement/>
             </div>
         </div>
     )
