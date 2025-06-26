@@ -14,6 +14,7 @@ import OrangeTextButton from "@/components/buttons/orangebutton"
 import BlueTextButton from "@/components/buttons/bluebuttton"
 import { refreshToken } from "@/backend/login"
 import LoginWidget from "@/components/LoginWidget"
+import WhiteTextButton from "@/components/buttons/whitebutton"
 
 export default function InventoryManagement () {
     const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())
@@ -60,6 +61,11 @@ export default function InventoryManagement () {
                         </td>
                         <td>
                             <BlueTextButton text="View Transaction History" href="/transactions"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            <WhiteTextButton text="Management" href="/manage"/>
                         </td>
                     </tr>
                 </tbody>

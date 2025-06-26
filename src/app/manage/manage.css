@@ -1,0 +1,37 @@
+
+#main-interface {
+    padding-left: 30%;
+    padding-right: 30%;
+}
+
+#page-title {
+    text-align: center;
+    margin-bottom: 5%;
+}
+
+.section-title {
+    text-align: center;
+}
+
+#user-management {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+#user-adder {
+    width: 80%;
+    padding: 5%;
+    margin: auto;
+}
+
+#user-table {
+    width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+    #user-management {
+        border-color: white;
+    }
+
+}
