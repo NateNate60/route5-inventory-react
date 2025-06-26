@@ -13,10 +13,11 @@
     text-align: center;
 }
 
-#user-management {
+.management-section {
     width: 100%;
     border: 1px solid black;
     border-radius: 10px;
+    margin-bottom: 5%;
 }
 
 #user-adder {

@@ -18,7 +18,7 @@ export default function UserManagement () {
         })
     }, [])
 
-    return <div id="user-management">
+    return <div id="user-management" className="management-section">
         <h2 className="section-title">
             Manage Users
         </h2>
