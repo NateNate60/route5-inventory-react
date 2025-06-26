@@ -1,5 +1,6 @@
 "use client"
 import addUser from "@/backend/addUser"
+import deleteUser from "@/backend/deleteUser"
 import getUsers from "@/backend/getUsers"
 import DeleteButton from "@/components/buttons/DeleteButton"
 import WhiteTextButton from "@/components/buttons/whitebutton"
@@ -108,7 +109,9 @@ function UserTable ({users}: UserTableProps) {
             {user.lastLogin.toLocaleDateString()}
         </td>
         <td>
-            <DeleteButton onClick={() => {}}/>
+            <DeleteButton onClick={() => {
+                deleteUser(user.username)
+            }}/>
         </td>
     </tr>)
 
