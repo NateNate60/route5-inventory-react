@@ -25,6 +25,7 @@ export default async function searchProducts (productName: string, productType: 
                     canonicalName: result["item_name"],
                     setName: result["set_name"],
                     attribute: "",
+                    number: result["upc"],
                     priceData: {
                         sealedLowPrice: result["sealed_low_price"],
                         sealedMarketPrice: result["sealed_market_price"]
