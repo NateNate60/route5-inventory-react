@@ -44,7 +44,7 @@ function UserAdder () {
             window.location.href = "."
         }
     }}>
-        <table id="user-adder">
+        <table id="user-adder" className="fullwidth">
             <thead>
                 <tr>
                     <th colSpan={2} className="section-title">

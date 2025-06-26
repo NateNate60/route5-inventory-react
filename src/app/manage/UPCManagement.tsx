@@ -13,7 +13,7 @@ export default function UPCManagement () {
     return <div id="upc-management" className="management-section">
         <h2 className="section-title">Associate UPCs with Products</h2>
         <form>
-            <table id="upc-table">
+            <table id="upc-table" className="fullwidth">
                 <thead>
                     <tr>
                         <th>
