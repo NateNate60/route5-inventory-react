@@ -1,3 +1,11 @@
+input[type="text"] {
+    display: block;
+    margin: auto;
+}
+
+td {
+    padding-bottom: 1%;
+}
 
 #main-interface {
     padding-left: 30%;
@@ -28,6 +36,10 @@
 
 #user-table {
     width: 100%;
+}
+
+#upc-table {
+    width: 100%
 }
 
 @media (prefers-color-scheme: dark) {
