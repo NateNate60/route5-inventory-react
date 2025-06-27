@@ -3,9 +3,9 @@ p {
 }
 
 #navigation {
-    margin-left: 30%;
-    margin-right: 30%;
+    margin: auto;
     width: 40%;
+    min-width: 20em;
     padding: 1%;
     margin-bottom: 1%;
     border: 1px solid black;
@@ -14,8 +14,9 @@ p {
 }
 
 #summary {
-    margin-left: 30%;
-    margin-right: 30%;
+    margin: auto;
+    width: 30%;
+    min-width: 20em;
     padding: 1%;
     margin-bottom: 1%;
     background-color: rgb(255, 255, 197);

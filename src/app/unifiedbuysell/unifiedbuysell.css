@@ -1,5 +1,6 @@
-.panels {
-    width: 100%;
+#panels {
+    margin: auto;
+    text-align: center;
 }
 
 .buy-panel {
@@ -9,19 +10,20 @@
     margin-bottom: 10px;
     padding: 1%;
     background-color: rgb(220, 255, 220);
-    float: left;
     border: 1px solid black;
     border-radius: 10px;
 }
 
 #buy-side {
-    float: inline-start;
-    width: 50%;
+    display: inline-block;
+    margin: auto;
+    width: 45em;
 }
 
 #sell-side {
-    float: inline-end;
-    width: 50%;
+    display: inline-block;
+    margin: auto;
+    width: 45em;
 }
 
 .sell-panel {
@@ -31,8 +33,7 @@
     margin-bottom: 10px;
     padding: 1%;
     background-color: rgb(255, 211, 154);
-    float: right;
-    clear: right;
+
     border: 1px solid black;
     border-radius: 10px;
 }
