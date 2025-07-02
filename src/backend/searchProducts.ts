@@ -38,6 +38,7 @@ export default async function searchProducts (productName: string, productType: 
                     canonicalName: result["card_name"],
                     setName: result["set_name"],
                     attribute: "",
+                    number: result["card_number"],
                     priceData: {
                         nmMarketPrice: result["nm_market_price"],
                         lpMarketPrice: result["lp_market_price"],
