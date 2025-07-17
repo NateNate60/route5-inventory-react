@@ -127,25 +127,36 @@ function SaleTransactionEntry ({tx}: SaleTransactionEntryProps) {
                             <th colSpan={2} className="small">
                                 Payment method
                             </th>
-                            <th colSpan={2} className="small unbold">
+                            <th className="small unbold">
                                 {tx.payment_method}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th colSpan={2} className="small">
-                                Store credit applied
-                            </th>
-                            <th colSpan={2} className="small unbold">
-                                ${Math.round(tx.credit_applied) / 100}
                             </th>
                         </tr>
                         <tr>
                             <th colSpan={2} className="small">
                                 Profit
                             </th>
-                            <th colSpan={2} className="small unbold">
+                            <th className="small unbold">
                                 ${Math.round(tx.sale_price_total - buyPriceTotal) / 100}
                             </th>
+                        </tr>
+                        <tr>
+                            <th colSpan={2} className="small">
+                                Money received
+                            </th>
+                            <th className="small unbold">
+                                ${Math.round(tx.sale_price_total - tx.credit_applied) / 100}
+                            </th>
+                            <th className="small">
+                                Store credit applied
+                            </th>
+                            <th className="small unbold">
+                                ${Math.round(tx.credit_applied) / 100}
+                            </th>
+                        </tr>
+                        <tr>
+                            <td colSpan={5}>
+                                <hr/>
+                            </td>
                         </tr>
                         <tr>
                             <th className="small">

@@ -75,7 +75,7 @@ export default function BuyTransactonsTable ({startDate, endDate}: BuyTransactio
                             We Paid
                         </th>
                         <th>
-                            Market Value
+                            Value (at time of transaction)
                         </th>
                         <th>
                         </th>
@@ -126,7 +126,7 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                             <th className="small">
                                 Seller Name
                             </th>
-                            <th colSpan={4} className="small unbold">
+                            <th colSpan={5} className="small unbold">
                                 {tx.acquired_from_name}
                             </th>
                         </tr>
@@ -134,7 +134,7 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                             <th className="small">
                                 Contact Info
                             </th>
-                            <th colSpan={4} className="small unbold">
+                            <th colSpan={5} className="small unbold">
                                 {tx.acquired_from_contact}
                             </th>
                         </tr>
@@ -142,8 +142,14 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                             <th className="small">
                                 Payment Method
                             </th>
-                            <th colSpan={2} className="small unbold">
+                            <th className="small unbold">
                                 {tx.payment_method}
+                            </th>
+                            <th className="small">
+                                Money Given
+                            </th>
+                            <th className="small unbold">
+                                ${Math.round(tx.acquired_price_total - tx.credit_given) / 100}
                             </th>
                             <th className="small">
                                 Store Credit Given
@@ -153,8 +159,8 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                             </th>
                         </tr>
                         <tr>
-                            <td>
-                                &nbsp;
+                            <td colSpan={6}>
+                                <hr/>
                             </td>
                         </tr>
                         <tr>
