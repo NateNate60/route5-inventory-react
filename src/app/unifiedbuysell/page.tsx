@@ -28,6 +28,7 @@ export default function UnifiedBuySellPage () {
     const [buyCredit, setBuyCredit] = useState<number>(0)
     const [buyCash, setBuyCash] = useState<number>(0)
     const [buyPaymentMethod, setBuyPaymentMethod] = useState<string>("cash")
+    const [buyBulk, setBuyBulk] = useState<number>(0)
 
     const [lastScan, setLastScan] = useState<Product>()
     
@@ -36,6 +37,7 @@ export default function UnifiedBuySellPage () {
     const [sellCredit, setSellCredit] = useState<number>(0)
     const [sellCash, setSellCash] = useState<number>(0)
     const [sellPaymentMethod, setSellPaymentMethod] = useState<string>("cash")
+    const [sellBulk, setSellBulk] = useState<number>(0)
 
     useEffect( () => {
         refreshToken()
@@ -68,6 +70,8 @@ export default function UnifiedBuySellPage () {
                     creditPaid={mode === "buy" ? sellCredit : buyCredit}
                     setCreditPaid={mode === "buy" ? setSellCredit : setBuyCredit}
                     setPaymentMethod={mode === "buy" ? setSellPaymentMethod : setBuyPaymentMethod}
+                    bulkTotal={buyBulk}
+                    setBulk={setBuyBulk}
                     onChange={ (item, attribute, value) => {
                         if (attribute === "quantity") {
                             buyCart.changeProductQuantity(item, value)
@@ -97,6 +101,8 @@ export default function UnifiedBuySellPage () {
                 creditPaid={mode === "sell" ? buyCredit: sellCredit}
                 setCreditPaid={mode === "sell" ? setBuyCredit : setSellCredit}
                 setPaymentMethod={mode === "sell" ? setBuyPaymentMethod : setSellPaymentMethod}
+                bulkTotal={sellBulk}
+                setBulk={setSellBulk}
                 onChange={ (item, quantity) => {
                     sellCart.products[item].quantity = quantity
                     setSellCards(sellCart.priceTotal())
@@ -142,11 +148,23 @@ export default function UnifiedBuySellPage () {
                 />
                 <div id="submit">
                     <WhiteTextButton text="Submit Transaction" onClick={() => {
-                        if (buyCards !== 0) {
-                            buyItems(buyCart, sellCards + sellCash + sellCredit, sellCredit, sellPaymentMethod)
-                        }
-                        if (sellCards !== 0) {
-                            sellItems(sellCart, buyCards + buyCash + buyCredit, buyCredit, buyPaymentMethod)
+                        if (mode === "trade") {
+                            let totalSellPrice = sellCards + sellBulk + sellCash + sellCredit
+
+                            // The difference in price between what the customer gave (in money and store credit) 
+                            // and what was given to the customer is represented as store credit that was issued 
+                            // to the customer and then immediately redeemed.
+                            let creditDifference = (totalSellPrice) - (buyCash + buyCredit)
+
+                            buyItems(buyCart, creditDifference, sellCredit + creditDifference, sellPaymentMethod, buyBulk)
+                            sellItems(sellCart, totalSellPrice, buyCredit + creditDifference, buyPaymentMethod, sellBulk)
+                        } else {
+                            if (buyCards !== 0) {
+                                buyItems(buyCart, sellCards + sellCash + sellCredit, sellCredit, sellPaymentMethod, buyBulk)
+                            }
+                            if (sellCards !== 0) {
+                                sellItems(sellCart, buyCards + buyCash + buyCredit, buyCredit, buyPaymentMethod, sellBulk)
+                            }
                         }
 
                         clearAll()

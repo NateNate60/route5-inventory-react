@@ -7,6 +7,7 @@ export default async function buyItems (products: ProductQuantityList,
                                         pricePaid: number,
                                         creditGiven: number,
                                         paymentMethod: string,
+                                        bulkTotal: number,
                                         sellerName: string = "",
                                         sellerContact: string = ""): Promise<any> {
     let cookie = getCookieValue("token")
@@ -29,6 +30,7 @@ export default async function buyItems (products: ProductQuantityList,
         },
         body: JSON.stringify({
             items: items,
+            bulk_total: bulkTotal,
             credit_given: creditGiven,
             payment_method: paymentMethod,
             acquired_from_name: sellerName,

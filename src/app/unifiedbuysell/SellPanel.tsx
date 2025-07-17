@@ -16,6 +16,8 @@ interface SellPanelProps {
     setCashPaid: (amount: number) => any,
     creditPaid: number,
     setCreditPaid: (amount: number) => any,
+    bulkTotal: number,
+    setBulk: (amount: number) => any,
     setPaymentMethod: (paymentMethod: string) => any
 }
 

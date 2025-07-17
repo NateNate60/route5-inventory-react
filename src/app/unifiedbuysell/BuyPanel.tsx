@@ -17,10 +17,12 @@ interface BuyPanelProps {
     setCashPaid: (amount: number) => any,
     creditPaid: number
     setCreditPaid: (amount: number) => any,
+    bulkTotal: number,
+    setBulk: (amount: number) => any,
     setPaymentMethod: (paymentMethod: string) => any
 }
 
-export default function BuyPanel ({cart, onChange, onDelete, cashPaid, setCashPaid, creditPaid, setCreditPaid, setPaymentMethod}: BuyPanelProps) {
+export default function BuyPanel ({cart, onChange, onDelete, cashPaid, setCashPaid, creditPaid, setCreditPaid, bulkTotal, setBulk, setPaymentMethod}: BuyPanelProps) {
 
     let buyTableEntries: Array<JSX.Element> = []
     for (let thing in cart.products) [
@@ -71,6 +73,14 @@ export default function BuyPanel ({cart, onChange, onDelete, cashPaid, setCashPa
                     <tr>
                         <td colSpan={5}>
                             <hr/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            Bulk
+                        </td>
+                        <td>
+                            $<NumericEntryField step={0.01} value={bulkTotal / 100} onChange={(value) => setBulk(value * 100)} min={0}/>
                         </td>
                     </tr>
                     <tr>

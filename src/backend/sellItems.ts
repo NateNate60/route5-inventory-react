@@ -2,12 +2,17 @@ import { ProductQuantityList } from "@/types/ProductQuantityList";
 import getCookieValue from "./getCookie";
 import CONSTANTS from "@/constants.json"
 
-export default async function sellItems (items: ProductQuantityList, priceTotal: number, creditApplied: number, paymentMethod: string) {
+export default async function sellItems (items: ProductQuantityList,
+                                         priceTotal: number,
+                                         creditApplied: number, 
+                                         paymentMethod: string,
+                                         bulkTotal: number) {
     let percentage = priceTotal / items.priceTotal()
     let cookie = getCookieValue("token")
 
     let data = {
         items: Array<any>(),
+        bulk_total: bulkTotal,
         credit_applied: creditApplied,
         payment_method: paymentMethod
     }
