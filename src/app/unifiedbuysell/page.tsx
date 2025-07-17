@@ -159,10 +159,10 @@ export default function UnifiedBuySellPage () {
                             buyItems(buyCart, creditDifference, sellCredit + creditDifference, sellPaymentMethod, buyBulk)
                             sellItems(sellCart, totalSellPrice, buyCredit + creditDifference, buyPaymentMethod, sellBulk)
                         } else {
-                            if (buyCards !== 0) {
+                            if (buyCards !== 0 || buyBulk !== 0) {
                                 buyItems(buyCart, sellCards + sellCash + sellCredit, sellCredit, sellPaymentMethod, buyBulk)
                             }
-                            if (sellCards !== 0) {
+                            if (sellCards !== 0 || sellBulk !== 0) {
                                 sellItems(sellCart, buyCards + buyCash + buyCredit, buyCredit, buyPaymentMethod, sellBulk)
                             }
                         }
