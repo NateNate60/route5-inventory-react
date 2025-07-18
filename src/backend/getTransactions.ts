@@ -27,6 +27,7 @@ export async function getBuyTransactions (startDate?: Date, endDate?: Date): Pro
                     acquired_from_contact: tx["acquired_from_contact"],
                     payment_method: tx["payment_method"],
                     credit_given: tx["credit_given"],
+                    bulk_total: tx["bulk_total"] ?? NaN,   
                     items: []
                 }
                 for (let item of tx["items"]) {
@@ -67,6 +68,7 @@ export async function getSellTransactions (startDate?: Date, endDate?: Date): Pr
                     sale_price_total: tx["sale_price_total"],
                     payment_method: tx["payment_method"],
                     credit_applied: tx["credit_applied"],
+                    bulk_total: tx["bulk_total"] ?? NaN,   
                     items: []
                 }
                 for (let item of tx["items"]) {

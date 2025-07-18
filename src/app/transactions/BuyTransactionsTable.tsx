@@ -209,14 +209,14 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                     {new Date(tx.acquired_date).toLocaleString()}
                 </td>
                 <td>
-                    {tx.items[0].description}
+                    {tx.items.length > 0 ? tx.items[0].description : "(bulk)"}
                     {maybeMore}
                 </td>
                 <td>
                     ${Math.round(tx.acquired_price_total) / 100}
                 </td>
                 <td>
-                    ${Math.round(marketValue) / 100}
+                    ${Math.round(marketValue + tx.bulk_total) / 100}
                 </td>
                 <td>
                     <WhiteTextButton text={expanded ? "▼" : "▶"} onClick={() => {setExpanded(!expanded)}}/>

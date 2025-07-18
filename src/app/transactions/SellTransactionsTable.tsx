@@ -190,7 +190,7 @@ function SaleTransactionEntry ({tx}: SaleTransactionEntryProps) {
                 {new Date(tx.sale_date).toLocaleString()}
             </td>
             <td>
-                {tx.items[0].description}
+                {tx.items.length > 0 ? tx.items[0].description : "(bulk)"}
                 {maybeMore}
             </td>
             <td>

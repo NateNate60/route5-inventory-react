@@ -7,6 +7,7 @@ export type BuyTransaction = {
     acquired_from_contact: string,
     acquired_price_total: number,
     payment_method: string,
+    bulk_total: number,
     credit_given: number,
     items: Array<TransactionProductInfo>
 }
@@ -16,6 +17,7 @@ export type SaleTransaction = {
     sale_price_total: number,
     payment_method: string,
     credit_applied: number,
+    bulk_total: number,
     txid: string,
     items: Array<TransactionProductInfo>
 }
