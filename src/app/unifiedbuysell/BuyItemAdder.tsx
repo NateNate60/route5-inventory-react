@@ -1,7 +1,7 @@
 "use client"
 
 import searchProducts, { getMarketPrice } from "@/backend/searchProducts"
-import InventorySearcher from "@/components/InventorySearcher"
+import { BuyInventorySearcher } from "@/app/unifiedbuysell/InventorySearcher"
 import ProductInfoForm from "@/components/ProductInfoForm"
 import { Product } from "@/types/Product"
 import { useState } from "react"
@@ -26,7 +26,7 @@ export default function BuyItemAdder ({onSubmit}: BuyItemAdderProps) {
         <div className="buy-panel">
             <h3>Add item received from customer</h3>
             <br />
-            <InventorySearcher onSubmit={(result, barcode) => {
+            <BuyInventorySearcher onSubmit={(result, barcode) => {
                 if ("error" in result) {
                     // Not found in inventory
 
@@ -46,7 +46,7 @@ export default function BuyItemAdder ({onSubmit}: BuyItemAdderProps) {
                                 condition: "sealed",
                                 acquired_price: "sealedMarketPrice" in result.priceData ? result.priceData.sealedMarketPrice : 1,
                                 acquired_date: today.toString(),
-                                sale_price: 1,
+                                sale_price: NaN,
                                 quantity: 1,
                                 consignor_name: "",
                                 consignor_contact: "",
@@ -54,6 +54,7 @@ export default function BuyItemAdder ({onSubmit}: BuyItemAdderProps) {
                                 sale_date: "",
                                 tcg_price_data: result
                             }
+                            product.sale_price = getMarketPrice(product) ?? NaN
                             onSubmit(product)
                         })
                     }

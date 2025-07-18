@@ -12,7 +12,7 @@ export default async function buyItems (products: ProductQuantityList,
                                         sellerContact: string = ""): Promise<any> {
     let cookie = getCookieValue("token")
     let items: Array<Product> = []
-    let percentage = pricePaid / products.priceTotal()
+    let percentage = (pricePaid - bulkTotal) / products.priceTotal()
 
     for (let itemID in products.products) {
         products.products[itemID].product.quantity = products.products[itemID].quantity
