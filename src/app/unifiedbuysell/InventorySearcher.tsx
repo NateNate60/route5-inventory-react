@@ -23,7 +23,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
 
     return (
         <div>
-            <table>
+            <table className="fullwidth">
                 <thead>
                     <tr>
                         <td>
