@@ -15,8 +15,8 @@ export default function calculateRates (rates: Rates, marketPrice: number, type:
                 tier++
             }
         }
-        creditRate = Math.floor(rates.creditRates.card[tier] / 50) * 50
-        cashRate = Math.floor(rates.cashRates.card[tier] / 50) * 50
+        creditRate = rates.creditRates.card[tier]
+        cashRate = rates.cashRates.card[tier]
     }
     return [cashRate, creditRate]
 }
