@@ -7,10 +7,11 @@ import { Product } from "@/types/Product"
 import { useState } from "react"
 
 interface BuyItemAdderProps {
-    onSubmit: (product: Product) => any
+    onSubmit: (product: Product) => any,
+    bulkBuyer: boolean
 }
 
-export default function BuyItemAdder ({onSubmit}: BuyItemAdderProps) {
+export default function BuyItemAdder ({onSubmit, bulkBuyer}: BuyItemAdderProps) {
     const [showForm, setShowForm] = useState<boolean>(false)
     const [barcode, setBarcode] = useState<string>("")
     const [pricePaid, setPricePaid] = useState<number>(0)

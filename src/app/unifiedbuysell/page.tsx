@@ -90,7 +90,7 @@ export default function UnifiedBuySellPage () {
                     setBuyCards(buyCart.priceTotal())
                     setChangeCounter(changeCounter + 1)
                 }}/>
-                <BuyItemAdder onSubmit={(product) => {
+                <BuyItemAdder bulkBuyer={false} onSubmit={(product) => {
                     buyCart.addProduct(product, false)
                     setLastScan(product)
                     setBuyCards(buyCart.priceTotal())
@@ -141,12 +141,12 @@ export default function UnifiedBuySellPage () {
                     setBuyCards(buyCart.priceTotal())
                     setChangeCounter(changeCounter + 1)
                 }}/>
-                <BuyItemAdder onSubmit={(product) => {
-                    buyCart.addProduct(product, false)
-                    setLastScan(product)
-                    setBuyCards(buyCart.priceTotal())
-                    setChangeCounter(changeCounter + 1)
-                }}/>
+            <BuyItemAdder bulkBuyer={true} onSubmit={(product) => {
+                buyCart.addProduct(product, false)
+                setLastScan(product)
+                setBuyCards(buyCart.priceTotal())
+                setChangeCounter(changeCounter + 1)
+            }}/>
         </div>
     }
 

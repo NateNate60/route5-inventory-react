@@ -12,7 +12,7 @@ interface InventorySearcherProps {
     showSuggestions?: boolean
 }
 
-export function BuyInventorySearcher ({onSubmit}: InventorySearcherProps): React.JSX.Element {
+export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySearcherProps): React.JSX.Element {
     /*
     A component which provides a search bar for searching the inventory.
     */
@@ -38,7 +38,7 @@ export function BuyInventorySearcher ({onSubmit}: InventorySearcherProps): React
                                     ).then( (item) => {
                                         onSubmit(item, s)
                                     })
-                                } else {
+                                } else if (showSuggestions) {
                                     searchProducts(s, "card"
                                     ).then( (value) => setSuggestions(value))
                                 }
