@@ -5,6 +5,12 @@ input[type="text"] {
 
 td {
     padding-bottom: 1%;
+    text-align: center;
+}
+
+.explanation-text {
+    padding-top: 2%;
+    padding-bottom: 2%;
 }
 
 .fullwidth {

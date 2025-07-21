@@ -8,6 +8,7 @@ import { useEffect } from "react"
 import { refreshToken } from "@/backend/login"
 import UPCManagement from "./UPCManagement"
 import PriceManagement from "./PriceManagement"
+import RateManagement from "./RateManagement"
 
 export default function ManagePage () {
     useEffect( () => {
@@ -27,6 +28,7 @@ export default function ManagePage () {
                 <UserManagement/>
                 <UPCManagement/>
                 <PriceManagement/>
+                <RateManagement/>
             </div>
         </div>
     )
