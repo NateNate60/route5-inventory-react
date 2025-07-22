@@ -3,6 +3,7 @@
 import "@/css/style.css"
 import "@/css/small.css"
 import "@/css/buttons.css"
+import "@/app/home.css"
 import getInventory from "@/backend/getInventory"
 import DropdownMenu from "@/components/DropdownMenu"
 import ProductDisplayer from "@/app/ProductDisplayer"
@@ -20,6 +21,8 @@ export default function InventoryManagement () {
     const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())
     const [errorText, setErrorText] = useState<string>("")
     const [totalValue, setTotalValue] = useState<number>(0)
+    const [acquisitionValue, setAcquisitionValue] = useState<number>(0)
+    const [searchString, setSearchString] = useState<string>("")
     const [sort, setSort] = useState<string>("abc")
     const [filter, setFilter] = useState<string>("")
 
@@ -37,6 +40,7 @@ export default function InventoryManagement () {
         getInventory(
         ).then( (value) => {
             let runningValue = 0
+            let acquiredRunningValue = 0
             if ("error" in value) {
                 setErrorText(value["error"])
                 return
@@ -44,8 +48,11 @@ export default function InventoryManagement () {
             for (let item of value) {
                 inventory.addProduct(item)
                 runningValue += item.sale_price * item.quantity
+                acquiredRunningValue += item.acquired_price * item.quantity
             }
             setTotalValue(runningValue)
+            setAcquisitionValue(acquiredRunningValue)
+            setErrorText("")
         })
     }, [loggedIn])
 
@@ -75,17 +82,62 @@ export default function InventoryManagement () {
                 <br/>
             </p>
             <div id="summary">
-                <p>
-                    Total value of inventory if everything is sold at asking: ${totalValue / 100}
-                </p>
-                <p>
-                    Sort by: <DropdownMenu options={SORTS} selected={sort} onClick={(s) => setSort(s)} />
-                </p>
-                <p>
-                    Filter by: <DropdownMenu options={FILTERS} selected={filter} onClick={(f) => setFilter(f)} />
-                </p>
+                <table className="fullwidth">
+                    <tbody>
+                        <tr>
+                            <td>
+                                Total value of inventory if everything is sold at asking: 
+                            </td>
+                            <td>
+                                $ {Math.round(acquisitionValue) / 100}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Total value of inventory according to purchase price: 
+                            </td>
+                            <td>
+                                $ {Math.round(totalValue) / 100}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={2}>
+                                <hr/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Sort
+                            </td>
+                            <td>
+                                <DropdownMenu options={SORTS} selected={sort} onClick={(s) => setSort(s)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Filter
+                            </td>
+                            <td>
+                                <DropdownMenu options={FILTERS} selected={filter} onClick={(f) => setFilter(f)} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan={2}>
+                                <hr/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Search
+                            </td>
+                            <td>
+                                <input type="text" value={searchString} onChange={(e) => setSearchString(e.target.value)}/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <ProductDisplayer products={inventory} editable={true} filter={filter} sort={sort}/>
+            <ProductDisplayer products={inventory} editable={true} filter={filter} sort={sort} search={searchString}/>
         </div>
     )
 }

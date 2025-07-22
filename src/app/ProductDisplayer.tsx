@@ -12,22 +12,24 @@ import { getMarketPrice } from "@/backend/searchProducts"
 interface ProductDisplayerProps {
     products: ProductQuantityList,
     editable: boolean,
-    sort?: string,
-    filter?: string
+    sort: string,
+    filter: string,
+    search: string
 }
 
-export default function ProductDisplayer ({products, editable, sort, filter}: ProductDisplayerProps) {
-    if (filter === "") {
-        filter = undefined
-    }
-
+export default function ProductDisplayer ({products, editable, sort, filter, search}: ProductDisplayerProps) {
     let productList = Array<Product>()
+
     for (let productID in products.products) {
         if (products.products[productID].product.type === filter ||
-            filter === undefined) {
+            filter === "") {
             productList.push(products.products[productID].product)
         }
             
+    }
+
+    if (search !== "") {
+        productList = productList.filter( (value) => `${value.tcg_price_data?.setName.toLowerCase()} ${value.tcg_price_data?.canonicalName.toLowerCase()} ${value.description.toLowerCase()} ${value.id}`.includes(search.toLowerCase()))
     }
     
     switch (sort) {
