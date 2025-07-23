@@ -6,7 +6,7 @@ import { JSX, useEffect, useState } from "react"
 import { PaymentMethodEntry } from "./PaymentMethodEntry"
 import NumericEntryField from "@/components/NumericEntryField"
 import DeleteButton from "@/components/buttons/DeleteButton"
-import { getMarketPrice } from "@/backend/searchProducts"
+import { getLowPrice, getMarketPrice } from "@/backend/searchProducts"
 import { Rates } from "@/types/Rates"
 import { getRates, getThreshhold } from "@/backend/settings"
 import calculateRates from "@/backend/calculateRates"
@@ -45,16 +45,21 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
     for (let thing in cart.products) {
         let product = cart.products[thing]
         let marketPrice = getMarketPrice(product.product) ?? NaN
+        let lowPrice = getLowPrice(product.product) ?? NaN
 
         // Calculate suggested price according to rate table
         let [cashRate, creditRate] = rates !== undefined ? calculateRates(rates, marketPrice, "card") : [NaN, NaN]
 
-        cashTotal += Math.floor((marketPrice * cashRate) / 50) * 50
-        creditTotal += Math.floor((marketPrice * creditRate) / 50) * 50
+        // Usually the market price, unless the card is under thre threshhold AND the TCG Low is lower than market.
+        let effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
+
+        cashTotal += Math.floor((effectivePrice * cashRate) / 50) * 50
+        creditTotal += Math.floor((effectivePrice * creditRate) / 50) * 50
         marketTotal += marketPrice
 
         buyTableEntries.push(<BuyPanelEntry product={cart.products[thing]} key={cart.products[thing].product.id}
                               marketPrice={marketPrice}
+                              lowPrice={lowPrice}
                               cashRate={cashRate}
                               creditRate={creditRate}
                               assetTagThreshhold={threshhold}
@@ -174,16 +179,21 @@ interface BuyPanelEntryProps {
     setBarcode: (oldBarcode: string, newBarcode: string) => boolean,
     onDelete: (id: string) => any,
     marketPrice: number,
+    lowPrice: number,
     cashRate: number,
     creditRate: number,
-    assetTagThreshhold?: number
+    assetTagThreshhold: number
 }
 
-function BuyPanelEntry ({product, setBarcode, onDelete, marketPrice, cashRate, creditRate, assetTagThreshhold}: BuyPanelEntryProps) {
+function BuyPanelEntry ({product, setBarcode, onDelete, marketPrice, lowPrice, cashRate, creditRate, assetTagThreshhold}: BuyPanelEntryProps) {
     
     const [barcodeField, setBarcodeField] = useState<string>(product.product.id[0] === "A" ? product.product.id : "")
     const [barcodeFieldDisabled, setBarcodeFieldDisabled] = useState<boolean>(product.product.id[0] === "A")
     const [errorText, setError] = useState<string>("")
+
+    // Usually the market price, unless the card is under thre threshhold AND the TCG Low is lower than market.
+    let effectivePrice = marketPrice < assetTagThreshhold && lowPrice < marketPrice ? lowPrice : marketPrice
+
     let maybeBarcode = undefined
     if (marketPrice >= (assetTagThreshhold ?? Infinity)) {
         maybeBarcode = <form onSubmit={(e) => {
@@ -218,13 +228,13 @@ function BuyPanelEntry ({product, setBarcode, onDelete, marketPrice, cashRate, c
                 $&nbsp;{marketPrice === undefined ? " unknown" : Math.round(marketPrice) / 100}
             </td>
             <td>
-                {/* TCG Low */} ?
+                $&nbsp;{Math.round(lowPrice) / 100}
             </td>
             <td>
-                $&nbsp;{Math.floor((marketPrice * cashRate) / 50) / 2} ({Math.round(cashRate * 100)}%)
+                $&nbsp;{Math.floor((effectivePrice * cashRate) / 50) / 2} ({Math.round(cashRate * 100)}%)
             </td>
             <td>
-                $&nbsp;{Math.floor((marketPrice * creditRate) / 50) / 2} ({Math.round(creditRate * 100)}%)
+                $&nbsp;{Math.floor((effectivePrice * creditRate) / 50) / 2} ({Math.round(creditRate * 100)}%)
             </td>
             <td>
                 <DeleteButton onClick={() => {onDelete(product.product.id)}}/>

@@ -40,7 +40,12 @@ export type TCGCardData = {
     lpMarketPrice: number,
     mpMarketPrice: number,
     hpMarketPrice: number,
-    dmMarketPrice: number
+    dmMarketPrice: number,
+    nmLowPrice: number,
+    lpLowPrice: number,
+    mpLowPrice: number,
+    hpLowPrice: number,
+    dmLowPrice: number
 }
 
 export type TCGSealedData = {

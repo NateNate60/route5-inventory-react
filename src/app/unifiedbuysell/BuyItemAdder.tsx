@@ -85,7 +85,7 @@ export default function BuyItemAdder ({onSubmit, bulkBuyer}: BuyItemAdderProps) 
                     setBarcode("")
                     setShowForm(false)
                 }
-            }} />
+            }} showSuggestions={bulkBuyer} />
             {maybeText}
             {maybeForm}
         </div>
