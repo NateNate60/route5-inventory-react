@@ -27,7 +27,12 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                 <thead>
                     <tr>
                         <td>
-                            <SearchBar big={true} onSubmit={(s: string) => {
+                            <SearchBar big={true} onSubmit={(input: string) => {
+                                let s = input
+                                if (input.toLowerCase().includes("psacard.com")) {
+                                    let split = input.split("/")
+                                    s = split[split.length - 2]
+                                }
                                 if (s.match(/^\d{12}$/) // UPC
                                     || s.match(/^A\d\d\d\d$/) // Asset tag
                                     || s.match(/^\d{8,10}$/) // PSA/BGS/CGC slabs
@@ -167,7 +172,12 @@ export function SellInventorySearcher ({onSubmit}: InventorySearcherProps): Reac
     */
     return (
         <div>
-            <SearchBar big={true} onSubmit={(s: string) => {
+            <SearchBar big={true} onSubmit={(input: string) => {
+                let s = input
+                if (input.toLowerCase().includes("psacard.com")) {
+                    let split = input.split("/")
+                    s = split[split.length - 2]
+                }
                 getProductInfo(s
                 ).then( (item) => {
                     onSubmit(item, s)
