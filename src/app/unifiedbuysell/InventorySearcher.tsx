@@ -33,10 +33,10 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                     let split = input.split("/")
                                     s = split[split.length - 2]
                                 }
-                                if (s.match(/^\d{12}$/) // UPC
+                                if (s.match(/^((\d{12})|(^[^1]\d{12}))$/) // UPC
                                     || s.match(/^A\d\d\d\d$/) // Asset tag
                                     || s.match(/^\d{8,10}$/) // PSA/BGS/CGC slabs
-                                    || s.match(/^\d{13}$/) // EAN-13
+                                    || s.match(/^1\d{12}$/) // New PSA slabs
                                     || s.match(/^\d{14}$/) // CGC slabs
                                 ) {
                                     getProductInfo(s

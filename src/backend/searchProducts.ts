@@ -5,7 +5,7 @@ import getCookieValue from "./getCookie";
 
 export default async function searchProducts (productName: string, productType: "sealed" | "card" | "slab"): Promise<Array<TCGProductData>> {
     let params = new URLSearchParams()
-    if (productName.length === 12 && productType === "sealed") {
+    if (productName.match(/^((\d{12})|(^[^1]\d{12}))$/) && productType === "sealed") {
         params.append("upc", productName)
     }
     params.append("query", productName)

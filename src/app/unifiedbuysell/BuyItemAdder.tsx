@@ -31,7 +31,7 @@ export default function BuyItemAdder ({onSubmit, bulkBuyer}: BuyItemAdderProps) 
                 if ("error" in result) {
                     // Not found in inventory
 
-                    if (barcode.length === 12) {
+                    if (barcode.match(/^((\d{12})|(^[^1]\d{12}))$/)) {
                         // This is a UPC. Try looking up in product database
                         searchProducts(barcode, "sealed"
                         ).then( (data) => {

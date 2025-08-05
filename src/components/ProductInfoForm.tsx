@@ -44,7 +44,7 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
     )
 
     let type: "slab" | "sealed" | "card"
-    if (barcode.length === 12) {
+    if (barcode.match(/^((\d{12})|(^[^1]\d{12}))$/)) {
         // UPC
         type = "sealed"
         if (condition == "") {

@@ -8,7 +8,7 @@ import { useState } from "react"
 export default function UPCManagement () {
     const [products, setProducts] = useState<Array<TCGProductData>>([])
 
-    let upcListings = products.map( (product) => <UPCEntry key={product.tcgID} product={product} disabled={product.number?.length === 12}/>)
+    let upcListings = products.map( (product) => <UPCEntry key={product.tcgID} product={product} disabled={Boolean(product.number?.match(/^((\d{12})|(^[^1]\d{12}))$/))}/>)
 
     return <div id="upc-management" className="management-section">
         <h2 className="section-title">Associate UPCs with Products</h2>
@@ -53,7 +53,7 @@ function UPCEntry ({product, disabled}: UPCEntryProps) {
     return <tr>
         <td>{product.canonicalName}</td>
         <td><input defaultValue={product.number} className={isError ? "error-text" : ""} disabled={disabled} onChange={(e) => {
-            if (e.target.value.length === 12 && e.target.value.match(/^\d{12}$/)) {
+            if (e.target.value.match(/^((\d{12})|(^[^1]\d{12}))$/)) {
                 setError(false)
                 associateUPC(product.tcgID, e.target.value)
             } else {
