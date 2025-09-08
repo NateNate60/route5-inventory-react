@@ -9,7 +9,6 @@ import SearchOptions from "./SearchOptions"
 import { useEffect, useState } from "react"
 import BackButton from "@/components/buttons/backbutton"
 import { refreshToken } from "@/backend/login"
-import SearchBar from "./SearchBar"
 
 export default function TransactionsPage () {
     // These initialise to last/next midnight today
