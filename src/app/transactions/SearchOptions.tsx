@@ -4,12 +4,14 @@ import WhiteTextButton from "@/components/buttons/whitebutton"
 import { useState } from "react"
 
 interface DateSelectorProps {
-    onChange: (start: Date, end: Date) => any
+    onChange: (start: Date, end: Date) => void,
+    setQuery: (query: string) => void,
+    query: string,
     start: Date,
     end: Date
 }
 
-export default function DateSelector ({onChange, start, end}: DateSelectorProps) {
+export default function SearchOptions ({onChange, setQuery, query, start, end}: DateSelectorProps) {
     const [startDate, setStartDate] = useState<string>(start.toISOString().slice(0, 10))
     const [endDate, setEndDate] = useState<string>(end.toISOString().slice(0, 10))
     const [changed, setChanged] = useState<boolean>(false)
@@ -86,6 +88,21 @@ export default function DateSelector ({onChange, start, end}: DateSelectorProps)
                         <td colSpan={2} className="date-selector-apply">
                             {maybeApplyButton}
                             {maybeSortOptions}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            <hr/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colSpan={2}>
+                            Seach for specific items bought or sold
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            <input id="search-bar" value={query} onChange={(e) => setQuery(e.target.value)}/>
                         </td>
                     </tr>
                 </tbody>

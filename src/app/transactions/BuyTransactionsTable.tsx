@@ -8,32 +8,60 @@ import { JSX, useEffect, useState } from "react"
 interface BuyTransactionsTableProps {
     startDate?: Date,
     endDate?: Date,
+    query: string
 }
 
-export default function BuyTransactonsTable ({startDate, endDate}: BuyTransactionsTableProps) {
+export default function BuyTransactonsTable ({startDate, endDate, query}: BuyTransactionsTableProps) {
 
-    const [transactions, setTransactions] = useState<Array<JSX.Element>>()
+    const [transactionRows, setTransactionRows] = useState<Array<JSX.Element | null>>([])
+    const [transactions, setTransactions] = useState<Array<BuyTransaction | null>>([])
     const [cashOut, setCashOut] = useState<number>(0)
     const [creditOut, setCreditOut] = useState<number>(0)
 
+    function parseTransactions (txs: Array<BuyTransaction | null>) {
+        let totalCreditOut = 0
+        let totalCashOut = 0
+        let rows = txs.map( (tx) => {
+            if (tx === null) {
+                return null
+            }
+            totalCreditOut += tx.credit_given
+            totalCashOut += tx.acquired_price_total
+            return <BuyTransactionEntry tx={tx} key={tx.txid}/>
+        })
+        setTransactionRows(rows)
+        setCashOut(totalCashOut)
+        setCreditOut(totalCreditOut)
+    }
 
     useEffect( () => {
         getBuyTransactions(startDate, endDate)
         .then((value) => {
-            let totalCreditOut = 0
-            let totalCashOut = 0
-            let txs = value.map( (tx) => {
-                totalCreditOut += tx.credit_given
-                totalCashOut += tx.acquired_price_total
-                return <BuyTransactionEntry tx={tx} key={tx.txid}/>
-            })
-            setTransactions(txs)
-            setCashOut(totalCashOut)
-            setCreditOut(totalCreditOut)
+            setTransactions(value)
+            parseTransactions(value)
         })
-        setTransactions([ <tr key="loading"><td colSpan={4}>Loading...</td></tr>])
+        setTransactionRows([ <tr key="loading"><td colSpan={4}>Loading...</td></tr>])
 
     }, [startDate, endDate])
+
+    useEffect( () => {
+        if (query === "") {
+            parseTransactions(transactions)
+            return
+        }
+        let shownTXs = transactions.map( (tx) => {
+            if (tx === null) {
+                return null
+            }
+            for (let item of tx.items) {
+                if (item.description.toLowerCase().includes(query.toLowerCase())) {
+                    return tx
+                }
+            }
+            return null
+        })
+        parseTransactions(shownTXs)
+    }, [query])
 
     return (
         <div id="left-side">
@@ -78,7 +106,7 @@ export default function BuyTransactonsTable ({startDate, endDate}: BuyTransactio
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions ?? <tr><td>Loading...</td></tr>}
+                    {transactionRows ?? <tr><td>Loading...</td></tr>}
                 </tbody>
             </table>
         </div>

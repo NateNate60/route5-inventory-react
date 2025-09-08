@@ -79,6 +79,11 @@ td {
     text-align: center;
 }
 
+#search-bar {
+    display: block;
+    margin: auto;
+}
+
 @media (prefers-color-scheme: dark) {
     #date-selector {
         background-color: rgb(121, 113, 0);

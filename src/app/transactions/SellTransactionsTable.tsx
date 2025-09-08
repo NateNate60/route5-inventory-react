@@ -12,28 +12,51 @@ interface SellTransactionsTableProps {
 }
 
 export default function SellTransactonsTable ({startDate, endDate, query}: SellTransactionsTableProps) {
-    const [transactions, setTransactions] = useState<Array<JSX.Element>>()
+    const [transactionEntries, setTransactionEntries] = useState<Array<JSX.Element | null>>([])
+    const [transactions, setTransactions] = useState<Array<SaleTransaction | null>>([])
     const [creditIn, setCreditIn] = useState<number>(0)
     const [cashIn, setCashIn] = useState<number>(0)
 
+    function parseTransactions (txs: Array<SaleTransaction | null>) {
+        let totalCreditIn = 0
+        let totalCashIn = 0
+        let rows = txs.map( (tx) => {
+            if (tx === null) {
+                return null
+            }
+            totalCreditIn += tx.credit_applied
+            totalCashIn += tx.sale_price_total
+            return <SaleTransactionEntry tx={tx} key={tx.txid}/>
+        })
+        setTransactionEntries(rows)
+        setCashIn(totalCashIn)
+        setCreditIn(totalCreditIn)
+    }
 
     useEffect(() => {
         getSellTransactions(startDate, endDate)
-        .then((value) => {
-            let totalCreditIn = 0
-            let totalCashIn = 0
-            let txs = value.map( (tx) => {
-                totalCreditIn += tx.credit_applied
-                totalCashIn += tx.sale_price_total
-                return <SaleTransactionEntry tx={tx} key={tx.txid}/>
-            })
-            setTransactions(txs)
-            setCashIn(totalCashIn)
-            setCreditIn(totalCreditIn)
+        .then( (value) => {
+            parseTransactions(value)
+            setTransactions(value)
         })
-        setTransactions([ <tr key="loading"><td colSpan={4}>Loading...</td></tr>])
+        setTransactionEntries([ <tr key="loading"><td colSpan={4}>Loading...</td></tr>])
     }, [startDate, endDate])
 
+    useEffect(() => {
+        let shownTXs = transactions.map( (tx) => {
+            // Return tx if and only if item matching query string is found
+            if (tx !== null) {
+                for (let item of tx.items) {
+                    if (item.description.toLowerCase().includes(query.toLowerCase())) {
+                        return tx
+                    }
+                }
+            }
+            return null
+        })
+        parseTransactions(shownTXs)
+    }, [query])
+    
     return (
         <div id="right-side">
             <table className="transaction-table">
@@ -74,7 +97,7 @@ export default function SellTransactonsTable ({startDate, endDate, query}: SellT
                     </tr>
                 </thead>
                 <tbody>
-                    {transactions}
+                    {transactionEntries}
                 </tbody>
             </table>
         </div>
