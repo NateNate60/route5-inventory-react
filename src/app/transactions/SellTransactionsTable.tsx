@@ -6,21 +6,18 @@ import { SaleTransaction } from "@/types/Transaction"
 import React, { JSX, useEffect, useState } from "react"
 
 interface SellTransactionsTableProps {
-    startDate?: Date,
-    endDate?: Date
+    startDate: Date,
+    endDate: Date,
+    query: string
 }
 
-export default function SellTransactonsTable ({startDate, endDate}: SellTransactionsTableProps) {
+export default function SellTransactonsTable ({startDate, endDate, query}: SellTransactionsTableProps) {
     const [transactions, setTransactions] = useState<Array<JSX.Element>>()
     const [creditIn, setCreditIn] = useState<number>(0)
     const [cashIn, setCashIn] = useState<number>(0)
 
-    const [currentStartDate, setCurrentStartDate] = useState<Date | undefined>(startDate)
-    const [currentEndDate, setCurrentEndDate] = useState<Date | undefined>(endDate)
 
     useEffect(() => {
-        setCurrentStartDate(startDate)
-        setCurrentEndDate(endDate)
         getSellTransactions(startDate, endDate)
         .then((value) => {
             let totalCreditIn = 0

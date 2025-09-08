@@ -16,12 +16,8 @@ export default function BuyTransactonsTable ({startDate, endDate}: BuyTransactio
     const [cashOut, setCashOut] = useState<number>(0)
     const [creditOut, setCreditOut] = useState<number>(0)
 
-    const [currentStartDate, setCurrentStartDate] = useState<Date | undefined>(startDate)
-    const [currentEndDate, setCurrentEndDate] = useState<Date | undefined>(endDate)
 
     useEffect( () => {
-        setCurrentStartDate(startDate)
-        setCurrentEndDate(endDate)
         getBuyTransactions(startDate, endDate)
         .then((value) => {
             let totalCreditOut = 0
