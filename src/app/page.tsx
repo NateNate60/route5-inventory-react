@@ -89,7 +89,7 @@ export default function InventoryManagement () {
                                 Total value of inventory if everything is sold at asking: 
                             </td>
                             <td>
-                                $ {Math.round(acquisitionValue) / 100}
+                                $ {Math.round(totalValue) / 100}
                             </td>
                         </tr>
                         <tr>
@@ -97,7 +97,7 @@ export default function InventoryManagement () {
                                 Total value of inventory according to purchase price: 
                             </td>
                             <td>
-                                $ {Math.round(totalValue) / 100}
+                                $ {Math.round(acquisitionValue) / 100}
                             </td>
                         </tr>
                         <tr>
