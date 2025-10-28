@@ -8,14 +8,13 @@ import { useState } from "react"
 
 interface BuyItemAdderProps {
     onSubmit: (product: Product) => any,
-    bulkBuyer: boolean
+    bulkBuyer: boolean,
+    mode: "buy" | "sell"
 }
 
-export default function BuyItemAdder ({onSubmit, bulkBuyer}: BuyItemAdderProps) {
+export default function BuyItemAdder ({onSubmit, bulkBuyer, mode}: BuyItemAdderProps) {
     const [showForm, setShowForm] = useState<boolean>(false)
     const [barcode, setBarcode] = useState<string>("")
-    const [pricePaid, setPricePaid] = useState<number>(0)
-    const [errorText, setErrorText] = useState<string>("")
 
     let maybeText
     let maybeForm = showForm ? <ProductInfoForm onSubmit={(product) => {
@@ -24,8 +23,8 @@ export default function BuyItemAdder ({onSubmit, bulkBuyer}: BuyItemAdderProps) 
             onSubmit(product)
         }} barcode={barcode}/> : undefined
     return (
-        <div className="buy-panel">
-            <h3>Add item received from customer</h3>
+        <div className={mode === "buy" ? "buy-panel" : "sell-panel"}>
+            <h3>Add item</h3>
             <br />
             <BuyInventorySearcher onSubmit={(result, barcode) => {
                 if ("error" in result) {

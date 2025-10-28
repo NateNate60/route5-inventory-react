@@ -28,6 +28,7 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
 
     const [rates, setRates] = useState<Rates>()
     const [threshhold, setThreshhold] = useState<number>(Infinity)
+    const [counter, setCounter] = useState<number>(0)
 
     useEffect( () => {
         getRates(
@@ -44,11 +45,11 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
     let lowTotal = 0
     for (let thing in cart.products) {
         let product = cart.products[thing]
-        let marketPrice = getMarketPrice(product.product) ?? NaN
+        let marketPrice = cart.products[thing].product.type === "slab" ? cart.products[thing].product.sale_price : (getMarketPrice(product.product) ?? NaN)
         let lowPrice = getLowPrice(product.product) ?? NaN
 
         // Calculate suggested price according to rate table
-        let [cashRate, creditRate] = rates !== undefined ? calculateRates(rates, marketPrice, "card") : [NaN, NaN]
+        let [cashRate, creditRate] = rates !== undefined ? calculateRates(rates, marketPrice, product.product.type) : [NaN, NaN]
 
         // Usually the market price, unless the card is under thre threshhold AND the TCG Low is lower than market.
         let effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
@@ -56,6 +57,7 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
         cashTotal += Math.floor((effectivePrice * cashRate) / 50) * 50
         creditTotal += Math.floor((effectivePrice * creditRate) / 50) * 50
         marketTotal += marketPrice
+        lowTotal += lowPrice
 
         buyTableEntries.push(<BuyPanelEntry product={cart.products[thing]} key={cart.products[thing].product.id}
                               marketPrice={marketPrice}
@@ -65,6 +67,14 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
                               assetTagThreshhold={threshhold}
                               onDelete={(id) => onDelete(id)}
                               setBarcode={changeBarcode}
+                              updatePrice={(newPrice) => {
+                                cart.products[thing].product.sale_price = newPrice * 100
+                                setCounter(counter + 1)
+                              }}
+                              updateQuantity={(newQty) => {
+                                cart.products[thing].quantity = newQty
+                                setCounter(counter + 1)
+                              }}
                               />)
     }
 
@@ -74,7 +84,7 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
                 <thead>
                     <tr>
                         <td colSpan={7} className="table-title">
-                            Bulk Buyer
+                            Buy from Customer
                         </td>
                     </tr>
                     <tr>
@@ -90,10 +100,13 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
                             Item
                         </th>
                         <th>
-                            TCG Market
+                            Qty
                         </th>
                         <th>
-                            TCG Low
+                            Market
+                        </th>
+                        <th>
+                            Lowest Listing
                         </th>
                         <th>
                             Cash Offer
@@ -121,6 +134,9 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
                             Totals
                         </td>
                         <td>
+
+                        </td>
+                        <td>
                             $&nbsp;{Math.round(marketTotal) / 100}
                         </td>
                         <td>
@@ -140,7 +156,6 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
                     </tr>
                     <tr>
                         <td>
-                            Note: EITHER money OR store credit can be given, not a combination of both.
                         </td>
                     </tr>
                     <tr>
@@ -148,9 +163,8 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
                             Store Credit
                         </td>
                         <td colSpan={2}>
-                            $<NumericEntryField step={0.01} value={creditPaid / 100} onChange={(value) => {
+                            $ <NumericEntryField step={0.01} value={creditPaid / 100} onChange={(value) => {
                                 setCreditPaid(value * 100)
-                                setCashPaid(0)
                             }} min={0}/>
                         </td>
                     </tr>
@@ -159,9 +173,8 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
                             Money
                         </td>
                         <td colSpan={2}>
-                            $<NumericEntryField step={0.01} value={cashPaid / 100} onChange={(value) => {
+                            $ <NumericEntryField step={0.01} value={cashPaid / 100} onChange={(value) => {
                                 setCashPaid(value * 100)
-                                setCreditPaid(0)
                             }} min={0}/>
                         </td>
                         <td>
@@ -177,7 +190,9 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
 interface BuyPanelEntryProps {
     product: ProductQuantity,
     setBarcode: (oldBarcode: string, newBarcode: string) => boolean,
-    onDelete: (id: string) => any,
+    onDelete: (id: string) => void,
+    updatePrice: (newPrice: number) => void,
+    updateQuantity: (newQty: number) => void,
     marketPrice: number,
     lowPrice: number,
     cashRate: number,
@@ -185,7 +200,7 @@ interface BuyPanelEntryProps {
     assetTagThreshhold: number
 }
 
-function BuyPanelEntry ({product, setBarcode, onDelete, marketPrice, lowPrice, cashRate, creditRate, assetTagThreshhold}: BuyPanelEntryProps) {
+function BuyPanelEntry ({product, setBarcode, onDelete, updatePrice, updateQuantity, marketPrice, lowPrice, cashRate, creditRate, assetTagThreshhold}: BuyPanelEntryProps) {
     
     const [barcodeField, setBarcodeField] = useState<string>(product.product.id[0] === "A" ? product.product.id : "")
     const [barcodeFieldDisabled, setBarcodeFieldDisabled] = useState<boolean>(product.product.id[0] === "A")
@@ -195,7 +210,9 @@ function BuyPanelEntry ({product, setBarcode, onDelete, marketPrice, lowPrice, c
     let effectivePrice = marketPrice < assetTagThreshhold && lowPrice < marketPrice ? lowPrice : marketPrice
 
     let maybeBarcode = undefined
-    if (marketPrice >= (assetTagThreshhold ?? Infinity)) {
+    if (product.product.type !== "card") {
+        maybeBarcode = product.product.id
+    } else if (marketPrice >= (assetTagThreshhold ?? Infinity)) {
         maybeBarcode = <form onSubmit={(e) => {
             e.preventDefault()
             
@@ -225,10 +242,21 @@ function BuyPanelEntry ({product, setBarcode, onDelete, marketPrice, lowPrice, c
                 {product.product.description} {product.product.tcg_price_data?.number} {product.product.condition}
             </td>
             <td>
-                $&nbsp;{marketPrice === undefined ? " unknown" : Math.round(marketPrice) / 100}
+                {product.product.type === "sealed" ? <NumericEntryField step={1} onChange={(value) => {
+                    if (value === 0) {
+                        onDelete(product.product.id)
+                    } else {
+                        updateQuantity(value)
+                    }
+                }} value={product.quantity}/> : null}
             </td>
             <td>
-                $&nbsp;{Math.round(lowPrice) / 100}
+                $&nbsp;{product.product.type === "slab" ? <NumericEntryField step={0.01} onChange={updatePrice} value={marketPrice / 100}/> : Math.round(marketPrice) / 100}
+                {product.product.type === "sealed" ? " ea." : null}
+            </td>
+            <td>
+                $&nbsp;{product.product.type !== "card" ? Math.round(marketPrice) / 100 : Math.round(lowPrice) / 100}
+                {product.product.type === "sealed" ? " ea." : null}
             </td>
             <td>
                 $&nbsp;{Math.floor((effectivePrice * cashRate) / 50) / 2} ({Math.round(cashRate * 100)}%)
