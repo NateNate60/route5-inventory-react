@@ -14,18 +14,10 @@ export default function ModeSelector ({onClick}: ModeSelectorProps) {
                 <tbody>
                     <tr>
                        <td>
-                            <GreenTextButton text="Buy" onClick={() => onClick("buy")}/>
+                            <GreenTextButton text="Buy" onClick={() => onClick("bulk")}/>
                         </td>
                         <td>
                             <OrangeTextButton text="Sell" onClick={() => onClick("sell")}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <WhiteTextButton text="Trade" onClick={() => onClick("trade")}/>
-                        </td>
-                        <td>
-                            <BlueTextButton text="Bulk" onClick={() => onClick("bulk")}/>
                         </td>
                     </tr>
                 </tbody>
