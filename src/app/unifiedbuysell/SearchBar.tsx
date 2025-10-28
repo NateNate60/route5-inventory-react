@@ -16,7 +16,7 @@ export default function SearchBar ({onSubmit, big}: SearchBarProps) {
             setValue("")
             onSubmit(content)
         }}>
-            <label>Scan or input bar code:</label>
+            <label>Scan bar code or input card name:</label>
             <input type="text" id="entry" className={big ? "big-input" : ""} onChange={(e) => setValue(e.target.value)} value={value}/>
         </form>
     )

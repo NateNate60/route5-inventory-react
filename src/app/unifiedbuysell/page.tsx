@@ -21,6 +21,7 @@ import BulkBuyPanel from "./BulkBuyPanel"
 import { getRates, getThreshhold } from "@/backend/settings"
 import calculateRates from "@/backend/calculateRates"
 import { getMarketPrice } from "@/backend/searchProducts"
+import BulkSellPanel from "./BulkSellPanel"
 
 export default function UnifiedBuySellPage () {
     const [changeCounter, setChangeCounter] = useState<number>(0)
@@ -57,13 +58,11 @@ export default function UnifiedBuySellPage () {
         setBuyCards(0)
         setBuyCash(0)
         setBuyCredit(0)
-        setBuyPaymentMethod("cash")
 
         setSellCart(new ProductQuantityList())
         setSellCards(0)
         setSellCash(0)
         setSellCredit(0)
-        setSellPaymentMethod("cash")
     }
 
     let maybeBuySide, maybeSellSide
@@ -90,7 +89,7 @@ export default function UnifiedBuySellPage () {
                     setBuyCards(buyCart.priceTotal())
                     setChangeCounter(changeCounter + 1)
                 }}/>
-                <BuyItemAdder bulkBuyer={false} onSubmit={(product) => {
+                <BuyItemAdder bulkBuyer={false} mode="buy" onSubmit={(product) => {
                     buyCart.addProduct(product, false)
                     setLastScan(product)
                     setBuyCards(buyCart.priceTotal())
@@ -100,7 +99,7 @@ export default function UnifiedBuySellPage () {
     }
     if (mode === "sell" || mode === "trade") {
         maybeSellSide = <div id={mode === "trade" ? "sell-side" : undefined}>
-            <SellPanel cart={sellCart} 
+            <BulkSellPanel cart={sellCart} 
                 cashPaid={mode === "sell" ? buyCash: sellCash}
                 setCashPaid={mode === "sell" ? setBuyCash : setSellCash} 
                 creditPaid={mode === "sell" ? buyCredit: sellCredit}
@@ -108,16 +107,13 @@ export default function UnifiedBuySellPage () {
                 setPaymentMethod={mode === "sell" ? setBuyPaymentMethod : setSellPaymentMethod}
                 bulkTotal={sellBulk}
                 setBulk={setSellBulk}
-                onChange={ (item, quantity) => {
-                    sellCart.products[item].quantity = quantity
+                onDelete={ (id) => {
+                    sellCart.deleteProduct(id)
                     setSellCards(sellCart.priceTotal())
                     setChangeCounter(changeCounter + 1)
-            }} onDelete={ (id) => {
-                sellCart.deleteProduct(id)
-                setSellCards(sellCart.priceTotal())
-                setChangeCounter(changeCounter + 1)
-            }}/>
-            <SellItemAdder onSubmit={ (product) => {
+                }}
+            />
+            <BuyItemAdder mode="sell" bulkBuyer={true} onSubmit={ (product) => {
                 sellCart.addProduct(product)
                 setLastScan(product)
                 setSellCards(sellCart.priceTotal())
@@ -141,7 +137,7 @@ export default function UnifiedBuySellPage () {
                     setBuyCards(buyCart.priceTotal())
                     setChangeCounter(changeCounter + 1)
                 }}/>
-            <BuyItemAdder bulkBuyer={true} onSubmit={(product) => {
+            <BuyItemAdder mode="buy" bulkBuyer={true} onSubmit={(product) => {
                 buyCart.addProduct(product, false)
                 setLastScan(product)
                 setBuyCards(buyCart.priceTotal())

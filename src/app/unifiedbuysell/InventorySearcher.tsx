@@ -53,7 +53,8 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                 </thead>
                 <tbody>
                     {suggestions.map(
-                        (suggestion) => <tr key={suggestion.tcgID}>
+                        (suggestion) => {
+                        return <tr key={suggestion.tcgID}>
                             <td>
                                 {suggestion.setName}
                             </td>
@@ -72,7 +73,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         id: "BULK",
                                         type: "card",
                                         description: suggestion.canonicalName,
-                                        acquired_price: 1,
+                                        acquired_price: NaN,
                                         acquired_date: today,
                                         sale_price: 1,
                                         tcg_price_data: suggestion,
@@ -90,7 +91,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         id: "BULK",
                                         type: "card",
                                         description: suggestion.canonicalName,
-                                        acquired_price: 1,
+                                        acquired_price: NaN,
                                         acquired_date: today,
                                         sale_price: 1,
                                         tcg_price_data: suggestion,
@@ -108,7 +109,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         id: "BULK",
                                         type: "card",
                                         description: suggestion.canonicalName,
-                                        acquired_price: 1,
+                                        acquired_price: NaN,
                                         acquired_date: today,
                                         sale_price: 1,
                                         tcg_price_data: suggestion,
@@ -126,7 +127,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         id: "BULK",
                                         type: "card",
                                         description: suggestion.canonicalName,
-                                        acquired_price: 1,
+                                        acquired_price: NaN,
                                         acquired_date: today,
                                         sale_price: 1,
                                         tcg_price_data: suggestion,
@@ -144,7 +145,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         id: "BULK",
                                         type: "card",
                                         description: suggestion.canonicalName,
-                                        acquired_price: 1,
+                                        acquired_price: NaN,
                                         acquired_date: today,
                                         sale_price: 1,
                                         tcg_price_data: suggestion,
@@ -158,7 +159,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                     setSuggestions([])
                                 }}/>
                             </td>
-                        </tr>
+                        </tr>}
                     )}
                 </tbody>
             </table>
@@ -166,23 +167,26 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
     )
 }
 
-export function SellInventorySearcher ({onSubmit}: InventorySearcherProps): React.JSX.Element {
-    /*
-    A component which provides a search bar for searching the inventory.
-    */
-    return (
-        <div>
-            <SearchBar big={true} onSubmit={(input: string) => {
-                let s = input
-                if (input.toLowerCase().includes("psacard.com")) {
-                    let split = input.split("/")
-                    s = split[split.length - 2]
-                }
-                getProductInfo(s
-                ).then( (item) => {
-                    onSubmit(item, s)
-                })
-            }}/>
-        </div>
-    )
-}
+// This function removed; both Sell and Buy functions use the BuyInventorySearcher
+export var SellInventorySearcher: ({onSubmit, showSuggestions}: InventorySearcherProps) => React.JSX.Element = BuyInventorySearcher
+
+// export function SellInventorySearcher ({onSubmit}: InventorySearcherProps): React.JSX.Element {
+//     /*
+//     A component which provides a search bar for searching the inventory.
+//     */
+//     return (
+//         <div>
+//             <SearchBar big={true} onSubmit={(input: string) => {
+//                 let s = input
+//                 if (input.toLowerCase().includes("psacard.com")) {
+//                     let split = input.split("/")
+//                     s = split[split.length - 2]
+//                 }
+//                 getProductInfo(s
+//                 ).then( (item) => {
+//                     onSubmit(item, s)
+//                 })
+//             }}/>
+//         </div>
+//     )
+// }
