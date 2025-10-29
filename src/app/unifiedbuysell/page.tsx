@@ -9,7 +9,6 @@ import ItemAdder from "./BuyItemAdder"
 import SellPanel from "./SellPanel"
 import SellItemAdder from "./SellItemAdder"
 import PercentageInfo from "./PercentageInfo"
-import WhiteTextButton from "@/components/buttons/buttons"
 import sellItems from "@/backend/sellItems"
 import buyItems from "@/backend/buyItems"
 import { Product } from "@/types/Product"
@@ -22,6 +21,7 @@ import { getRates, getThreshhold } from "@/backend/settings"
 import calculateRates from "@/backend/calculateRates"
 import { getMarketPrice } from "@/backend/searchProducts"
 import BulkSellPanel from "./BulkSellPanel"
+import TextButton from "@/components/buttons/buttons"
 
 export default function UnifiedBuySellPage () {
     const [changeCounter, setChangeCounter] = useState<number>(0)
@@ -124,7 +124,7 @@ export default function UnifiedBuySellPage () {
                     {error}
                 </p>
                 <div id="submit">
-                    <WhiteTextButton text="Submit Transaction" onClick={async () => {
+                    <TextButton colour="white" text="Submit Transaction" onClick={async () => {
                         
                         if (mode === "bulk") {
                             let threshhold = await getThreshhold()

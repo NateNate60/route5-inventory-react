@@ -10,7 +10,7 @@ interface TextButtonProps {
     submit?: boolean
 }
 
-export default function TextButton ({href, text, onClick, id, colour, width, submit = false}: TextButtonProps) {
+export default function TextButton ({href, text, onClick, id, colour = "white", width, submit = false}: TextButtonProps) {
 
     return <span>
         <a href={href}>

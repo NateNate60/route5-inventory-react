@@ -5,7 +5,7 @@ import DeleteButton from "./buttons/DeleteButton"
 import React, { useState } from "react";
 import ProductPriceField from "./ProductPriceField";
 import { Product, ProductQuantity } from "@/types/Product";
-import WhiteTextButton from "./buttons/buttons";
+import TextButton from "./buttons/buttons";
 
 interface ProductCartProps {
     products: ProductQuantityList,
@@ -105,7 +105,7 @@ function ProductListing ({product, editable, onChange, onDelete}: ProductListing
 
     let maybeSaveButton
     if (changed && onChange !== undefined) {
-        maybeSaveButton = <WhiteTextButton text="Save" onClick={ () => {
+        maybeSaveButton = <TextButton colour="white" text="Save" onClick={ () => {
             let newValue: ProductQuantity = {
                 quantity: quantityInCart,
                 product: product.product

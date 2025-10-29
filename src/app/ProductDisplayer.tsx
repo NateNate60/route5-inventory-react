@@ -2,12 +2,12 @@
 
 import React, { useState } from "react"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
-import WhiteTextButton from "@/components/buttons/buttons"
 import { Product } from "@/types/Product"
 import updatePrice from "@/backend/updatePrice"
 import "./inventory.css"
 import NumericEntryField from "@/components/NumericEntryField"
 import { getMarketPrice } from "@/backend/searchProducts"
+import TextButton from "@/components/buttons/buttons"
 
 interface ProductDisplayerProps {
     products: ProductQuantityList,
@@ -149,7 +149,7 @@ function ProductListing ({product, editable}: ProductListingProps) {
                 {product['consignor_contact']}
             </td>
             <td width={"10%"} className="result-table">
-                <WhiteTextButton text="Save" onClick={() => {
+                <TextButton colour="white" text="Save" onClick={() => {
                     updatePrice(price, product["id"])
                     setPriceDate(new Date().toISOString())
                 }}/>

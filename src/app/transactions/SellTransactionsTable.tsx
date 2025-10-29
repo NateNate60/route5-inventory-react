@@ -1,7 +1,7 @@
 "use client"
 
 import { getSellTransactions } from "@/backend/getTransactions"
-import WhiteTextButton from "@/components/buttons/buttons"
+import TextButton from "@/components/buttons/buttons"
 import { SaleTransaction } from "@/types/Transaction"
 import React, { JSX, useEffect, useState } from "react"
 
@@ -219,7 +219,7 @@ function SaleTransactionEntry ({tx}: SaleTransactionEntryProps) {
                 ${Math.round(tx.sale_price_total) / 100}
             </td>
             <td>
-                <WhiteTextButton text={expanded ? "▲" : "▼"} onClick={ () => setExpanded(!expanded)}/>
+                <TextButton colour="white" text={expanded ? "▲" : "▼"} onClick={ () => setExpanded(!expanded)}/>
             </td>
         </tr>
         {maybeDetails}

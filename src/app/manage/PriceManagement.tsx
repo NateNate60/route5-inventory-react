@@ -1,5 +1,5 @@
 import uploadPricingData from "@/backend/uploadPricingData";
-import WhiteTextButton from "@/components/buttons/buttons";
+import TextButton from "@/components/buttons/buttons";
 import { useState } from "react";
 
 export default function PriceManagement () {
@@ -32,7 +32,7 @@ export default function PriceManagement () {
                         }}/>
                     </td>
                     <td>
-                        <WhiteTextButton text='Upload' onClick={ () => {
+                        <TextButton colour="white" text='Upload' onClick={ () => {
                             if (file !== undefined) {
                                 uploadPricingData(file)
                                 .then( (response) => {

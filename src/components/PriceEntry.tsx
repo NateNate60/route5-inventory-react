@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import GreenTextButton from "./buttons/buttons"
-
+import TextButton from "./buttons/buttons"
 interface PriceEntryProps {
     onSubmit: (moneyReceived: number, creditApplied: number, paymentMethod: string) => void
 }
@@ -70,7 +69,7 @@ export default function PriceEntry ({onSubmit}: PriceEntryProps) {
                         
                         <tr>
                             <td>
-                                <GreenTextButton text="Submit" onClick={ () => {
+                                <TextButton colour="green" text="Submit" onClick={ () => {
                                     onSubmit(pricePaid, 0, paymentMethod)
                                 }}/>
                             </td>

@@ -5,7 +5,7 @@ import SearchBar from "./SearchBar"
 import getProductInfo from "@/backend/getProductInfo"
 import { BackendAPIError } from "@/types/BackendAPIError"
 import searchProducts from "@/backend/searchProducts"
-import WhiteTextButton from "@/components/buttons/buttons"
+import TextButton from "@/components/buttons/buttons"
 
 interface InventorySearcherProps {
     onSubmit: (e: Product | BackendAPIError | SlabCert, barcode: string) => any,
@@ -68,7 +68,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                 {suggestion.attribute}
                             </td>
                             <td>
-                                <WhiteTextButton text="NM" onClick={ () => {
+                                <TextButton colour="white" text="NM" onClick={ () => {
                                     onSubmit( {
                                         id: "BULK",
                                         type: "card",
@@ -86,7 +86,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                     }, "")
                                     setSuggestions([])
                                 }}/>
-                                <WhiteTextButton text="LP" onClick={ () => {
+                                <TextButton colour="white" text="LP" onClick={ () => {
                                     onSubmit( {
                                         id: "BULK",
                                         type: "card",
@@ -104,7 +104,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                     }, "")
                                     setSuggestions([])
                                 }}/>
-                                <WhiteTextButton text="MP" onClick={ () => {
+                                <TextButton colour="white" text="MP" onClick={ () => {
                                     onSubmit( {
                                         id: "BULK",
                                         type: "card",
@@ -122,7 +122,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                     }, "")
                                     setSuggestions([])
                                 }}/>
-                                <WhiteTextButton text="HP" onClick={ () => {
+                                <TextButton colour="white" text="HP" onClick={ () => {
                                     onSubmit( {
                                         id: "BULK",
                                         type: "card",
@@ -140,7 +140,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                     }, "")
                                     setSuggestions([])
                                 }}/>
-                                <WhiteTextButton text="DM" onClick={ () => {
+                                <TextButton colour="white" text="DM" onClick={ () => {
                                     onSubmit( {
                                         id: "BULK",
                                         type: "card",

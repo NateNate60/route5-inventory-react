@@ -11,11 +11,9 @@ import { ProductQuantityList } from "@/types/ProductQuantityList"
 import { use, useEffect, useState } from "react"
 
 import { FILTERS, SORTS } from "@/types/Sort"
-import OrangeTextButton from "@/components/buttons/buttons"
-import BlueTextButton from "@/components/buttons/buttons"
 import { refreshToken } from "@/backend/login"
 import LoginWidget from "@/components/LoginWidget"
-import WhiteTextButton from "@/components/buttons/buttons"
+import TextButton from "@/components/buttons/buttons"
 
 export default function InventoryManagement () {
     const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())
@@ -64,15 +62,15 @@ export default function InventoryManagement () {
                 <tbody>
                     <tr>
                         <td>
-                            <OrangeTextButton text="Record New Transaction" href="/unifiedbuysell"/>
+                            <TextButton colour="orange" text="Record New Transaction" href="/unifiedbuysell"/>
                         </td>
                         <td>
-                            <BlueTextButton text="View Transaction History" href="/transactions"/>
+                            <TextButton colour="blue" text="View Transaction History" href="/transactions"/>
                         </td>
                     </tr>
                     <tr>
                         <td colSpan={2}>
-                            <WhiteTextButton text="Management" href="/manage"/>
+                            <TextButton colour="white" text="Management" href="/manage"/>
                         </td>
                     </tr>
                 </tbody>

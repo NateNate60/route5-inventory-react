@@ -2,7 +2,7 @@
 
 import { getRates } from "@/backend/settings"
 import updateRates from "@/backend/updateRates"
-import WhiteTextButton from "@/components/buttons/buttons"
+import TextButton from "@/components/buttons/buttons"
 import NumericEntryField from "@/components/NumericEntryField"
 import { Rates } from "@/types/Rates"
 import { useEffect, useState } from "react"
@@ -80,7 +80,7 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
 
     let maybeSaveButton = undefined
     if (showSaveButton) {
-        maybeSaveButton = <WhiteTextButton text="Save" onClick={onSave}/>
+        maybeSaveButton = <TextButton colour="white" text="Save" onClick={onSave}/>
     }
 
     let tiers = rates.cutoffs.card
@@ -153,7 +153,7 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
                 <td>
                 </td>
                 <td>
-                    <WhiteTextButton text="Add row" onClick={() => {
+                    <TextButton colour="white" text="Add row" onClick={() => {
                         let newRates = rates
                         newRates.cutoffs.card.push(rates.cutoffs.card[rates.cutoffs.card.length - 1] + 1)
                         newRates.cashRates.card.push(0)

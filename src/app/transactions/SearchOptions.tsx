@@ -1,6 +1,6 @@
 "use client"
 
-import WhiteTextButton from "@/components/buttons/buttons"
+import TextButton from "@/components/buttons/buttons"
 import { useState } from "react"
 
 interface DateSelectorProps {
@@ -18,7 +18,7 @@ export default function SearchOptions ({onChange, setQuery, query, start, end}: 
 
     let maybeApplyButton
     if (changed) {
-        maybeApplyButton = <WhiteTextButton text="Apply" onClick={() => {
+        maybeApplyButton = <TextButton colour="white" text="Apply" onClick={() => {
             let s = new Date(startDate)
             let e = new Date(endDate)
             s.setTime(s.getTime() + s.getTimezoneOffset() * 60 * 1000)
@@ -31,7 +31,7 @@ export default function SearchOptions ({onChange, setQuery, query, start, end}: 
     let maybeSortOptions
     if (!changed) {
         maybeSortOptions = <span>
-            <WhiteTextButton text="Show this month" onClick={ () => {
+            <TextButton colour="white" text="Show this month" onClick={ () => {
                 let today = new Date()
                 let s = new Date(today.getFullYear(), today.getMonth(), 1);
                 s.setTime(s.getTime() + s.getTimezoneOffset() * 60 * 1000)
@@ -42,7 +42,7 @@ export default function SearchOptions ({onChange, setQuery, query, start, end}: 
                 setEndDate(e.toISOString().slice(0, 10))
                 onChange(s, e)
             }}/>
-            <WhiteTextButton text="Show last month" onClick={ () => {
+            <TextButton colour="white" text="Show last month" onClick={ () => {
                 let today = new Date()
                 let s = new Date(today.getFullYear(), today.getMonth() - 1, 1);
                 s.setTime(s.getTime() + s.getTimezoneOffset() * 60 * 1000)

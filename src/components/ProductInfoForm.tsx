@@ -1,9 +1,9 @@
 "use client"
 
 import { Product, TCGProductData } from "@/types/Product";
-import WhiteTextButton from "./buttons/buttons";
-import { useState } from "react";
 import searchProducts from "@/backend/searchProducts";
+import { useState } from "react";
+import TextButton from "./buttons/buttons";
 
 interface ProductInforFormProps {
     barcode: string,
@@ -33,7 +33,7 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                 {suggestion.number}
             </td>
             <td>
-                <WhiteTextButton text="Select" onClick={ () => {
+                <TextButton colour="white" text="Select" onClick={ () => {
                     setDescription(suggestion.canonicalName)
                     setSuggestions([])
                     setDisableNameInput(true)
@@ -111,7 +111,7 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                     </tr>
                     <tr>
                         <td>
-                            <WhiteTextButton text="Add" onClick={() => {
+                            <TextButton colour="white" text="Add" onClick={() => {
                                 let today = new Date()
                                 let info: Product = {
                                     id: barcode,

@@ -1,4 +1,4 @@
-import TextButton, { WhiteTextButton } from "./buttons"
+import TextButton from "./buttons"
 
 interface SubmitButtonProps {
     text: string

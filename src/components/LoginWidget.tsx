@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import WhiteTextButton from "./buttons/buttons";
 import { checkAccessValidity, logout, refreshToken } from "@/backend/login";
+import TextButton from "./buttons/buttons";
 
 interface LoginWidgetProps {
     onTokenFetch?: () => void
@@ -22,9 +22,9 @@ export default function LoginWidget ({onTokenFetch}: LoginWidgetProps) {
 
     let loginButton
     if (! username) {
-        loginButton = <WhiteTextButton text="Log in" href="/login"/>
+        loginButton = <TextButton colour="white" text="Log in" href="/login"/>
     } else {
-        loginButton = <WhiteTextButton text="Log out" onClick={logout}/>
+        loginButton = <TextButton colour="white" text="Log out" onClick={logout}/>
     }
     return (
         <div id="login-widget">

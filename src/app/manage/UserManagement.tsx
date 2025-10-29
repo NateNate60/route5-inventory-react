@@ -2,8 +2,8 @@
 import addUser from "@/backend/addUser"
 import deleteUser from "@/backend/deleteUser"
 import getUsers from "@/backend/getUsers"
+import TextButton from "@/components/buttons/buttons"
 import DeleteButton from "@/components/buttons/DeleteButton"
-import WhiteTextButton from "@/components/buttons/buttons"
 import { User } from "@/types/User"
 import { useEffect, useState } from "react"
 
@@ -76,7 +76,7 @@ function UserAdder () {
                         &nbsp;This user is an admin
                     </td>
                     <td>
-                        <WhiteTextButton text="Add" submit={true}/>
+                        <TextButton colour="white" text="Add" submit={true}/>
                     </td>
                 </tr>
                 <tr>

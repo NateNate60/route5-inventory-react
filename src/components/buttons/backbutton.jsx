@@ -1,4 +1,4 @@
-import TextButton from "./buttons"
+import TextButton from "./buttons";
 
 export default function BackButton () {
     return (

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react";
-import WhiteTextButton from "./buttons/buttons";
+import TextButton from "./buttons/buttons";
 
 export default function TokenSetter () {
     /*
@@ -12,7 +12,7 @@ export default function TokenSetter () {
         <form>
             <label>Paste access token:</label>
             <input type="password"  name="cookie-input" onChange={ (e) => setValue(e.target.value)} value={value}/>
-            <WhiteTextButton text="Set" onClick={() => {
+            <TextButton colour="white" text="Set" onClick={() => {
                 // Cookie expires in 30 days
                 document.cookie = `token=Bearer ${value}; max-age=2592000`
             }}/>

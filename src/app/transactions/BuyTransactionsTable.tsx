@@ -1,7 +1,7 @@
 "use client"
 
 import { getBuyTransactions } from "@/backend/getTransactions"
-import WhiteTextButton from "@/components/buttons/buttons"
+import TextButton from "@/components/buttons/buttons"
 import { BuyTransaction } from "@/types/Transaction"
 import { JSX, useEffect, useState } from "react"
 
@@ -243,7 +243,7 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                     ${Math.round(marketValue + tx.bulk_total) / 100}
                 </td>
                 <td>
-                    <WhiteTextButton text={expanded ? "▲" : "▼"} onClick={() => {setExpanded(!expanded)}}/>
+                    <TextButton colour="white" text={expanded ? "▲" : "▼"} onClick={() => {setExpanded(!expanded)}}/>
                 </td>
             </tr>
             {maybeDetails}

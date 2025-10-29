@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import { RedTextButton } from "./buttons";
 
 
 export default function DeleteButton (props) {
@@ -25,6 +24,6 @@ export default function DeleteButton (props) {
         )
     }
     return (
-        <RedTextButton text={confirm ? "Confirm" : "Delete"} onClick={handleClick}/>
+        <TextButton colour="red" text={confirm ? "Confirm" : "Delete"} onClick={handleClick}/>
     )
 }
