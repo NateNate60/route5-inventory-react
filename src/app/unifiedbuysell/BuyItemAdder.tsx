@@ -8,11 +8,10 @@ import { useState } from "react"
 
 interface BuyItemAdderProps {
     onSubmit: (product: Product) => any,
-    bulkBuyer: boolean,
     mode: "buy" | "sell"
 }
 
-export default function BuyItemAdder ({onSubmit, bulkBuyer, mode}: BuyItemAdderProps) {
+export default function ItemAdder ({onSubmit, mode}: BuyItemAdderProps) {
     const [showForm, setShowForm] = useState<boolean>(false)
     const [barcode, setBarcode] = useState<string>("")
 
@@ -84,7 +83,7 @@ export default function BuyItemAdder ({onSubmit, bulkBuyer, mode}: BuyItemAdderP
                     setBarcode("")
                     setShowForm(false)
                 }
-            }} showSuggestions={bulkBuyer} />
+            }} showSuggestions={true} />
             {maybeText}
             {maybeForm}
         </div>
