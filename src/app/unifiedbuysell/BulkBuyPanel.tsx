@@ -19,12 +19,10 @@ interface BuyPanelProps {
     setCashPaid: (amount: number) => any,
     creditPaid: number
     setCreditPaid: (amount: number) => any,
-    bulkTotal: number,
-    setBulk: (amount: number) => any,
     setPaymentMethod: (paymentMethod: string) => any
 }
 
-export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, setCashPaid, creditPaid, setCreditPaid, bulkTotal, setBulk, setPaymentMethod}: BuyPanelProps) {
+export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, setCashPaid, creditPaid, setCreditPaid, setPaymentMethod}: BuyPanelProps) {
 
     const [rates, setRates] = useState<Rates>()
     const [threshhold, setThreshhold] = useState<number>(Infinity)
