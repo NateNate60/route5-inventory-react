@@ -118,9 +118,11 @@ function SaleTransactionEntry ({tx}: SaleTransactionEntryProps) {
 
     let maybeDetails
     if (expanded) {
-        let buyPriceTotal = 0
+        let totalProfit = 0
         let detailRows = tx.items.map( (value, index) => {
-            buyPriceTotal += value.acquired_price * value.quantity
+            if (value.acquired_price !== null) {
+                totalProfit += value.sale_price - value.acquired_price
+            }
             return <tr key={value.id}>
                 <td className="small">
                     {value.id}
@@ -132,7 +134,7 @@ function SaleTransactionEntry ({tx}: SaleTransactionEntryProps) {
                     {value.description}
                 </td>
                 <td className="small">
-                    ${Math.round(value.acquired_price * value.quantity) / 100}
+                    {value.acquired_price ? "$" + Math.round(value.acquired_price * value.quantity) / 100 : "?"}
                 </td>
                 <td className="small monetary">
                     ${Math.round(value.sale_price * value.quantity) / 100}
@@ -156,7 +158,7 @@ function SaleTransactionEntry ({tx}: SaleTransactionEntryProps) {
                                 Profit
                             </th>
                             <th className="small unbold">
-                                ${Math.round(tx.sale_price_total - buyPriceTotal) / 100}
+                                ${Math.round(totalProfit) / 100}
                             </th>
                         </tr>
                         <tr>
@@ -217,7 +219,7 @@ function SaleTransactionEntry ({tx}: SaleTransactionEntryProps) {
                 ${Math.round(tx.sale_price_total) / 100}
             </td>
             <td>
-                <WhiteTextButton text={expanded ? "▼" : "▶"} onClick={ () => setExpanded(!expanded)}/>
+                <WhiteTextButton text={expanded ? "▲" : "▼"} onClick={ () => setExpanded(!expanded)}/>
             </td>
         </tr>
         {maybeDetails}

@@ -133,13 +133,13 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                 {item.description}
             </td>
             <td className="details-table-cell">
-                ${Math.round(item.acquired_price * item.quantity) / 100}
+                ${Math.round(item.acquired_price ?? 0 * item.quantity) / 100}
             </td>
             <td className="monetary details-table-cell">
                 ${Math.round(item.sale_price * item.quantity) / 100}
             </td>
             <td className="monetary details-table-cell">
-                {Math.round(item.acquired_price / item.sale_price * 100)}
+                {Math.round(item.acquired_price ?? 0 / item.sale_price * 100)}
             </td>
         </tr>)
         maybeDetails = <tr>
@@ -243,7 +243,7 @@ function BuyTransactionEntry ({tx}: BuyTransactionProps) {
                     ${Math.round(marketValue + tx.bulk_total) / 100}
                 </td>
                 <td>
-                    <WhiteTextButton text={expanded ? "▼" : "▶"} onClick={() => {setExpanded(!expanded)}}/>
+                    <WhiteTextButton text={expanded ? "▲" : "▼"} onClick={() => {setExpanded(!expanded)}}/>
                 </td>
             </tr>
             {maybeDetails}

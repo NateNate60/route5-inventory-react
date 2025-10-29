@@ -25,7 +25,7 @@ export type SaleTransaction = {
 export type TransactionProductInfo = {
     id: string,
     sale_price: number,
-    acquired_price: number,
+    acquired_price: number | null,
     quantity: number,
     description: string
 }
