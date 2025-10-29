@@ -3,24 +3,23 @@ import getCookieValue from "./getCookie";
 import CONSTANTS from "@/constants.json"
 import { Product } from "@/types/Product";
 
-export default async function buyItems (products: ProductQuantityList,
-                                        pricePaid: number,
+export default async function buyItems (cart: ProductQuantityList,
+                                        moneyGiven: number,
                                         creditGiven: number,
                                         paymentMethod: string,
-                                        bulkTotal: number,
                                         sellerName: string = "",
                                         sellerContact: string = ""): Promise<any> {
     let cookie = getCookieValue("token")
     let items: Array<Product> = []
-    let percentage = (pricePaid - bulkTotal) / products.priceTotal()
 
-    for (let itemID in products.products) {
-        products.products[itemID].product.quantity = products.products[itemID].quantity
-        let target = products.products[itemID].product
+    let percentage = (moneyGiven + creditGiven) / cart.priceTotal()
+
+    for (let itemID in cart.products) {
+        cart.products[itemID].product.quantity = cart.products[itemID].quantity
+        let target = cart.products[itemID].product
         target.acquired_price = target.sale_price * percentage
         items.push(target)
     }
-
 
     let response = await fetch(`${CONSTANTS.BACKEND_URL}/v1/inventory/add`, {
         method: "POST",
@@ -30,7 +29,6 @@ export default async function buyItems (products: ProductQuantityList,
         },
         body: JSON.stringify({
             items: items,
-            bulk_total: bulkTotal,
             credit_given: creditGiven,
             payment_method: paymentMethod,
             acquired_from_name: sellerName,
