@@ -1,6 +1,6 @@
 "use client"
 
-import WhiteTextButton from "@/components/buttons/whitebutton"
+import WhiteTextButton from "@/components/buttons/buttons"
 import { useState } from "react"
 
 interface DateSelectorProps {

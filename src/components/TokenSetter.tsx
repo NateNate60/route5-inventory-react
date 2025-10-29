@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react";
-import WhiteTextButton from "./buttons/whitebutton";
+import WhiteTextButton from "./buttons/buttons";
 
 export default function TokenSetter () {
     /*

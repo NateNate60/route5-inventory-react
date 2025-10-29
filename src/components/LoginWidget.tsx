@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import WhiteTextButton from "./buttons/whitebutton";
+import WhiteTextButton from "./buttons/buttons";
 import { checkAccessValidity, logout, refreshToken } from "@/backend/login";
 
 interface LoginWidgetProps {

@@ -2,7 +2,7 @@
 
 import { getRates } from "@/backend/settings"
 import updateRates from "@/backend/updateRates"
-import WhiteTextButton from "@/components/buttons/whitebutton"
+import WhiteTextButton from "@/components/buttons/buttons"
 import NumericEntryField from "@/components/NumericEntryField"
 import { Rates } from "@/types/Rates"
 import { useEffect, useState } from "react"

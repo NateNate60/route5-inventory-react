@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import GreenTextButton from "./buttons/greenbutton"
+import GreenTextButton from "./buttons/buttons"
 
 interface PriceEntryProps {
     onSubmit: (moneyReceived: number, creditApplied: number, paymentMethod: string) => void

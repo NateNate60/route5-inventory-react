@@ -3,7 +3,7 @@ import addUser from "@/backend/addUser"
 import deleteUser from "@/backend/deleteUser"
 import getUsers from "@/backend/getUsers"
 import DeleteButton from "@/components/buttons/DeleteButton"
-import WhiteTextButton from "@/components/buttons/whitebutton"
+import WhiteTextButton from "@/components/buttons/buttons"
 import { User } from "@/types/User"
 import { useEffect, useState } from "react"
 

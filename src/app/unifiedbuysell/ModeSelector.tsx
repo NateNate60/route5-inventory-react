@@ -1,7 +1,7 @@
-import BlueTextButton from "@/components/buttons/bluebuttton";
-import GreenTextButton from "@/components/buttons/greenbutton";
-import OrangeTextButton from "@/components/buttons/orangebutton";
-import WhiteTextButton from "@/components/buttons/whitebutton";
+import BlueTextButton from "@/components/buttons/buttons";
+import GreenTextButton from "@/components/buttons/buttons";
+import OrangeTextButton from "@/components/buttons/buttons";
+import WhiteTextButton from "@/components/buttons/buttons";
 
 interface ModeSelectorProps {
     onClick: (mode: "buy" | "sell" | "trade" | "bulk") => any

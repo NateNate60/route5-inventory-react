@@ -1,10 +1,10 @@
 "use client"
 
-import WhiteTextButton from "@/components/buttons/whitebutton"
 import "@/css/style.css"
 import "./login.css"
-import { useEffect, useState } from "react"
-import { login, refreshToken } from "@/backend/login"
+import { useState } from "react"
+import { login, } from "@/backend/login"
+import SubmitButton from "@/components/buttons/SubmitButton"
 
 export default function LoginPage () {
     const [staySignedIn, setStaySignedIn] = useState<boolean>(false)
@@ -62,7 +62,7 @@ export default function LoginPage () {
                     </tr>
                     <tr>
                         <td id="login-button">
-                            <WhiteTextButton text="Log in" submit={true}/>
+                            <SubmitButton text="Log in"/>
                         </td>
                         
                     </tr>

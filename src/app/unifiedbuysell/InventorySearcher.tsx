@@ -5,7 +5,7 @@ import SearchBar from "./SearchBar"
 import getProductInfo from "@/backend/getProductInfo"
 import { BackendAPIError } from "@/types/BackendAPIError"
 import searchProducts from "@/backend/searchProducts"
-import WhiteTextButton from "@/components/buttons/whitebutton"
+import WhiteTextButton from "@/components/buttons/buttons"
 
 interface InventorySearcherProps {
     onSubmit: (e: Product | BackendAPIError | SlabCert, barcode: string) => any,

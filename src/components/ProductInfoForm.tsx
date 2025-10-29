@@ -1,7 +1,7 @@
 "use client"
 
 import { Product, TCGProductData } from "@/types/Product";
-import WhiteTextButton from "./buttons/whitebutton";
+import WhiteTextButton from "./buttons/buttons";
 import { useState } from "react";
 import searchProducts from "@/backend/searchProducts";
 

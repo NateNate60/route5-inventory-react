@@ -11,11 +11,11 @@ import { ProductQuantityList } from "@/types/ProductQuantityList"
 import { use, useEffect, useState } from "react"
 
 import { FILTERS, SORTS } from "@/types/Sort"
-import OrangeTextButton from "@/components/buttons/orangebutton"
-import BlueTextButton from "@/components/buttons/bluebuttton"
+import OrangeTextButton from "@/components/buttons/buttons"
+import BlueTextButton from "@/components/buttons/buttons"
 import { refreshToken } from "@/backend/login"
 import LoginWidget from "@/components/LoginWidget"
-import WhiteTextButton from "@/components/buttons/whitebutton"
+import WhiteTextButton from "@/components/buttons/buttons"
 
 export default function InventoryManagement () {
     const [inventory, setInventory] = useState<ProductQuantityList>(new ProductQuantityList())

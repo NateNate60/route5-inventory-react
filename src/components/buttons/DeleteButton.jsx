@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import RedTextButton from "./redbutton";
+import { RedTextButton } from "./buttons";
 
 
 export default function DeleteButton (props) {

@@ -1,7 +1,7 @@
 "use client"
 
 import { getSellTransactions } from "@/backend/getTransactions"
-import WhiteTextButton from "@/components/buttons/whitebutton"
+import WhiteTextButton from "@/components/buttons/buttons"
 import { SaleTransaction } from "@/types/Transaction"
 import React, { JSX, useEffect, useState } from "react"
 

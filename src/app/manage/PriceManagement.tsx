@@ -1,5 +1,5 @@
 import uploadPricingData from "@/backend/uploadPricingData";
-import WhiteTextButton from "@/components/buttons/whitebutton";
+import WhiteTextButton from "@/components/buttons/buttons";
 import { useState } from "react";
 
 export default function PriceManagement () {

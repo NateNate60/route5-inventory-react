@@ -5,7 +5,7 @@ import DeleteButton from "./buttons/DeleteButton"
 import React, { useState } from "react";
 import ProductPriceField from "./ProductPriceField";
 import { Product, ProductQuantity } from "@/types/Product";
-import WhiteTextButton from "./buttons/whitebutton";
+import WhiteTextButton from "./buttons/buttons";
 
 interface ProductCartProps {
     products: ProductQuantityList,

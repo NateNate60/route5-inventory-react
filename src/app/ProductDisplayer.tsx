@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { ProductQuantityList } from "@/types/ProductQuantityList"
-import WhiteTextButton from "../components/buttons/whitebutton"
+import WhiteTextButton from "@/components/buttons/buttons"
 import { Product } from "@/types/Product"
 import updatePrice from "@/backend/updatePrice"
 import "./inventory.css"
