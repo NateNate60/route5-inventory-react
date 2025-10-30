@@ -13,7 +13,11 @@ export default function DeleteButton (props) {
             return
         }
         props.onClick()
-        setDisabled(true)
+        if (! props.noDisable) {
+            setDisabled(true)
+        } else {
+            setConfirm(false)
+        }
     }
 
 

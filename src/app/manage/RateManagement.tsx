@@ -3,6 +3,7 @@
 import { getRates } from "@/backend/settings"
 import updateRates from "@/backend/updateRates"
 import TextButton from "@/components/buttons/buttons"
+import DeleteButton from "@/components/buttons/DeleteButton"
 import NumericEntryField from "@/components/NumericEntryField"
 import { Rates } from "@/types/Rates"
 import { useEffect, useState } from "react"
@@ -107,6 +108,15 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
                     onChange(newRates)
                 }}/>%
             </td>
+            <td>
+                {index === 0 ? null : <DeleteButton noDisable={true} onClick={() => {
+                    let newRates = rates
+                    newRates.creditRates.card.splice(index, 1)
+                    newRates.cashRates.card.splice(index, 1)
+                    newRates.cutoffs.card.splice(index, 1)
+                    onChange(newRates)
+                }}/>}
+            </td>
         </tr>
     })
 
@@ -141,6 +151,9 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
                 </th>
                 <th>
                     Store credit rate
+                </th>
+                <th>
+                    {/*Delete button*/}
                 </th>
             </tr>
         </thead>
