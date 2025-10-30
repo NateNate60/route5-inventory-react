@@ -28,6 +28,7 @@ export default function UnifiedBuySellPage () {
 
     const [mode, setMode] = useState<"buy" | "sell" | "trade" | "bulk">("sell")
     const [error, setError] = useState<string>("")
+    const [adderError, setAdderError] = useState<string>("")
 
     const [receivedCart, setReceivedCart] = useState<ProductQuantityList>(new ProductQuantityList())
     const [receivedCredit, setReceivedCredit] = useState<number>(0)
@@ -93,8 +94,13 @@ export default function UnifiedBuySellPage () {
                         setChangeCounter(changeCounter + 1)
                     }}
                 />
-            <ItemAdder mode="sell" onSubmit={(product) => {
-                givenCart.addProduct(product, false)
+            <ItemAdder mode="sell" errorText={adderError} onSubmit={(product) => {
+                let enoughStock = givenCart.addProduct(product, true)
+                if (!enoughStock) {
+                    setAdderError(`Only ${product.quantity} unit(s) of ${product.description} are available`)
+                } else {
+                    setAdderError("")
+                }
                 setLastScan(product)
                 setChangeCounter(changeCounter + 1)
             }}/>
