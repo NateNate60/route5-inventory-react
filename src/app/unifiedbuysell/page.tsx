@@ -88,7 +88,7 @@ export default function UnifiedBuySellPage () {
                     setCashPaid={setReceivedCash} 
                     creditPaid={receivedCredit}
                     setCreditPaid={setReceivedCredit}
-                    setPaymentMethod={setGivenPaymentMethod}
+                    setPaymentMethod={setReceivedPaymentMethod}
                     onDelete={(id) => {
                         givenCart.deleteProduct(id)
                         setChangeCounter(changeCounter + 1)
