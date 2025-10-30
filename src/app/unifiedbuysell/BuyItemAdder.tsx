@@ -8,14 +8,14 @@ import { useState } from "react"
 
 interface BuyItemAdderProps {
     onSubmit: (product: Product) => any,
-    mode: "buy" | "sell"
+    mode: "buy" | "sell",
+    errorText?: string
 }
 
-export default function ItemAdder ({onSubmit, mode}: BuyItemAdderProps) {
+export default function ItemAdder ({onSubmit, mode, errorText}: BuyItemAdderProps) {
     const [showForm, setShowForm] = useState<boolean>(false)
     const [barcode, setBarcode] = useState<string>("")
 
-    let maybeText
     let maybeForm = showForm ? <ProductInfoForm onSubmit={(product) => {
             setShowForm(false)
             setBarcode("")
@@ -34,6 +34,7 @@ export default function ItemAdder ({onSubmit, mode}: BuyItemAdderProps) {
                         searchProducts(barcode, "sealed"
                         ).then( (data) => {
                             if (data.length === 0 ) {
+                                setShowForm(true)
                                 return
                             }
                             let result = data[0]
@@ -46,7 +47,7 @@ export default function ItemAdder ({onSubmit, mode}: BuyItemAdderProps) {
                                 acquired_price: "sealedMarketPrice" in result.priceData ? result.priceData.sealedMarketPrice : 1,
                                 acquired_date: today.toString(),
                                 sale_price: NaN,
-                                quantity: 1,
+                                quantity: 0,
                                 consignor_name: "",
                                 consignor_contact: "",
                                 sale_price_date: today.toString(),
@@ -54,10 +55,12 @@ export default function ItemAdder ({onSubmit, mode}: BuyItemAdderProps) {
                                 tcg_price_data: result
                             }
                             product.sale_price = getMarketPrice(product) ?? NaN
+                            setShowForm(false)
                             onSubmit(product)
                         })
+                    } else {
+                        setShowForm(true)
                     }
-                    setShowForm(true)
                     setBarcode(barcode)
                 } else if ("id" in result) {
                     // Product found
@@ -84,7 +87,9 @@ export default function ItemAdder ({onSubmit, mode}: BuyItemAdderProps) {
                     setShowForm(false)
                 }
             }} showSuggestions={true} />
-            {maybeText}
+            <p className="error-text">
+                {errorText}
+            </p>
             {maybeForm}
         </div>
     )
