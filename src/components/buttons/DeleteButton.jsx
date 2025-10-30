@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+import TextButton from "./buttons";
 
 
 export default function DeleteButton (props) {
