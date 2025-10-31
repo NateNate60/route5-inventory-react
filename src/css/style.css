@@ -1,16 +1,16 @@
 body, .button {
-    font-family: "Century Gothic", Futura, sans-serif;
+    font-family: "Overpass", sans-serif;
     font-size: large;
     margin: 20px;
 }
 
 input[type="submit"], button {
-    font-family:  "Century Gothic", Futura, sans-serif;
+    font-family:  "Overpass", sans-serif;
     font-size: large;
 }
 
 input, select {
-    font-family:  "Century Gothic", Futura, sans-serif;
+    font-family:  "Overpass", sans-serif;
     font-size: large;
 }
 
