@@ -18,5 +18,5 @@ export default async function updateRates (newRates: Rates) {
             "Authorization": getCookieValue("token"),
             "Content-Type": "application/json"
         }
-    }).then( (response) => response.json())
+    })
 }
