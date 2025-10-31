@@ -59,9 +59,10 @@ export default function RateManagement () {
                             return
                         }
                     }
-                    updateRates(rates)
-                    setChanged(false)
+                    
                 }
+                updateRates(rates)
+                setChanged(false)
             }
             
         }}/>
@@ -116,7 +117,7 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
                 }}/>%
             </td>
             <td>
-                {index === 0 ? null : <DeleteButton noDisable={true} onClick={() => {
+                {index === 40 ? null : <DeleteButton noDisable={true} onClick={() => {
                     let newRates = rates
                     newRates.creditRates[selectedType].splice(index, 1)
                     newRates.cashRates[selectedType].splice(index, 1)
@@ -129,7 +130,7 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
 
     rows.push(<tr key={tiers.length}>
             <td>
-                ${Math.round(tiers[tiers.length - 1]) / 100} and up
+                ${Math.round(tiers[tiers.length - 1] ?? 0) / 100} and up
             </td>
             <td>
                 <NumericEntryField value={Math.round(rates.cashRates[selectedType][tiers.length] * 100)} step={1} onChange={(val) => {
@@ -150,9 +151,11 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
     return <table className="fullwidth">
         <thead>
             <tr>
-                <th colSpan={3}>
-                    Show rates for
+                <th colSpan={2}>
                 </th>
+                <td>
+                    Show rates for
+                </td>
                 <th>
                     <DropdownMenu selected={selectedType} options={{
                         card: "Raw cards",
@@ -191,9 +194,13 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
                 <td>
                     <TextButton colour="white" text="Add row" onClick={() => {
                         let newRates = rates
-                        newRates.cutoffs.card.push(rates.cutoffs.card[rates.cutoffs.card.length - 1] + 1)
-                        newRates.cashRates.card.push(0)
-                        newRates.creditRates.card.push(0)
+                        let newThreshhold = rates.cutoffs[selectedType][rates.cutoffs[selectedType].length - 1] + 1
+                        if (isNaN(newThreshhold)) {
+                            newThreshhold = 1
+                        }
+                        newRates.cutoffs[selectedType].push(newThreshhold)
+                        newRates.cashRates[selectedType].push(0)
+                        newRates.creditRates[selectedType].push(0)
                         onChange(newRates)
                     }}/>
                 </td>
