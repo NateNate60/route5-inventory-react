@@ -4,6 +4,7 @@ import { getRates } from "@/backend/settings"
 import updateRates from "@/backend/updateRates"
 import TextButton from "@/components/buttons/buttons"
 import DeleteButton from "@/components/buttons/DeleteButton"
+import DropdownMenu from "@/components/DropdownMenu"
 import NumericEntryField from "@/components/NumericEntryField"
 import { Rates } from "@/types/Rates"
 import { useEffect, useState } from "react"
@@ -36,28 +37,31 @@ export default function RateManagement () {
             setRates(newRates)}}
         onSave={ () => {
             if (rates !== undefined) {
-                let max = 0
-                for (let threshhold of rates.cutoffs.card) {
-                    if (threshhold <= max) {
-                        setError("Tier threshholds must be in strictly ascending order and not negative.")
-                        return
+                let selectedType: "card" | "slab" | "sealed"
+                for (selectedType in rates.cutoffs) {
+                    let max = 0
+                    for (let threshhold of rates.cutoffs[selectedType]) {
+                        if (threshhold <= max) {
+                            setError("Tier threshholds must be in strictly ascending order and not negative.")
+                            return
+                        }
+                        max = threshhold
                     }
-                    max = threshhold
-                }
-                for (let rate of rates.cashRates.card) {
-                    if (rate < 0) {
-                        setError("Rates cannot be negative.")
-                        return
+                    for (let rate of rates.cashRates[selectedType]) {
+                        if (rate < 0) {
+                            setError("Rates cannot be negative.")
+                            return
+                        }
                     }
-                }
-                for (let rate of rates.creditRates.card) {
-                    if (rate < 0) {
-                        setError("Rates cannot be negative.")
-                        return
+                    for (let rate of rates.creditRates[selectedType]) {
+                        if (rate < 0) {
+                            setError("Rates cannot be negative.")
+                            return
+                        }
                     }
+                    updateRates(rates)
+                    setChanged(false)
                 }
-                updateRates(rates)
-                setChanged(false)
             }
             
         }}/>
@@ -75,6 +79,9 @@ interface RateDisplayerProps {
 }
 
 function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDisplayerProps) {
+
+    const [selectedType, setSelectedType] = useState<"card" | "slab" | "sealed">("card")
+
     if (rates === undefined) {
         return <p>Loading...</p>
     }
@@ -84,36 +91,36 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
         maybeSaveButton = <TextButton colour="white" text="Save" onClick={onSave}/>
     }
 
-    let tiers = rates.cutoffs.card
+    let tiers = rates.cutoffs[selectedType]
     let rows = tiers.map( (value, index) => {
         return <tr key={index}>
             <td>
                 $&nbsp;{index === 0 ? 0 : Math.round(tiers[index - 1]) / 100}&ndash;$&nbsp;<NumericEntryField value={Math.round(tiers[index]) / 100} step={0.01} onChange={(val) => {
                     let newRates = rates
-                    newRates.cutoffs.card[index] = Math.round(val * 100)
+                    newRates.cutoffs[selectedType][index] = Math.round(val * 100)
                     onChange(newRates)
                 }}/>
             </td>
             <td>
-                <NumericEntryField value={Math.round(rates.cashRates.card[index] * 100)} step={1} onChange={(val) => {
+                <NumericEntryField value={Math.round(rates.cashRates[selectedType][index] * 100)} step={1} onChange={(val) => {
                     let newRates = rates
-                    newRates.cashRates.card[index] = Math.round(val) / 100
+                    newRates.cashRates[selectedType][index] = Math.round(val) / 100
                     onChange(newRates)
                 }}/>%
             </td>
             <td>
-                <NumericEntryField value={Math.round(rates.creditRates.card[index] * 100)} step={1} onChange={(val) => {
+                <NumericEntryField value={Math.round(rates.creditRates[selectedType][index] * 100)} step={1} onChange={(val) => {
                     let newRates = rates
-                    newRates.creditRates.card[index] = Math.round(val) / 100
+                    newRates.creditRates[selectedType][index] = Math.round(val) / 100
                     onChange(newRates)
                 }}/>%
             </td>
             <td>
                 {index === 0 ? null : <DeleteButton noDisable={true} onClick={() => {
                     let newRates = rates
-                    newRates.creditRates.card.splice(index, 1)
-                    newRates.cashRates.card.splice(index, 1)
-                    newRates.cutoffs.card.splice(index, 1)
+                    newRates.creditRates[selectedType].splice(index, 1)
+                    newRates.cashRates[selectedType].splice(index, 1)
+                    newRates.cutoffs[selectedType].splice(index, 1)
                     onChange(newRates)
                 }}/>}
             </td>
@@ -125,16 +132,16 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
                 ${Math.round(tiers[tiers.length - 1]) / 100} and up
             </td>
             <td>
-                <NumericEntryField value={Math.round(rates.cashRates.card[tiers.length] * 100)} step={1} onChange={(val) => {
+                <NumericEntryField value={Math.round(rates.cashRates[selectedType][tiers.length] * 100)} step={1} onChange={(val) => {
                     let newRates = rates
-                    newRates.cashRates.card[tiers.length] = Math.round(val) / 100
+                    newRates.cashRates[selectedType][tiers.length] = Math.round(val) / 100
                     onChange(newRates)
                 }}/>%
             </td>
             <td>
-                <NumericEntryField value={Math.round(rates.creditRates.card[tiers.length] * 100)} step={1} onChange={(val) => {
+                <NumericEntryField value={Math.round(rates.creditRates[selectedType][tiers.length] * 100)} step={1} onChange={(val) => {
                     let newRates = rates
-                    newRates.creditRates.card[tiers.length] = Math.round(val) / 100
+                    newRates.creditRates[selectedType][tiers.length] = Math.round(val) / 100
                     onChange(newRates)
                 }}/>%
             </td>
@@ -142,6 +149,22 @@ function CardRateDisplayer ({rates, showSaveButton, onChange, onSave}: RateDispl
 
     return <table className="fullwidth">
         <thead>
+            <tr>
+                <th colSpan={3}>
+                    Show rates for
+                </th>
+                <th>
+                    <DropdownMenu selected={selectedType} options={{
+                        card: "Raw cards",
+                        sealed: "Sealed products",
+                        slab: "Graded cards"
+                    }} onClick={(value) => {
+                        if (value === "card" || value === "slab" || value === "sealed") {
+                            setSelectedType(value)
+                        }
+                    }}/>
+                </th>
+            </tr>
             <tr>
                 <th>
                     Price range
