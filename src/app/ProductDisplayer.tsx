@@ -8,16 +8,17 @@ import "./inventory.css"
 import NumericEntryField from "@/components/NumericEntryField"
 import { getMarketPrice } from "@/backend/searchProducts"
 import TextButton from "@/components/buttons/buttons"
+import DeleteButton from "@/components/buttons/DeleteButton"
+import sellItems from "@/backend/sellItems"
 
 interface ProductDisplayerProps {
     products: ProductQuantityList,
-    editable: boolean,
     sort: string,
     filter: string,
     search: string
 }
 
-export default function ProductDisplayer ({products, editable, sort, filter, search}: ProductDisplayerProps) {
+export default function ProductDisplayer ({products, sort, filter, search}: ProductDisplayerProps) {
     let productList = Array<Product>()
 
     for (let productID in products.products) {
@@ -54,7 +55,7 @@ export default function ProductDisplayer ({products, editable, sort, filter, sea
     let resultRows: Array<React.JSX.Element> = []
     for (let product of productList) {
         resultRows.push( 
-            <ProductListing product={product} editable={editable} key={product.id}/>
+            <ProductListing product={product} key={`${product.id}-${Date.now()}`}/>
         )
     }
             
@@ -106,12 +107,26 @@ export default function ProductDisplayer ({products, editable, sort, filter, sea
 
 interface ProductListingProps {
     product: Product,
-    editable: boolean
 }
 
-function ProductListing ({product, editable}: ProductListingProps) {
-    let [price, setPrice] = useState<number>(product["sale_price"])
-    let [priceDate, setPriceDate] = useState<string>(product["sale_price_date"])
+function ProductListing ({product}: ProductListingProps) {
+    const [price, setPrice] = useState<number>(product["sale_price"])
+    const [priceDate, setPriceDate] = useState<string>(product["sale_price_date"])
+    const [modified, setModified] = useState<boolean>(false)
+
+
+    let maybeButton = null
+    if (modified) {
+        maybeButton = <TextButton colour="white" text="Save" onClick={() => {
+            setModified(false)
+            updatePrice(price, product["id"])
+            setPriceDate(new Date().toISOString())
+        }}/>
+    } else {
+        let cart = new ProductQuantityList()
+        cart.addProduct(product, false)
+        maybeButton = <DeleteButton onClick={() => sellItems(cart, 0, 0, "lost")}/>
+    }
 
     let marketPrice = Math.round(getMarketPrice(product) ?? 0) / 100
     return (
@@ -138,7 +153,10 @@ function ProductListing ({product, editable}: ProductListingProps) {
                 {marketPrice === 0 ? "" : "$" + marketPrice}
             </td>
             <td width={"7%"} className="result-table">
-                $<NumericEntryField step={0.01} value={Math.round(price) / 100} onChange={(newPrice) => {setPrice(newPrice * 100)}}/>
+                $<NumericEntryField step={0.01} value={Math.round(price) / 100} onChange={(newPrice) => {
+                    setModified(true)
+                    setPrice(newPrice * 100)
+                }}/>
             </td>
             <td width={"10%"} className="result-table">
                 <ProductPriceDate dateString={priceDate} />
@@ -149,10 +167,7 @@ function ProductListing ({product, editable}: ProductListingProps) {
                 {product['consignor_contact']}
             </td>
             <td width={"10%"} className="result-table">
-                <TextButton colour="white" text="Save" onClick={() => {
-                    updatePrice(price, product["id"])
-                    setPriceDate(new Date().toISOString())
-                }}/>
+                {maybeButton}
             </td>
         </tr>
     )
