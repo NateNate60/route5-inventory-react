@@ -66,15 +66,15 @@ export default function InventoryManagement () {
                 <tbody>
                     <tr>
                         <td>
-                            <TextButton colour="orange" text="Record New Transaction" href="/unifiedbuysell"/>
+                            <TextButton colour="orange" text="Record New Transaction" href="/unifiedbuysell" disabled={errorText !== ""}/>
                         </td>
                         <td>
-                            <TextButton colour="blue" text="View Transaction History" href="/transactions"/>
+                            <TextButton colour="blue" text="View Transaction History" href="/transactions" disabled={errorText !== ""}/>
                         </td>
                     </tr>
                     <tr>
                         <td colSpan={2}>
-                            <TextButton colour="white" text="Management" href="/manage"/>
+                            <TextButton colour="white" text="Management" href="/manage" disabled={errorText !== ""}/>
                         </td>
                     </tr>
                 </tbody>

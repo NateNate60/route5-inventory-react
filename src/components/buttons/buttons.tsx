@@ -7,11 +7,19 @@ interface TextButtonProps {
     id?: string,
     colour?: string,
     width?: number,
-    submit?: boolean
+    submit?: boolean,
+    disabled?: boolean
 }
 
-export default function TextButton ({href, text, onClick, id, colour = "white", width, submit = false}: TextButtonProps) {
+export default function TextButton ({href, text, onClick, id, colour = "white", width, submit = false, disabled = false}: TextButtonProps) {
 
+    if (disabled) {
+        return <span>
+        <button className={`disabled-button`} id={id} style={{width: width}} disabled>
+            {text} 
+        </button>
+    </span>
+    }
     return <span>
         <a href={href}>
             <button className={colour ? `${colour}-button` : ''} type={submit ? "submit" : "button"} onClick={onClick} id={id} style={{width: width}}>

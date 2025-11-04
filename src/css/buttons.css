@@ -103,3 +103,14 @@
     clear: both;
     margin-bottom: 1em;
 }
+
+.disabled-button {
+    background-color: grey;
+    width: fit-content;
+    border-style: solid;
+    border-color: grey;
+    border-width: 2px;
+    border-radius: 10px;
+    display: inline;
+    padding: 5px;
+}
