@@ -1,3 +1,7 @@
 .fulldwidth {
     width: 100%;
 }
+
+#mainpage-error-text {
+    text-align: center;
+}

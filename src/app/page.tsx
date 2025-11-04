@@ -40,6 +40,10 @@ export default function InventoryManagement () {
             let runningValue = 0
             let acquiredRunningValue = 0
             if ("error" in value) {
+                if (value.error === "Missing Authorization Header") {
+                    setErrorText("You're not logged in")
+                    return
+                }
                 setErrorText(value["error"])
                 return
             }
@@ -75,7 +79,7 @@ export default function InventoryManagement () {
                     </tr>
                 </tbody>
             </table>
-            <p className="error-text">
+            <p className="error-text" id="mainpage-error-text">
                 {errorText}
                 <br/>
             </p>
