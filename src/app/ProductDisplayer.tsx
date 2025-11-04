@@ -74,6 +74,9 @@ export default function ProductDisplayer ({products, sort, filter, search}: Prod
                         Condition
                     </th>
                     <th>
+                        Set
+                    </th>
+                    <th>
                         In inventory
                     </th>
                     <th>
@@ -90,9 +93,6 @@ export default function ProductDisplayer ({products, sort, filter, search}: Prod
                     </th>
                     <th>
                         Price date
-                    </th>
-                    <th>
-                        Consignor
                     </th>
                     <th>
                     </th>
@@ -140,6 +140,9 @@ function ProductListing ({product}: ProductListingProps) {
             <td width={"10%"} className="result-table">
                 {product['condition']}
             </td>
+            <td width={"10%"} className="result-table">
+                {product.tcg_price_data?.setName}
+            </td>
             <td width={"6%"} className="result-table">
                 {product['quantity']}
             </td>
@@ -160,11 +163,6 @@ function ProductListing ({product}: ProductListingProps) {
             </td>
             <td width={"10%"} className="result-table">
                 <ProductPriceDate dateString={priceDate} />
-            </td>
-            <td width={"10%"} className="result-table">
-                {product['consignor_name']}
-                <br/>
-                {product['consignor_contact']}
             </td>
             <td width={"10%"} className="result-table">
                 {maybeButton}
