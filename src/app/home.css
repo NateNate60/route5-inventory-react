@@ -1,7 +1,11 @@
-.fulldwidth {
+.fullwidth {
     width: 100%;
 }
 
 #mainpage-error-text {
+    text-align: center;
+}
+
+#market-matcher-buttons {
     text-align: center;
 }

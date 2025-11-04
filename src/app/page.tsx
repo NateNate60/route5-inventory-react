@@ -182,9 +182,10 @@ export default function InventoryManagement () {
                             </th>
                         </tr>
                         <tr>
-                            <td colSpan={2}>
-                                <TextButton colour="white" text="Update all singles prices" disabled={!loggedIn} onClick={() => setInventory(matchMarketPrices(inventory, "card", threshold))}/>
-                                <TextButton colour="white" text="Update all sealed prices" disabled={!loggedIn} onClick={() => setInventory(matchMarketPrices(inventory, "sealed", threshold))}/>
+                            <td colSpan={2} id="market-matcher-buttons">
+                                <TextButton colour="white" text="Singles" disabled={!loggedIn} onClick={() => setInventory(matchMarketPrices(inventory, "card", threshold))}/>
+                                <TextButton colour="white" text="Sealed" disabled={!loggedIn} onClick={() => setInventory(matchMarketPrices(inventory, "sealed", threshold))}/>
+                                <TextButton colour="white" disabled text="Graded cards"/>
                             </td>
                         </tr>
                     </tbody>
