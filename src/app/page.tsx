@@ -96,11 +96,11 @@ export default function InventoryManagement () {
             setErrorText("")
             setInventory(inventory)
         })
-    }, [])
+    }, [loggedIn])
 
     return (
         <div>
-            <LoginWidget onTokenFetch={() =>{}}/>
+            <LoginWidget onTokenFetch={() =>{setLoggedIn(true)}}/>
             <h1 id="page-title">Manage Inventory</h1>
             <table id="navigation">
                 <tbody>

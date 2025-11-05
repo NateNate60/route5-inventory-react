@@ -5,7 +5,7 @@ import { checkAccessValidity, logout, refreshToken } from "@/backend/login";
 import TextButton from "./buttons/buttons";
 
 interface LoginWidgetProps {
-    onTokenFetch?: () => void
+    onTokenFetch: () => void
 }
 
 export default function LoginWidget ({onTokenFetch}: LoginWidgetProps) {
@@ -15,7 +15,9 @@ export default function LoginWidget ({onTokenFetch}: LoginWidgetProps) {
         checkAccessValidity(
         ).then( (record) => {
             setUsername(record.username)
-            onTokenFetch?.()
+            if (record.username) {
+                onTokenFetch()
+            }
         }
         )
     }, [])
