@@ -1,4 +1,5 @@
 export type TokenValidityRecord = {
     expiration: Date,
-    username: string
+    username: string,
+    org: string
 }

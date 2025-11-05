@@ -56,6 +56,7 @@ export async function checkAccessValidity (): Promise<TokenValidityRecord> {
     }).then( (response) => response.json())
     return {
         expiration: response["expiration"],
+        org: response["org"],
         username: response["username"]
     }
 }
