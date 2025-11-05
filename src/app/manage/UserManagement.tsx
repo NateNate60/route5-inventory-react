@@ -2,12 +2,17 @@
 import addUser from "@/backend/addUser"
 import deleteUser from "@/backend/deleteUser"
 import getUsers from "@/backend/getUsers"
+import { checkAccessValidity } from "@/backend/login"
 import TextButton from "@/components/buttons/buttons"
 import DeleteButton from "@/components/buttons/DeleteButton"
 import { User } from "@/types/User"
 import { useEffect, useState } from "react"
 
-export default function UserManagement () {
+interface UserManagementProps {
+    currentUser: string
+}
+
+export default function UserManagement ({currentUser}: UserManagementProps) {
 
     const [users, setUsers] = useState<Array<User>>([])
 
@@ -23,7 +28,7 @@ export default function UserManagement () {
             Manage Users
         </h2>
         <UserAdder/>
-        <UserTable users={users}/>
+        <UserTable users={users} currentUser={currentUser}/>
     </div>
 }
 
@@ -90,10 +95,11 @@ function UserAdder () {
 }
 
 interface UserTableProps {
-    users: Array<User>
+    users: Array<User>,
+    currentUser: string
 }
 
-function UserTable ({users}: UserTableProps) {
+function UserTable ({users, currentUser}: UserTableProps) {
 
     let userTableEntries = users.map( (user) => <tr key={user.username}>
         <td>
@@ -109,9 +115,10 @@ function UserTable ({users}: UserTableProps) {
             {user.lastLogin.toLocaleDateString()}
         </td>
         <td>
-            <DeleteButton onClick={() => {
+            {user.username === currentUser && user.username ? null : <DeleteButton onClick={() => {
                 deleteUser(user.username)
-            }}/>
+            }}/>}
+            
         </td>
     </tr>)
 

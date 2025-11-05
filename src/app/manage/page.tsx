@@ -13,7 +13,10 @@ import RateManagement from "./RateManagement"
 export default function ManagePage () {
     useEffect( () => {
         refreshToken()
-        checkAccessValidity().then( (value) => setOrg(value.org))
+        checkAccessValidity().then( (value) => {
+            setOrg(value.org)
+            setCurrentUser(value.username)
+        })
         const interval = setInterval( () => {
             refreshToken()
         }, 60000)
@@ -21,6 +24,7 @@ export default function ManagePage () {
     }, [])
 
     const [org, setOrg] = useState<string>("")
+    const [currentUser, setCurrentUser] = useState<string>("")
 
     let maybeRouteFivePanels = null
     if (org === "route5") {
@@ -35,7 +39,7 @@ export default function ManagePage () {
             <BackButton/>
             <div id="main-interface">
                 <h1 id="page-title">Management</h1>
-                <UserManagement/>
+                <UserManagement currentUser={currentUser}/>
                 <RateManagement/>
                 
             </div>
