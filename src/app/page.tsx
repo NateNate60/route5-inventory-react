@@ -17,6 +17,7 @@ import TextButton from "@/components/buttons/buttons"
 import { getMarketPrice } from "@/backend/searchProducts"
 import updatePrice from "@/backend/updatePrice"
 import { getThreshhold } from "@/backend/settings"
+import { Product } from "@/types/Product"
 
 function matchMarketPrices (inventory: ProductQuantityList, type: "card" | "slab" | "sealed", threshold: number): ProductQuantityList {
     /*
@@ -60,8 +61,37 @@ export default function InventoryManagement () {
 
     const [loggedIn, setLoggedIn] = useState<boolean>(false)
 
+    async function processInventory () {
+        await refreshToken()
+        getInventory(
+        ).then( (value) => {
+            if ("error" in value) {
+                if (value.error === "Missing Authorization Header" && !loggedIn) {
+                    setErrorText("You're not logged in")
+                } else {
+                    setErrorText(value["error"])
+                }
+            } else {
+                let inventory = new ProductQuantityList()
+                let runningValue = 0
+                let acquiredRunningValue = 0
+                
+                setLoggedIn(true)
+                for (let item of value) {
+                    inventory.addProduct(item)
+                    runningValue += item.sale_price * item.quantity
+                    acquiredRunningValue += item.acquired_price * item.quantity
+                }
+                setTotalValue(runningValue)
+                setAcquisitionValue(acquiredRunningValue)
+                setErrorText("")
+                setInventory(inventory)
+            }
+        })
+    }
+
     useEffect( () => {
-        refreshToken()
+        processInventory()
         getThreshhold().then((value) => setThreshhold(value))
         const interval = setInterval( () => {
             refreshToken()
@@ -69,38 +99,9 @@ export default function InventoryManagement () {
         return () => clearInterval(interval);
     }, [])
 
-    useEffect( () => {
-        getInventory(
-        ).then( (value) => {
-            let inventory = new ProductQuantityList()
-            let runningValue = 0
-            let acquiredRunningValue = 0
-            if ("error" in value) {
-                if (value.error === "Missing Authorization Header") {
-                    setErrorText("You're not logged in")
-                    setLoggedIn(false)
-                    return
-                }
-                setErrorText(value["error"])
-                setLoggedIn(false)
-                return
-            }
-            setLoggedIn(true)
-            for (let item of value) {
-                inventory.addProduct(item)
-                runningValue += item.sale_price * item.quantity
-                acquiredRunningValue += item.acquired_price * item.quantity
-            }
-            setTotalValue(runningValue)
-            setAcquisitionValue(acquiredRunningValue)
-            setErrorText("")
-            setInventory(inventory)
-        })
-    }, [loggedIn])
-
     return (
         <div>
-            <LoginWidget onTokenFetch={() =>{setLoggedIn(true)}}/>
+            <LoginWidget onTokenFetch={() =>{processInventory}}/>
             <h1 id="page-title">Manage Inventory</h1>
             <table id="navigation">
                 <tbody>
