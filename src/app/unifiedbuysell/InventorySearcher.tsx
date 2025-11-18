@@ -135,7 +135,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <th colSpan={5}>TCG Player Catalogue</th>
+                        <th colSpan={5}>TCG Player Card Catalogue</th>
                     </tr>
                     <tr>
                         <td colSpan={5}>
