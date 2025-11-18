@@ -5,7 +5,8 @@ import SearchBar from "./SearchBar"
 import getProductInfo from "@/backend/getProductInfo"
 import { BackendAPIError } from "@/types/BackendAPIError"
 import searchProducts from "@/backend/searchProducts"
-import TextButton from "@/components/buttons/buttons"
+import TextButton, { WhiteTextButton } from "@/components/buttons/buttons"
+import getInventory from "@/backend/getInventory"
 
 interface InventorySearcherProps {
     onSubmit: (e: Product | BackendAPIError | SlabCert, barcode: string) => any,
@@ -17,17 +18,54 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
     A component which provides a search bar for searching the inventory.
     */
 
-    const [suggestions, setSuggestions] = useState<Array<TCGProductData>>([])
+    const [tcgSuggestions, setTCGSuggestions] = useState<Array<TCGProductData>>([])
+    const [inventorySuggestions, setInventorySuggestions] = useState<Array<Product>>([])
 
+    const [tcgResultsText, setTCGResultsText] = useState<string>("Press enter to search TCG Player database...")
+    const [inventoryResultsText, setInventoryResultsText] = useState<string>("Start typing to search inventory...")
     const today = new Date().toISOString()
+
+    function clearAll () {
+        setInventoryResultsText("Start typing to search inventory...")
+        setInventorySuggestions([])
+        setTCGResultsText("Press enter to search TCG Player database...")
+        setTCGSuggestions([])
+    }
 
     return (
         <div>
             <table className="fullwidth">
                 <thead>
                     <tr>
-                        <td>
-                            <SearchBar big={true} onSubmit={(input: string) => {
+                        <td colSpan={5}>
+                            <SearchBar onChange={(input: string) => {
+                                if (input.match(/^\d+$/)) {
+                                    return
+                                }
+                                if (input.length < 3) {
+                                    clearAll()
+                                    return
+                                }
+                                getInventory()
+                                .then( (value) => {
+                                    if ("error" in value) {
+                                        setInventoryResultsText("Error")
+                                        setTCGSuggestions([])
+                                        return
+                                    }
+                                    setInventoryResultsText("")
+                                    let results: Array<Product> = value
+                                    .filter( (value) => value !== undefined)
+                                    results = results.filter(
+                                        (value) => `${value.tcg_price_data?.setName} ${value.tcg_price_data?.canonicalName} ${value.tcg_price_data?.number}`.toLowerCase().includes(input.toLowerCase())
+                                    )
+                                    if (results.length === 0) {
+                                        setInventoryResultsText("No results.\n\nPress enter to try searching the TCG Player database instead")
+                                    }
+                                    setInventorySuggestions(results)
+                                })
+                                setInventoryResultsText("Searching...")
+                            }} onSubmit={(input: string) => {
                                 let s = input
                                 if (input.toLowerCase().includes("psacard.com")) {
                                     let split = input.split("/")
@@ -41,18 +79,70 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                 ) {
                                     getProductInfo(s
                                     ).then( (item) => {
+                                        setInventoryResultsText("Start typing to search inventory...")
+                                        setInventorySuggestions([])
+                                        setTCGResultsText("Press enter to search TCG Player database...")
+                                        setTCGSuggestions([])
                                         onSubmit(item, s)
                                     })
                                 } else if (showSuggestions) {
                                     searchProducts(s, "card"
-                                    ).then( (value) => setSuggestions(value))
+                                    ).then( (value) => {
+                                        if (value.length === 0) {
+                                            setTCGResultsText("No results")
+                                        } else {
+                                            setTCGResultsText("")
+                                        }
+                                        setTCGSuggestions(value)
+                                    })
+                                    setTCGResultsText("Searching...")
                                 }
                             }}/>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
-                    {suggestions.map(
+                    <tr>
+                        <th colSpan={5}>Inventory</th>
+                    </tr>
+                    <tr>
+                        <td colSpan={5}>
+                            <i>{inventoryResultsText}</i>
+                        </td>
+                    </tr>
+                    {inventorySuggestions.map((suggestion) => <tr>
+                        <td>
+                            {suggestion.tcg_price_data?.setName}
+                        </td>
+                        <td>
+                            {suggestion.tcg_price_data?.canonicalName ?? suggestion.description} {suggestion.condition}
+                        </td>
+                        <td>
+                            {suggestion.tcg_price_data?.number}
+                        </td>
+                        <td>
+                            {suggestion.tcg_price_data?.attribute}
+                        </td>
+                        <td>
+                            <WhiteTextButton text="Add" onClick={() => {
+                                onSubmit(suggestion, suggestion.id)
+                                clearAll()
+                            }}/>
+                        </td>
+                        </tr>
+                    )}
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th colSpan={5}>TCG Player Catalogue</th>
+                    </tr>
+                    <tr>
+                        <td colSpan={5}>
+                            <i>{tcgResultsText}</i>
+                        </td>
+                    </tr>
+                    {tcgSuggestions.map(
                         (suggestion) => {
                         return <tr key={suggestion.tcgID}>
                             <td>
@@ -84,7 +174,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         sale_price_date: today,
                                         condition: "NM",
                                     }, "")
-                                    setSuggestions([])
+                                    clearAll()
                                 }}/>
                                 <TextButton colour="white" text="LP" onClick={ () => {
                                     onSubmit( {
@@ -102,7 +192,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         sale_price_date: today,
                                         condition: "LP",
                                     }, "")
-                                    setSuggestions([])
+                                    clearAll()
                                 }}/>
                                 <TextButton colour="white" text="MP" onClick={ () => {
                                     onSubmit( {
@@ -120,7 +210,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         sale_price_date: today,
                                         condition: "MP",
                                     }, "")
-                                    setSuggestions([])
+                                    clearAll()
                                 }}/>
                                 <TextButton colour="white" text="HP" onClick={ () => {
                                     onSubmit( {
@@ -138,7 +228,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         sale_price_date: today,
                                         condition: "HP",
                                     }, "")
-                                    setSuggestions([])
+                                    clearAll()
                                 }}/>
                                 <TextButton colour="white" text="DM" onClick={ () => {
                                     onSubmit( {
@@ -156,7 +246,7 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                         sale_price_date: today,
                                         condition: "DM",
                                     }, "")
-                                    setSuggestions([])
+                                    clearAll()
                                 }}/>
                             </td>
                         </tr>}

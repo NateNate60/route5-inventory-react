@@ -3,11 +3,11 @@
 import { FormEvent, useState } from "react"
 
 interface SearchBarProps {
-    onSubmit: (s: string) => any,
-    big: boolean
+    onSubmit: (s: string) => void,
+    onChange: (s: string) => void,
 }
 
-export default function SearchBar ({onSubmit, big}: SearchBarProps) {
+export default function SearchBar ({onSubmit, onChange}: SearchBarProps) {
     const [value, setValue] = useState<string>("")
     return (
         <form onSubmit={(e: FormEvent<HTMLFormElement>) => {
@@ -17,7 +17,10 @@ export default function SearchBar ({onSubmit, big}: SearchBarProps) {
             onSubmit(content)
         }}>
             <label>Scan bar code or input card name:</label>
-            <input type="text" id="entry" className={big ? "big-input" : ""} onChange={(e) => setValue(e.target.value)} value={value}/>
+            <input type="text" id="entry" className="big-input" value={value} onChange={(e) => {
+                onChange(e.target.value)
+                setValue(e.target.value)}}
+            />
         </form>
     )
 }
