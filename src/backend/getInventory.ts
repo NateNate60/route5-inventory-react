@@ -3,14 +3,24 @@ import getCookieValue from "./getCookie";
 import { Product } from "@/types/Product";
 import { BackendAPIError } from "@/types/BackendAPIError";
 
-export default async function getInventory (): Promise<Array<Product> | BackendAPIError> {
-    let r = await fetch(`${CONSTANTS.BACKEND_URL}/v1/inventory/all`,
-        {
-            headers: {
-                "Authorization": getCookieValue("token")
-            }
-        }
-    )
+const CACHED_INVENTORY_VALIDITY_SECONDS = 60
 
-    return r.json()
+export default async function getInventory (): Promise<Array<Product> | BackendAPIError> {
+    let storedData = localStorage.getItem("inventory")
+    if (storedData !== null) {
+        let parsedData = JSON.parse(storedData)
+        if (Date.now() - parsedData.timestamp < CACHED_INVENTORY_VALIDITY_SECONDS * 1000) {
+            return new Promise<Array<Product>>( (resolve, reject) => resolve(parsedData["inventory"]))
+        }
+    }
+    let r = await fetch(`${CONSTANTS.BACKEND_URL}/v1/inventory/all`,
+            {
+                headers: {
+                    "Authorization": getCookieValue("token")
+                }
+            }
+        )
+    let data = r.json()
+    data.then((data) => localStorage.setItem("inventory", JSON.stringify({timestamp: Date.now(), inventory: data})))
+    return data
 }

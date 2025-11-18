@@ -28,6 +28,7 @@ export function login (username: string, password: string, staySignedIn: boolean
 export function logout () {
     document.cookie = `token=; Max-Age=0; path=/`
     document.cookie = `refresh_token=; Max-Age=0; path=/`
+    localStorage.clear()
     window.location.reload()
 }
 
