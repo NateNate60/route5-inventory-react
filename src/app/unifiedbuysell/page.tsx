@@ -160,7 +160,7 @@ export default function UnifiedBuySellPage () {
                                 }
                             }
 
-                            buyItems(receivedCart, givenCash, givenCredit, givenPaymentMethod)
+                            buyItems(receivedCart, givenCash, givenCredit, givenPaymentMethod, threshhold)
 
                         } else {
                             sellItems(givenCart, receivedCash, receivedCredit, receivedPaymentMethod)
