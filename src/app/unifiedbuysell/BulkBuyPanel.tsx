@@ -44,8 +44,8 @@ export default function BulkBuyPanel ({cart, changeRate, threshhold, changeBarco
         // Usually the market price, unless the card is under thre threshhold AND the TCG Low is lower than market.
         let effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
 
-        cashTotal += Math.floor((effectivePrice * product.cashRate) / 50) * 50
-        creditTotal += Math.floor((effectivePrice * product.creditRate) / 50) * 50
+        cashTotal += Math.floor((effectivePrice * product.cashRate * product.quantity) / 50) * 50
+        creditTotal += Math.floor((effectivePrice * product.creditRate * product.quantity) / 50) * 50
         marketTotal += marketPrice * cart.products[thing].quantity
         lowTotal += lowPrice * cart.products[thing].quantity
 
@@ -253,10 +253,14 @@ function BuyPanelEntry ({product, setBarcode, onDelete, updatePrice, updateCashR
                 {product.product.type === "sealed" ? " ea." : null}
             </td>
             <td>
-                $&nbsp;{Math.floor((effectivePrice * cashRate) / 50) / 2} (<NumericEntryField short value={Math.round(cashRate * 100)} step={1} onChange={(value) => updateCashRate(value / 100)}/>%)
+                $&nbsp;{Math.floor((effectivePrice * cashRate) / 50) / 2}&nbsp;
+                (<NumericEntryField short value={Math.round(cashRate * 100)} step={1} onChange={(value) => updateCashRate(value / 100)}/>%)
+                {product.product.type === "sealed" ? " ea." : null}
             </td>
             <td>
-                $&nbsp;{Math.floor((effectivePrice * creditRate) / 50) / 2} (<NumericEntryField short value={Math.round(creditRate * 100)} step={1} onChange={(value) => updateCreditRate(value / 100)}/>%)
+                $&nbsp;{Math.floor((effectivePrice * creditRate) / 50) / 2}&nbsp;
+                (<NumericEntryField short value={Math.round(creditRate * 100)} step={1} onChange={(value) => updateCreditRate(value / 100)}/>%)
+                {product.product.type === "sealed" ? " ea." : null}
             </td>
             <td>
                 <DeleteButton onClick={() => {onDelete(product.product.id)}}/>
