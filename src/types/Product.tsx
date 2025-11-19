@@ -23,7 +23,9 @@ export type SlabCert = {
 
 export type ProductQuantity = {
     product: Product,
-    quantity: number
+    quantity: number,
+    cashRate: number,
+    creditRate: number
 }
 
 export type TCGProductData = {

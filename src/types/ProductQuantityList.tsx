@@ -1,5 +1,7 @@
 import { getMarketPrice } from "@/backend/searchProducts"
 import { Product, ProductQuantity } from "./Product"
+import calculateRates from "@/backend/calculateRates"
+import { Rates } from "./Rates"
 
 export class ProductQuantityList {
     products: {
@@ -64,7 +66,7 @@ export class ProductQuantityList {
         return price
     }
 
-    addProduct (product: Product, enforceQuantityConstraint: boolean = true): boolean {
+    addProduct (product: Product, enforceQuantityConstraint: boolean = true, rates?: Rates): boolean {
         /*
         Add a product to the list
         */
@@ -73,7 +75,16 @@ export class ProductQuantityList {
             this.bulkCount++
             product.id = "B" + this.bulkCount
             product.sale_price = getMarketPrice(product) ?? NaN
+            let cashRate, creditRate
+            if (rates !== undefined) {
+                [cashRate, creditRate] = calculateRates(rates, product.sale_price, product.type)
+            } else {
+                [cashRate, creditRate] = [NaN, NaN]
+            }
+            
             this.products[product.id] = {
+                cashRate: cashRate,
+                creditRate: creditRate,
                 product: product,
                 quantity: 1
             }
@@ -89,11 +100,32 @@ export class ProductQuantityList {
                 // There is no stock of the product
                 return false
             }
+            let cashRate, creditRate
+            if (rates !== undefined) {
+                [cashRate, creditRate] = calculateRates(rates, product.sale_price, product.type)
+            } else {
+                [cashRate, creditRate] = [NaN, NaN]
+            }
             this.products[product.id] = {
+                cashRate: cashRate,
+                creditRate: creditRate,
                 product: product,
                 quantity: 1
             }
         }
         return true
+    }
+
+    changeRate (productID: string, cashRate?: number, creditRate?: number): void {
+        /*
+        Change the rates to be paid
+        */
+
+        if (cashRate !== undefined) {
+            this.products[productID].cashRate = cashRate
+        }
+        if (creditRate !== undefined) {
+            this.products[productID].creditRate = creditRate
+        }
     }
 }

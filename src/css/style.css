@@ -51,6 +51,10 @@ a {
     width: 4.5em
 }
 
+.short-numeric-input {
+    width: 2em;
+}
+
 .single-product-displayer {
     padding: 5px;
 }

@@ -22,6 +22,7 @@ import calculateRates from "@/backend/calculateRates"
 import { getMarketPrice } from "@/backend/searchProducts"
 import BulkSellPanel from "./BulkSellPanel"
 import TextButton from "@/components/buttons/buttons"
+import { Rates } from "@/types/Rates"
 
 export default function UnifiedBuySellPage () {
     const [changeCounter, setChangeCounter] = useState<number>(0)
@@ -42,11 +43,21 @@ export default function UnifiedBuySellPage () {
     const [givenCash, setGivenCash] = useState<number>(0)
     const [givenPaymentMethod, setGivenPaymentMethod] = useState<string>("cash")
 
+    const [rates, setRates] = useState<Rates>()
+    const [threshhold, setThreshhold] = useState<number>(NaN)
+
     useEffect( () => {
         refreshToken()
         const interval = setInterval( () => {
             refreshToken()
         }, 60000)
+
+        getRates(
+        ).then( (r) => setRates(r))
+        
+        getThreshhold(
+        ).then( (r) => setThreshhold(r))
+
         return () => clearInterval(interval);
     }, [])
 
@@ -61,12 +72,17 @@ export default function UnifiedBuySellPage () {
     }
 
     let maybeBuySide, maybeSellSide
-    if (mode === "bulk") {
+    if (mode === "bulk" && rates !== undefined) {
         maybeBuySide = <div id={"bulk"}>
-            <BulkBuyPanel cart={receivedCart} 
+            <BulkBuyPanel cart={receivedCart}
                     cashPaid={givenCash}
+                    threshhold={threshhold}
                     setCashPaid={setGivenCash} 
                     creditPaid={givenCredit}
+                    changeRate={(id, cashRate, creditRate) => {
+                        receivedCart.changeRate(id, cashRate, creditRate)
+                        setChangeCounter(changeCounter + 1)
+                    }}
                     setCreditPaid={setGivenCredit}
                     setPaymentMethod={setGivenPaymentMethod}
                     changeBarcode={ (oldBarcode, newBarcode) => receivedCart.changeBarcode(oldBarcode, newBarcode)}
@@ -76,7 +92,7 @@ export default function UnifiedBuySellPage () {
                     }}
                 />
             <ItemAdder mode="buy" onSubmit={(product) => {
-                receivedCart.addProduct(product, false)
+                receivedCart.addProduct(product, false, rates)
                 setLastScan(product)
                 setChangeCounter(changeCounter + 1)
             }}/>

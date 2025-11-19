@@ -22,6 +22,11 @@ export default async function getInventory (): Promise<Array<Product> | BackendA
             }
         )
     let data = r.json()
-    data.then((data) => localStorage.setItem("inventory", JSON.stringify({timestamp: Date.now(), inventory: data})))
+    data.then((data) => {
+        if ("error" in data) {
+            return
+        }
+        localStorage.setItem("inventory", JSON.stringify({timestamp: Date.now(), inventory: data}))
+    })
     return data
 }

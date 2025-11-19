@@ -13,6 +13,8 @@ import calculateRates from "@/backend/calculateRates"
 
 interface BuyPanelProps {
     cart: ProductQuantityList,
+    changeRate: (productID: string, cashRate?: number, creditRate?: number) => void,
+    threshhold: number,
     changeBarcode: (oldBarcode: string, newBarcode: string) => any,
     onDelete: (item: string) => any,
     cashPaid: number,
@@ -22,19 +24,10 @@ interface BuyPanelProps {
     setPaymentMethod: (paymentMethod: string) => any
 }
 
-export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, setCashPaid, creditPaid, setCreditPaid, setPaymentMethod}: BuyPanelProps) {
+export default function BulkBuyPanel ({cart, changeRate, threshhold, changeBarcode, onDelete, cashPaid, setCashPaid, creditPaid, setCreditPaid, setPaymentMethod}: BuyPanelProps) {
 
-    const [rates, setRates] = useState<Rates>()
-    const [threshhold, setThreshhold] = useState<number>(Infinity)
     const [counter, setCounter] = useState<number>(0)
 
-    useEffect( () => {
-        getRates(
-        ).then( (r) => setRates(r))
-
-        getThreshhold(
-        ).then( (r) => setThreshhold(r))
-    }, [])
 
     let buyTableEntries: Array<JSX.Element> = []
     let cashTotal = 0
@@ -46,23 +39,24 @@ export default function BulkBuyPanel ({cart, changeBarcode, onDelete, cashPaid, 
         let marketPrice = cart.products[thing].product.type === "slab" ? cart.products[thing].product.sale_price : (getMarketPrice(product.product) ?? NaN)
         let lowPrice = getLowPrice(product.product) ?? NaN
 
-        // Calculate suggested price according to rate table
-        let [cashRate, creditRate] = rates !== undefined ? calculateRates(rates, marketPrice, product.product.type) : [NaN, NaN]
+        
 
         // Usually the market price, unless the card is under thre threshhold AND the TCG Low is lower than market.
         let effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
 
-        cashTotal += Math.floor((effectivePrice * cashRate) / 50) * 50
-        creditTotal += Math.floor((effectivePrice * creditRate) / 50) * 50
-        marketTotal += marketPrice
-        lowTotal += lowPrice
+        cashTotal += Math.floor((effectivePrice * product.cashRate) / 50) * 50
+        creditTotal += Math.floor((effectivePrice * product.creditRate) / 50) * 50
+        marketTotal += marketPrice * cart.products[thing].quantity
+        lowTotal += lowPrice * cart.products[thing].quantity
 
-        buyTableEntries.push(<BuyPanelEntry product={cart.products[thing]} key={cart.products[thing].product.id}
+        buyTableEntries.push(<BuyPanelEntry product={product} key={product.product.id}
                               marketPrice={marketPrice}
                               lowPrice={lowPrice}
-                              cashRate={cashRate}
-                              creditRate={creditRate}
+                              cashRate={product.cashRate}
+                              creditRate={product.creditRate}
                               assetTagThreshhold={threshhold}
+                              updateCashRate={(value) => changeRate(product.product.id, value)}
+                              updateCreditRate={(value) => changeRate(product.product.id, undefined, value)}
                               onDelete={(id) => onDelete(id)}
                               setBarcode={changeBarcode}
                               updatePrice={(newPrice) => {
@@ -190,6 +184,8 @@ interface BuyPanelEntryProps {
     setBarcode: (oldBarcode: string, newBarcode: string) => boolean,
     onDelete: (id: string) => void,
     updatePrice: (newPrice: number) => void,
+    updateCashRate: (newRate: number) => void,
+    updateCreditRate: (newRate: number) => void,
     updateQuantity: (newQty: number) => void,
     marketPrice: number,
     lowPrice: number,
@@ -198,7 +194,7 @@ interface BuyPanelEntryProps {
     assetTagThreshhold: number
 }
 
-function BuyPanelEntry ({product, setBarcode, onDelete, updatePrice, updateQuantity, marketPrice, lowPrice, cashRate, creditRate, assetTagThreshhold}: BuyPanelEntryProps) {
+function BuyPanelEntry ({product, setBarcode, onDelete, updatePrice, updateCashRate, updateCreditRate, updateQuantity, marketPrice, lowPrice, cashRate, creditRate, assetTagThreshhold}: BuyPanelEntryProps) {
     
     const [barcodeField, setBarcodeField] = useState<string>(product.product.id[0] === "A" ? product.product.id : "")
     const [barcodeFieldDisabled, setBarcodeFieldDisabled] = useState<boolean>(product.product.id[0] === "A")
@@ -257,10 +253,10 @@ function BuyPanelEntry ({product, setBarcode, onDelete, updatePrice, updateQuant
                 {product.product.type === "sealed" ? " ea." : null}
             </td>
             <td>
-                $&nbsp;{Math.floor((effectivePrice * cashRate) / 50) / 2} ({Math.round(cashRate * 100)}%)
+                $&nbsp;{Math.floor((effectivePrice * cashRate) / 50) / 2} (<NumericEntryField short value={Math.round(cashRate * 100)} step={1} onChange={(value) => updateCashRate(value / 100)}/>%)
             </td>
             <td>
-                $&nbsp;{Math.floor((effectivePrice * creditRate) / 50) / 2} ({Math.round(creditRate * 100)}%)
+                $&nbsp;{Math.floor((effectivePrice * creditRate) / 50) / 2} (<NumericEntryField short value={Math.round(creditRate * 100)} step={1} onChange={(value) => updateCreditRate(value / 100)}/>%)
             </td>
             <td>
                 <DeleteButton onClick={() => {onDelete(product.product.id)}}/>
