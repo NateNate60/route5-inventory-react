@@ -10,10 +10,10 @@ import getInventory from "@/backend/getInventory"
 
 interface InventorySearcherProps {
     onSubmit: (e: Product | BackendAPIError | SlabCert, barcode: string) => any,
-    showSuggestions?: boolean
+    showInventory: boolean
 }
 
-export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySearcherProps): React.JSX.Element {
+export function InventorySearcher ({onSubmit, showInventory}: InventorySearcherProps): React.JSX.Element {
     /*
     A component which provides a search bar for searching the inventory.
     */
@@ -21,15 +21,149 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
     const [tcgSuggestions, setTCGSuggestions] = useState<Array<TCGProductData>>([])
     const [inventorySuggestions, setInventorySuggestions] = useState<Array<Product>>([])
 
-    const [tcgResultsText, setTCGResultsText] = useState<string>("Press enter to search TCG Player database...")
-    const [inventoryResultsText, setInventoryResultsText] = useState<string>("Start typing to search inventory...")
+    const [resultsText, setResultsText] = useState<string>("Press enter to search TCG Player database...")
+    const [searchTarget, setSearchTarget] = useState<string>("inventory")
+
     const today = new Date().toISOString()
 
     function clearAll () {
-        setInventoryResultsText("Start typing to search inventory...")
+        setResultsText("Start typing to search inventory...")
         setInventorySuggestions([])
-        setTCGResultsText("Press enter to search TCG Player database...")
         setTCGSuggestions([])
+    }
+
+    let results: Array<React.JSX.Element> = []
+    if (searchTarget === "inventory") {
+        results = inventorySuggestions.map((suggestion) => <tr>
+            <td>
+                {suggestion.tcg_price_data?.setName}
+            </td>
+            <td>
+                {suggestion.tcg_price_data?.canonicalName ?? suggestion.description} {suggestion.condition}
+            </td>
+            <td>
+                {suggestion.tcg_price_data?.number}
+            </td>
+            <td>
+                {suggestion.tcg_price_data?.attribute}
+            </td>
+            <td>
+                <WhiteTextButton text="Add" onClick={() => {
+                    onSubmit(suggestion, suggestion.id)
+                    clearAll()
+                }}/>
+            </td>
+            </tr>
+        )
+    } else {
+        results = tcgSuggestions.map( (suggestion) => {
+            return (<tr key={suggestion.tcgID}>
+                <td>
+                    {suggestion.setName}
+                </td>
+                <td>
+                    {suggestion.canonicalName}
+                </td>
+                <td>
+                    {suggestion.number}
+                </td>
+                <td>
+                    {suggestion.attribute}
+                </td>
+                <td>
+                    <TextButton colour="white" text="NM" onClick={ () => {
+                        onSubmit( {
+                            id: "BULK",
+                            type: "card",
+                            description: suggestion.canonicalName,
+                            acquired_price: NaN,
+                            acquired_date: today,
+                            sale_price: 1,
+                            tcg_price_data: suggestion,
+                            quantity: 1,
+                            consignor_name: "",
+                            consignor_contact: "",
+                            sale_date: "",
+                            sale_price_date: today,
+                            condition: "NM",
+                        }, "")
+                        clearAll()
+                    }}/>
+                    <TextButton colour="white" text="LP" onClick={ () => {
+                        onSubmit( {
+                            id: "BULK",
+                            type: "card",
+                            description: suggestion.canonicalName,
+                            acquired_price: NaN,
+                            acquired_date: today,
+                            sale_price: 1,
+                            tcg_price_data: suggestion,
+                            quantity: 1,
+                            consignor_name: "",
+                            consignor_contact: "",
+                            sale_date: "",
+                            sale_price_date: today,
+                            condition: "LP",
+                        }, "")
+                        clearAll()
+                    }}/>
+                    <TextButton colour="white" text="MP" onClick={ () => {
+                        onSubmit( {
+                            id: "BULK",
+                            type: "card",
+                            description: suggestion.canonicalName,
+                            acquired_price: NaN,
+                            acquired_date: today,
+                            sale_price: 1,
+                            tcg_price_data: suggestion,
+                            quantity: 1,
+                            consignor_name: "",
+                            consignor_contact: "",
+                            sale_date: "",
+                            sale_price_date: today,
+                            condition: "MP",
+                        }, "")
+                        clearAll()
+                    }}/>
+                    <TextButton colour="white" text="HP" onClick={ () => {
+                        onSubmit( {
+                            id: "BULK",
+                            type: "card",
+                            description: suggestion.canonicalName,
+                            acquired_price: NaN,
+                            acquired_date: today,
+                            sale_price: 1,
+                            tcg_price_data: suggestion,
+                            quantity: 1,
+                            consignor_name: "",
+                            consignor_contact: "",
+                            sale_date: "",
+                            sale_price_date: today,
+                            condition: "HP",
+                        }, "")
+                        clearAll()
+                    }}/>
+                    <TextButton colour="white" text="DM" onClick={ () => {
+                        onSubmit( {
+                            id: "BULK",
+                            type: "card",
+                            description: suggestion.canonicalName,
+                            acquired_price: NaN,
+                            acquired_date: today,
+                            sale_price: 1,
+                            tcg_price_data: suggestion,
+                            quantity: 1,
+                            consignor_name: "",
+                            consignor_contact: "",
+                            sale_date: "",
+                            sale_price_date: today,
+                            condition: "DM",
+                        }, "")
+                        clearAll()
+                    }}/>
+                </td>
+                </tr>)
+        })
     }
 
     return (
@@ -39,6 +173,9 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                     <tr>
                         <td colSpan={5}>
                             <SearchBar onChange={(input: string) => {
+                                if (!showInventory) {
+                                    return
+                                }
                                 if (input.match(/^\d+$/)) {
                                     return
                                 }
@@ -49,22 +186,23 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                 getInventory()
                                 .then( (value) => {
                                     if ("error" in value) {
-                                        setInventoryResultsText("Error")
+                                        setResultsText("Error")
                                         setTCGSuggestions([])
                                         return
                                     }
-                                    setInventoryResultsText("")
+                                    setResultsText("")
                                     let results: Array<Product> = value
                                     .filter( (value) => value !== undefined)
                                     results = results.filter(
                                         (value) => `${value.tcg_price_data?.setName} ${value.tcg_price_data?.canonicalName} ${value.tcg_price_data?.number}`.toLowerCase().includes(input.toLowerCase())
                                     )
                                     if (results.length === 0) {
-                                        setInventoryResultsText("No results.\n\nPress enter to try searching the TCG Player database instead")
+                                        setResultsText("No results.\n\nPress enter to try searching the TCG Player database instead")
                                     }
                                     setInventorySuggestions(results)
                                 })
-                                setInventoryResultsText("Searching...")
+                                setResultsText("Searching...")
+                                setSearchTarget("inventory")
                             }} onSubmit={(input: string) => {
                                 let s = input
                                 if (input.toLowerCase().includes("psacard.com")) {
@@ -79,178 +217,36 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
                                 ) {
                                     getProductInfo(s
                                     ).then( (item) => {
-                                        setInventoryResultsText("Start typing to search inventory...")
+                                        setResultsText("Start typing to search inventory...")
                                         setInventorySuggestions([])
-                                        setTCGResultsText("Press enter to search TCG Player database...")
                                         setTCGSuggestions([])
                                         onSubmit(item, s)
                                     })
-                                } else if (showSuggestions) {
-                                    searchProducts(s, "card"
-                                    ).then( (value) => {
-                                        if (value.length === 0) {
-                                            setTCGResultsText("No results")
-                                        } else {
-                                            setTCGResultsText("")
-                                        }
-                                        setTCGSuggestions(value)
-                                    })
-                                    setTCGResultsText("Searching...")
                                 }
+                                searchProducts(s, "card"
+                                ).then( (value) => {
+                                    if (value.length === 0) {
+                                        setResultsText("No results")
+                                    } else {
+                                        setResultsText("")
+                                    }
+                                    setTCGSuggestions(value)
+                                })
+                                setResultsText("Searching...")
+                                
+                                setSearchTarget("tcgplayer")
                             }}/>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th colSpan={5}>Inventory</th>
+                        <th colSpan={5}>{searchTarget === "inventory" ? "Inventory" : "TCG Player Catalogue"}</th>
                     </tr>
                     <tr>
-                        <td colSpan={5}>
-                            <i>{inventoryResultsText}</i>
-                        </td>
+                        <td>{resultsText}</td>
                     </tr>
-                    {inventorySuggestions.map((suggestion) => <tr>
-                        <td>
-                            {suggestion.tcg_price_data?.setName}
-                        </td>
-                        <td>
-                            {suggestion.tcg_price_data?.canonicalName ?? suggestion.description} {suggestion.condition}
-                        </td>
-                        <td>
-                            {suggestion.tcg_price_data?.number}
-                        </td>
-                        <td>
-                            {suggestion.tcg_price_data?.attribute}
-                        </td>
-                        <td>
-                            <WhiteTextButton text="Add" onClick={() => {
-                                onSubmit(suggestion, suggestion.id)
-                                clearAll()
-                            }}/>
-                        </td>
-                        </tr>
-                    )}
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <th colSpan={5}>TCG Player Card Catalogue</th>
-                    </tr>
-                    <tr>
-                        <td colSpan={5}>
-                            <i>{tcgResultsText}</i>
-                        </td>
-                    </tr>
-                    {tcgSuggestions.map(
-                        (suggestion) => {
-                        return <tr key={suggestion.tcgID}>
-                            <td>
-                                {suggestion.setName}
-                            </td>
-                            <td>
-                                {suggestion.canonicalName}
-                            </td>
-                            <td>
-                                {suggestion.number}
-                            </td>
-                            <td>
-                                {suggestion.attribute}
-                            </td>
-                            <td>
-                                <TextButton colour="white" text="NM" onClick={ () => {
-                                    onSubmit( {
-                                        id: "BULK",
-                                        type: "card",
-                                        description: suggestion.canonicalName,
-                                        acquired_price: NaN,
-                                        acquired_date: today,
-                                        sale_price: 1,
-                                        tcg_price_data: suggestion,
-                                        quantity: 1,
-                                        consignor_name: "",
-                                        consignor_contact: "",
-                                        sale_date: "",
-                                        sale_price_date: today,
-                                        condition: "NM",
-                                    }, "")
-                                    clearAll()
-                                }}/>
-                                <TextButton colour="white" text="LP" onClick={ () => {
-                                    onSubmit( {
-                                        id: "BULK",
-                                        type: "card",
-                                        description: suggestion.canonicalName,
-                                        acquired_price: NaN,
-                                        acquired_date: today,
-                                        sale_price: 1,
-                                        tcg_price_data: suggestion,
-                                        quantity: 1,
-                                        consignor_name: "",
-                                        consignor_contact: "",
-                                        sale_date: "",
-                                        sale_price_date: today,
-                                        condition: "LP",
-                                    }, "")
-                                    clearAll()
-                                }}/>
-                                <TextButton colour="white" text="MP" onClick={ () => {
-                                    onSubmit( {
-                                        id: "BULK",
-                                        type: "card",
-                                        description: suggestion.canonicalName,
-                                        acquired_price: NaN,
-                                        acquired_date: today,
-                                        sale_price: 1,
-                                        tcg_price_data: suggestion,
-                                        quantity: 1,
-                                        consignor_name: "",
-                                        consignor_contact: "",
-                                        sale_date: "",
-                                        sale_price_date: today,
-                                        condition: "MP",
-                                    }, "")
-                                    clearAll()
-                                }}/>
-                                <TextButton colour="white" text="HP" onClick={ () => {
-                                    onSubmit( {
-                                        id: "BULK",
-                                        type: "card",
-                                        description: suggestion.canonicalName,
-                                        acquired_price: NaN,
-                                        acquired_date: today,
-                                        sale_price: 1,
-                                        tcg_price_data: suggestion,
-                                        quantity: 1,
-                                        consignor_name: "",
-                                        consignor_contact: "",
-                                        sale_date: "",
-                                        sale_price_date: today,
-                                        condition: "HP",
-                                    }, "")
-                                    clearAll()
-                                }}/>
-                                <TextButton colour="white" text="DM" onClick={ () => {
-                                    onSubmit( {
-                                        id: "BULK",
-                                        type: "card",
-                                        description: suggestion.canonicalName,
-                                        acquired_price: NaN,
-                                        acquired_date: today,
-                                        sale_price: 1,
-                                        tcg_price_data: suggestion,
-                                        quantity: 1,
-                                        consignor_name: "",
-                                        consignor_contact: "",
-                                        sale_date: "",
-                                        sale_price_date: today,
-                                        condition: "DM",
-                                    }, "")
-                                    clearAll()
-                                }}/>
-                            </td>
-                        </tr>}
-                    )}
+                    {results}
                 </tbody>
             </table>
         </div>
@@ -258,7 +254,6 @@ export function BuyInventorySearcher ({onSubmit, showSuggestions}: InventorySear
 }
 
 // This function removed; both Sell and Buy functions use the BuyInventorySearcher
-export var SellInventorySearcher: ({onSubmit, showSuggestions}: InventorySearcherProps) => React.JSX.Element = BuyInventorySearcher
 
 // export function SellInventorySearcher ({onSubmit}: InventorySearcherProps): React.JSX.Element {
 //     /*

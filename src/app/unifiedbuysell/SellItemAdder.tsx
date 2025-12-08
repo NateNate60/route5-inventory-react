@@ -1,6 +1,6 @@
 "use client"
 
-import { SellInventorySearcher } from "@/app/unifiedbuysell/InventorySearcher"
+import { InventorySearcher } from "@/app/unifiedbuysell/InventorySearcher"
 import { Product } from "@/types/Product"
 import { useState } from "react"
 
@@ -17,7 +17,7 @@ export default function SellItemAdder ({onSubmit}: SellItemAdderProps) {
             <p className="error-text">
                 {maybeError}
             </p>
-            <SellInventorySearcher onSubmit={(item) => {
+            <InventorySearcher showInventory={true} onSubmit={(item) => {
                 if ("error" in item) {
                     // Item not found
                     setError(item.error)

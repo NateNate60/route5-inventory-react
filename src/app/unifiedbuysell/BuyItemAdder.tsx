@@ -1,7 +1,7 @@
 "use client"
 
 import searchProducts, { getMarketPrice } from "@/backend/searchProducts"
-import { BuyInventorySearcher } from "@/app/unifiedbuysell/InventorySearcher"
+import { InventorySearcher } from "@/app/unifiedbuysell/InventorySearcher"
 import ProductInfoForm from "@/components/ProductInfoForm"
 import { Product } from "@/types/Product"
 import { useState } from "react"
@@ -25,7 +25,7 @@ export default function ItemAdder ({onSubmit, mode, errorText}: BuyItemAdderProp
         <div className={mode === "buy" ? "buy-panel" : "sell-panel"}>
             <h3>Add item</h3>
             <br />
-            <BuyInventorySearcher onSubmit={(result, barcode) => {
+            <InventorySearcher showInventory={false} onSubmit={(result, barcode) => {
                 if ("error" in result) {
                     // Not found in inventory
 
@@ -86,7 +86,7 @@ export default function ItemAdder ({onSubmit, mode, errorText}: BuyItemAdderProp
                     setBarcode("")
                     setShowForm(false)
                 }
-            }} showSuggestions={true} />
+            }}/>
             <p className="error-text">
                 {errorText}
             </p>
