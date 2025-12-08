@@ -1,8 +1,8 @@
 "use client"
 
 import { Product, TCGProductData } from "@/types/Product";
-import searchProducts from "@/backend/searchProducts";
-import { useState } from "react";
+import searchProducts, { getMarketPrice } from "@/backend/searchProducts";
+import { JSX, useState } from "react";
 import TextButton from "./buttons/buttons";
 
 interface ProductInforFormProps {
@@ -14,14 +14,12 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
     const [description, setDescription] = useState<string>("")
     const [condition, setCondition] = useState<string>("")
     const [quantity, setQuantity] = useState<number>(1)
-    const [consignorName, setConsignorName] = useState<string>("")
-    const [consignorContact, setConsignorContact] = useState<string>("")
     const [tcgData, setTCGData] = useState<TCGProductData>()
     const [disableNameInput, setDisableNameInput] = useState<boolean>(false)
 
     const [suggestions, setSuggestions] = useState<Array<TCGProductData>>([])
 
-    let maybeSuggestions = suggestions.map( (suggestion) => 
+    let maybeSuggestions: Array<JSX.Element> = suggestions.map( (suggestion) => 
         <tr key={suggestion.tcgID}>
             <td>
                 {suggestion.setName}
@@ -42,6 +40,9 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
             </td>
         </tr>
     )
+    if (maybeSuggestions.length == 0) {
+        maybeSuggestions = [<tr key={null}><td colSpan={2}>No matching products on TCG Player were found. You may enter the name manually but the market price will not synchronise.</td></tr>]
+    }
 
     let type: "slab" | "sealed" | "card"
     if (barcode.match(/^((\d{12})|(^[^1]\d{12}))$/)) {
@@ -65,6 +66,11 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                 <thead>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td colSpan={2}>
+                            This product was not found in the database. Please enter its name to search for it on TCG Player.
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <label>Card name or product description</label>
@@ -95,22 +101,6 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                     </tr>
                     <tr>
                         <td>
-                            Consignor name (optional)
-                        </td>
-                        <td>
-                            <input type="text" id="consignor_name" name="consignor_name" onChange={(e) => setConsignorName(e.target.value)} value={consignorName}/>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td>
-                            Consignor contact info (optional)
-                        </td>
-                        <td>
-                            <input type="text" id="consignor_contact" name="consignor_contact" onChange={(e) => setConsignorContact(e.target.value)} value={consignorContact}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
                             <TextButton colour="white" text="Add" onClick={() => {
                                 let today = new Date()
                                 let info: Product = {
@@ -122,11 +112,16 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                                     acquired_date: today.toString(),
                                     sale_price: 1,
                                     quantity: quantity,
-                                    consignor_name: consignorName,
-                                    consignor_contact: consignorContact,
+                                    consignor_name: "",
+                                    consignor_contact: "",
                                     sale_price_date: today.toString(),
                                     sale_date: "",
                                     tcg_price_data: tcgData
+                                }
+                                
+                                if (tcgData !== undefined) {
+                                    // populate price data
+                                    info.sale_price = getMarketPrice(info) ?? 1
                                 }
 
                                 if (info.condition === "") {
@@ -141,8 +136,6 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
                                 }
                                 setDescription("")
                                 setQuantity(1)
-                                setConsignorContact("")
-                                setConsignorName("")
                                 onSubmit(info)
                             }}/>
                         </td>
