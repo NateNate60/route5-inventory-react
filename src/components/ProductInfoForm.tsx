@@ -41,7 +41,7 @@ export default function ProductInfoForm ({onSubmit, barcode}: ProductInforFormPr
         </tr>
     )
     if (maybeSuggestions.length == 0) {
-        maybeSuggestions = [<tr key={null}><td colSpan={2}>No matching products on TCG Player were found. You may enter the name manually but the market price will not synchronise.</td></tr>]
+        maybeSuggestions = [<tr key={null}><td colSpan={2}>No matching products on TCG Player were found.</td></tr>]
     }
 
     let type: "slab" | "sealed" | "card"
