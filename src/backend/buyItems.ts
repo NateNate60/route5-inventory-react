@@ -21,11 +21,14 @@ export default async function buyItems (cart: ProductQuantityList,
     for (let itemID in cart.products) {
         let marketPrice = getMarketPrice(cart.products[itemID].product)
         let lowPrice = getLowPrice(cart.products[itemID].product)
+        let effectivePrice: number
         if (marketPrice !== undefined && lowPrice !== undefined) {
-            let effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
-            totalCashOfferPrice += Math.floor(cart.products[itemID].cashRate * effectivePrice / 50) * 50 * cart.products[itemID].quantity
-            totalCreditOfferPrice += Math.floor(cart.products[itemID].creditRate * effectivePrice / 50) * 50 * cart.products[itemID].quantity
+            effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
+        } else {
+            effectivePrice = cart.products[itemID].product.sale_price
         }
+        totalCashOfferPrice += Math.floor(cart.products[itemID].cashRate * effectivePrice / 50) * 50 * cart.products[itemID].quantity
+        totalCreditOfferPrice += Math.floor(cart.products[itemID].creditRate * effectivePrice / 50) * 50 * cart.products[itemID].quantity
     }
     
     if (creditGiven > 0) {
@@ -41,21 +44,25 @@ export default async function buyItems (cart: ProductQuantityList,
         // acquired price calculation
         let marketPrice = getMarketPrice(cart.products[itemID].product)
         let lowPrice = getLowPrice(cart.products[itemID].product)
+
+        let effectivePrice: number
         if (marketPrice !== undefined && lowPrice !== undefined) {
-            let effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
-            if (creditGiven > 0) {
-                let baseAmountPaid = Math.floor(cart.products[itemID].creditRate * effectivePrice / 50) * 50
-                let proportionOfTotal = (baseAmountPaid * cart.products[itemID].quantity) / totalCreditOfferPrice
-                let extraAmountPaid = proportionOfTotal * excessPaid / cart.products[itemID].quantity
-                target.acquired_price = baseAmountPaid + extraAmountPaid
-            } else {
-                let baseAmountPaid = Math.floor(cart.products[itemID].cashRate * effectivePrice / 50) * 50
-                let proportionOfTotal = (baseAmountPaid * cart.products[itemID].quantity) / totalCashOfferPrice
-                let extraAmountPaid = proportionOfTotal * excessPaid / cart.products[itemID].quantity
-                target.acquired_price = baseAmountPaid + extraAmountPaid
-            }
-            
+            effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
+        } else {
+            effectivePrice = cart.products[itemID].product.sale_price
         }
+        if (creditGiven > 0) {
+            let baseAmountPaid = Math.floor(cart.products[itemID].creditRate * effectivePrice / 50) * 50
+            let proportionOfTotal = (baseAmountPaid * cart.products[itemID].quantity) / totalCreditOfferPrice
+            let extraAmountPaid = proportionOfTotal * excessPaid / cart.products[itemID].quantity
+            target.acquired_price = baseAmountPaid + extraAmountPaid
+        } else {
+            let baseAmountPaid = Math.floor(cart.products[itemID].cashRate * effectivePrice / 50) * 50
+            let proportionOfTotal = (baseAmountPaid * cart.products[itemID].quantity) / totalCashOfferPrice
+            let extraAmountPaid = proportionOfTotal * excessPaid / cart.products[itemID].quantity
+            target.acquired_price = baseAmountPaid + extraAmountPaid
+        }
+            
         
 
         items.push(target)
