@@ -36,10 +36,8 @@ export default function BulkBuyPanel ({cart, changeRate, threshhold, changeBarco
     let lowTotal = 0
     for (let thing in cart.products) {
         let product = cart.products[thing]
-        let marketPrice = cart.products[thing].product.type === "slab" ? cart.products[thing].product.sale_price : (getMarketPrice(product.product) ?? NaN)
-        let lowPrice = getLowPrice(product.product) ?? NaN
-
-        
+        let marketPrice = product.product.type === "slab" || product.product.tcg_price_data === undefined ? product.product.sale_price : (getMarketPrice(product.product) ?? NaN)
+        let lowPrice = product.product.tcg_price_data === undefined ? product.product.sale_price : getLowPrice(product.product) ?? NaN
 
         // Usually the market price, unless the card is under thre threshhold AND the TCG Low is lower than market.
         let effectivePrice = marketPrice < threshhold && lowPrice < marketPrice ? lowPrice : marketPrice
@@ -245,7 +243,7 @@ function BuyPanelEntry ({product, setBarcode, onDelete, updatePrice, updateCashR
                 }} value={product.quantity}/> : null}
             </td>
             <td>
-                $&nbsp;{product.product.type === "slab" ? <NumericEntryField step={0.01} onChange={updatePrice} value={marketPrice / 100}/> : Math.round(marketPrice) / 100}
+                $&nbsp;{product.product.type === "slab" || product.product.tcg_price_data === undefined ? <NumericEntryField step={0.01} onChange={updatePrice} value={marketPrice / 100}/> : Math.round(marketPrice) / 100}
                 {product.product.type === "sealed" ? " ea." : null}
             </td>
             <td>
