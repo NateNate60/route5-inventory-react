@@ -29,7 +29,8 @@ export default async function searchProducts (productName: string, productType: 
                     priceData: {
                         sealedLowPrice: result["sealed_low_price"],
                         sealedMarketPrice: result["sealed_market_price"]
-                    }
+                    },
+                    imageURL: result["image_url"] ?? ""
                 })
             } else if ("card_name" in result) {
                 // This is a Pokemon single
@@ -50,8 +51,8 @@ export default async function searchProducts (productName: string, productType: 
                         mpLowPrice: result["mp_low_price"],
                         hpLowPrice: result["hp_low_price"],
                         dmLowPrice: result["dm_low_price"],
-                        
-                    }
+                    },
+                    imageURL: result["image_url"] ?? ""
                 })
             }
         }

@@ -34,7 +34,8 @@ export type TCGProductData = {
     setName: string,
     attribute: string,
     number?: string,
-    priceData: TCGCardData | TCGSealedData
+    priceData: TCGCardData | TCGSealedData,
+    imageURL: string
 }
 
 export type TCGCardData = {
