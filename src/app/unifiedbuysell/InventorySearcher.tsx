@@ -34,7 +34,7 @@ export function InventorySearcher ({onSubmit, showInventory}: InventorySearcherP
 
     let results: Array<React.JSX.Element> = []
     if (searchTarget === "inventory") {
-        results = inventorySuggestions.map((suggestion) => <tr>
+        results = inventorySuggestions.map((suggestion) => <tr key={suggestion.id}>
             <td>
                 {suggestion.tcg_price_data?.setName}
             </td>
@@ -59,6 +59,10 @@ export function InventorySearcher ({onSubmit, showInventory}: InventorySearcherP
         results = tcgSuggestions.map( (suggestion) => {
             return (<tr key={suggestion.tcgID}>
                 <td>
+                    <img src={suggestion.imageURL === "" ? undefined : suggestion.imageURL} width={100}/>
+                </td>
+                <td>
+                    {suggestion.attribute.includes("Japanese") ? "🇯🇵 ": null}
                     {suggestion.setName}
                 </td>
                 <td>
