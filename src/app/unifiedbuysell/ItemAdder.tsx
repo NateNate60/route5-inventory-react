@@ -25,7 +25,7 @@ export default function ItemAdder ({onSubmit, mode, errorText}: BuyItemAdderProp
         <div className={mode === "buy" ? "buy-panel" : "sell-panel"}>
             <h3>Add item</h3>
             <br />
-            <InventorySearcher showInventory={false} onSubmit={(result, barcode) => {
+            <InventorySearcher showInventory={mode === "sell"} onSubmit={(result, barcode) => {
                 if ("error" in result) {
                     // Not found in inventory
 
